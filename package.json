@@ -1,0 +1,15 @@
+{
+  "name": "newmediapilot",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=npm-vite",
+    "build": "npm run build --workspace=npm-vite",
+    "watch": "npm run watch --workspace=npm-deploy",
+    "deploy": "npm run deploy --workspace=npm-deploy"
+  }
+}
