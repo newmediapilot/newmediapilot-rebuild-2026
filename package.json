@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "npm-vite",
+    "npm-lambda",
+    "npm-cloudfront",
+    "npm-deploy",
+    "npm-work"
   ],
   "scripts": {
     "dev": "npm run dev --workspace=npm-vite",
