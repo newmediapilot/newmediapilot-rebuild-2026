@@ -1,0 +1,15 @@
+{
+  "name": "npm-lambda",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "test": "node --test"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
