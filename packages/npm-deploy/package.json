@@ -1,0 +1,14 @@
+{
+  "name": "npm-deploy",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "node scripts/deploy.mjs",
+    "watch": "node scripts/deploy.mjs --watch"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
