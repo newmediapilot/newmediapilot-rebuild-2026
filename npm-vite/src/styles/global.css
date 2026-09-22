@@ -17,6 +17,7 @@ html {
 }
 
 .tile {
+  cursor: pointer;
   transition: none;
 }
 
@@ -46,6 +47,7 @@ ul:hover .tile:not(:hover) .tile-bg {
 
 .tile-chicklet {
   display: inline-block;
+  user-select: none;
 }
 
 @keyframes tile-fade-in {
