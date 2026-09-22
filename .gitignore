@@ -6,6 +6,12 @@ dist/
 build/
 out/
 coverage/
+.astro/
+
+# Vendored Decap CMS assets (copied from node_modules by scripts/copy-decap.mjs)
+/npm-vite/public/admin/*.js
+/npm-vite/public/admin/*.css
+/npm-vite/public/admin/*.wasm
 
 # Lambda / Serverless artifacts
 .artifacts/
