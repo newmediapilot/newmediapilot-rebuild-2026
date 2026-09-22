@@ -11,8 +11,13 @@ const background = image
   : 'background-color: #000000;'
 ---
 
-<li class="relative aspect-square overflow-hidden p-3" style={background}>
-  <span class="inline-block rounded-md bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-black">
+<li class="relative aspect-square overflow-hidden bg-black p-3">
+  <div
+    aria-hidden="true"
+    class="tile-bg pointer-events-none absolute inset-0 opacity-10 grayscale"
+    style={background}
+  ></div>
+  <span class="relative inline-block rounded-md bg-white px-4 py-1.5 text-2xl font-extrabold uppercase tracking-widest text-black">
     {title}
   </span>
 </li>

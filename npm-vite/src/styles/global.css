@@ -16,6 +16,16 @@ html {
   }
 }
 
+.tile-bg {
+  animation: tile-fade-in 1s ease-out both;
+}
+
+@keyframes tile-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 :root {
   --tile-1: #ef4444;
   --tile-2: #f97316;

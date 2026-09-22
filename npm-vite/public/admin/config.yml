@@ -16,4 +16,5 @@ collections:
     fields:
       - { label: Title, name: title, widget: string }
       - { label: Image, name: image, widget: image }
+      - { label: Source, name: source, widget: text, required: false, hint: Original link this image was converted from (metadata only). }
       - { label: Body, name: body, widget: markdown, required: false }

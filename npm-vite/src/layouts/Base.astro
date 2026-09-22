@@ -17,8 +17,8 @@ const tiles = (await getCollection('tiles')).sort((a, b) => a.id.localeCompare(b
     <title>{title}</title>
   </head>
   <body>
-    <main class="flex h-dvh w-full items-center justify-center">
-      <ul class="grid h-full place-content-center w-[min(100vw,33.333dvh)] md:w-[min(100vw,75dvh)] lg:w-[min(100vw,133.333dvh)] grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <main class="flex min-h-dvh items-center justify-center md:h-dvh">
+      <ul class="grid w-full place-content-center grid-cols-2 md:w-[min(100vw,75dvh)] lg:w-[min(100vw,133.333dvh)] md:grid-cols-3 lg:grid-cols-4">
         {tiles.map((tile) => (
           <Tile title={tile.data.title} image={tile.data.image} />
         ))}

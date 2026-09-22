@@ -6,6 +6,7 @@ const tiles = defineCollection({
   schema: z.object({
     title: z.string(),
     image: z.string().optional(),
+    source: z.string().optional(),
   }),
 })
 
