@@ -13,6 +13,7 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=npm-vite",
+    "start": "npm run start --workspace=npm-vite",
     "build": "npm run build --workspace=npm-vite",
     "watch": "npm run watch --workspace=npm-deploy",
     "deploy": "npm run deploy --workspace=npm-deploy",

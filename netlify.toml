@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build --workspace=npm-vite"
+  publish = "npm-vite/dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Decap CMS on Netlify: enable Identity + Git Gateway in Netlify's Site Settings
+# (Identity > Enable, then like "Git Gateway" under Identity services).

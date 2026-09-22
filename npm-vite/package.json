@@ -4,14 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "watch": "vite build --watch"
-  },
-  "dependencies": {
+    "start": "node scripts/copy-decap.mjs && node scripts/dev.mjs",
+    "dev": "node scripts/copy-decap.mjs && astro dev --host",
+    "cms": "decap-server",
+    "build": "node scripts/copy-decap.mjs && astro build",
+    "preview": "astro preview --host"
   },
   "devDependencies": {
-    "vite": "^7.0.0"
+    "astro": "7.3.3",
+    "decap-cms": "3.16.2",
+    "decap-server": "3.11.2"
   }
 }
