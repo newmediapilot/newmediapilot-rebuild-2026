@@ -11,8 +11,10 @@
     "preview": "astro preview --host"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
     "astro": "7.3.3",
     "decap-cms": "3.16.2",
-    "decap-server": "3.11.2"
+    "decap-server": "3.11.2",
+    "tailwindcss": "4.3.3"
   }
 }

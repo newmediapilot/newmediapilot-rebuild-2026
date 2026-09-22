@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+html {
+  background: radial-gradient(circle at center center, #000000 0%, #0c0c0c 100%);
+  background-size: 150% 150%;
+  animation: gradient-drift 40s ease-in-out infinite;
+}
+
+@keyframes gradient-drift {
+  0%,
+  100% {
+    background-position: 50% 50%;
+  }
+  50% {
+    background-position: 30% 70%;
+  }
+}
+
+:root {
+  --tile-1: #ef4444;
+  --tile-2: #f97316;
+  --tile-3: #f59e0b;
+  --tile-4: #84cc16;
+  --tile-5: #22c55e;
+  --tile-6: #14b8a6;
+  --tile-7: #06b6d4;
+  --tile-8: #3b82f6;
+  --tile-9: #6366f1;
+  --tile-10: #8b5cf6;
+  --tile-11: #a855f7;
+  --tile-12: #ec4899;
+}

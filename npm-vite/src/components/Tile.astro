@@ -1,0 +1,13 @@
+---
+interface Props {
+  text?: string
+}
+
+const { text = 'Tile' } = Astro.props
+---
+
+<li class="aspect-square rounded-md bg-white p-3">
+  <span class="inline-block rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-black">
+    {text}
+  </span>
+</li>
