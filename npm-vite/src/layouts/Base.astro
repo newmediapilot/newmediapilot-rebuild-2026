@@ -26,3 +26,14 @@ const tiles = (await getCollection('tiles')).sort((a, b) => a.id.localeCompare(b
     </main>
   </body>
 </html>
+
+<script is:inline>
+  document.addEventListener('click', (e) => {
+    const tile = e.target.closest('.tile')
+    if (!tile) return
+    document.querySelectorAll('.tile.is-active').forEach(el => {
+      if (el !== tile) el.classList.remove('is-active')
+    })
+    tile.classList.toggle('is-active')
+  })
+</script>

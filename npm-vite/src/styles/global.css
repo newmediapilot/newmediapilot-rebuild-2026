@@ -37,13 +37,22 @@ html {
   transform-origin: center center;
 }
 
-.tile:hover .tile-chicklet-bg span {
+.tile:hover .tile-chicklet-bg span,
+.tile.is-active .tile-chicklet-bg span {
   transform: scale(10);
 }
 
-ul:hover .tile:not(:hover) .tile-bg {
+ul:hover .tile:not(:hover) .tile-bg,
+ul:has(.tile.is-active) .tile:not(.is-active) .tile-bg {
+  opacity: 0.02;
+  filter: grayscale(1) brightness(0) contrast(0);
+}
+
+ul:has(.tile.is-active) .tile:not(.is-active) .tile-chicklet,
+ul:has(.tile.is-active) .tile:not(.is-active) .tile-chicklet-bg span,
+ul:has(.tile.is-active) .tile:not(.is-active) .tile-chicklet-wrapper {
   opacity: 0.05;
-  filter: grayscale(1);
+  filter: brightness(0) contrast(0);
 }
 
 .tile-chicklet {
