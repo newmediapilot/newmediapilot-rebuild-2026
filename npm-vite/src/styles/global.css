@@ -19,7 +19,6 @@ html {
 .tile {
   cursor: pointer;
   user-select: none;
-  transition: none;
 }
 
 .tile-bg {
