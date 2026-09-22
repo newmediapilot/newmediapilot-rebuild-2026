@@ -1,7 +1,3 @@
-# Decap CMS config
-# Production auth on Netlify: enable Identity + Git Gateway in the Netlify UI.
-# Locally, `decap-server` (started by `npm run start`) proxies commits to your git repo.
-
 backend:
   name: git-gateway
   branch: main
@@ -13,12 +9,11 @@ media_folder: public/uploads
 public_folder: /uploads
 
 collections:
-  - name: pages
-    label: Pages
-    files:
-      - name: home
-        label: Home
-        file: src/pages/index.md
-        fields:
-          - { label: Title, name: title, widget: string }
-          - { label: Body, name: body, widget: markdown }
+  - name: tiles
+    label: Tiles
+    folder: src/content/tiles
+    create: true
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Image, name: image, widget: image }
+      - { label: Body, name: body, widget: markdown, required: false }

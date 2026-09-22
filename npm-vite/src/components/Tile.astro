@@ -1,13 +1,18 @@
 ---
 interface Props {
-  text?: string
+  title?: string
+  image?: string
 }
 
-const { text = 'Tile' } = Astro.props
+const { title = 'Tile', image } = Astro.props
+
+const background = image
+  ? `background-image: url('${image}'); background-size: cover; background-position: center;`
+  : 'background-color: #000000;'
 ---
 
-<li class="aspect-square rounded-md bg-white p-3">
-  <span class="inline-block rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-black">
-    {text}
+<li class="relative aspect-square overflow-hidden p-3" style={background}>
+  <span class="inline-block rounded-md bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-black">
+    {title}
   </span>
 </li>
