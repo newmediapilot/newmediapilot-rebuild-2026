@@ -11,13 +11,20 @@ const background = image
   : 'background-color: #000000;'
 ---
 
-<li class="relative aspect-square overflow-hidden bg-black p-3">
+<li class="tile relative aspect-square overflow-hidden bg-black p-3">
   <div
     aria-hidden="true"
     class="tile-bg pointer-events-none absolute inset-0 opacity-10 grayscale"
     style={background}
   ></div>
-  <span class="relative inline-block rounded-md bg-white px-4 py-1.5 text-2xl font-extrabold uppercase tracking-widest text-black">
-    {title}
-  </span>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div class="tile-chicklet-wrapper relative">
+      <div class="tile-chicklet-bg absolute inset-0 flex items-center justify-center pointer-events-none">
+        <span class="inline-block rounded-md bg-white px-4 py-1.5 text-2xl font-extrabold uppercase tracking-widest text-white">{title}</span>
+      </div>
+      <span class="tile-chicklet inline-block rounded-md bg-black px-4 py-1.5 text-2xl font-extrabold uppercase tracking-widest text-white relative z-10 shadow-[0_0_16px_rgba(255,255,255,0.15)]">
+        {title}
+      </span>
+    </div>
+  </div>
 </li>

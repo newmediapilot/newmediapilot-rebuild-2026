@@ -16,8 +16,36 @@ html {
   }
 }
 
+.tile {
+  transition: none;
+}
+
 .tile-bg {
   animation: tile-fade-in 1s ease-out both;
+  transition: opacity 0.3s ease-out, filter 0.3s ease-out;
+}
+
+.tile-chicklet-wrapper {
+  position: relative;
+}
+
+.tile-chicklet-bg span {
+  transition: transform 3s cubic-bezier(0.3, 1.4, 0.4, 1);
+  transition-timing-function: cubic-bezier(0.3, 1.4, 0.4, 1);
+  transform-origin: center center;
+}
+
+.tile:hover .tile-chicklet-bg span {
+  transform: scale(10);
+}
+
+ul:hover .tile:not(:hover) .tile-bg {
+  opacity: 0.05;
+  filter: grayscale(1);
+}
+
+.tile-chicklet {
+  display: inline-block;
 }
 
 @keyframes tile-fade-in {
