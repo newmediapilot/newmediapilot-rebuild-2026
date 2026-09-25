@@ -1,0 +1,97 @@
+---
+const fields = [
+  { name: 'name', label: 'Name', type: 'text', autocomplete: 'name' },
+  { name: 'email', label: 'Email', type: 'email', autocomplete: 'email' },
+  { name: 'number', label: 'Number', type: 'tel', autocomplete: 'tel' },
+]
+---
+
+<dialog
+  id="contact"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70"
+>
+  <div class="page flex h-full flex-col bg-black!">
+    <div class="flex items-center justify-between gap-4 py-6">
+      <h2 class="text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Send a message</h2>
+      <button
+        type="button"
+        data-close-contact
+        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 transition-colors hover:bg-white hover:text-black"
+        aria-label="Close"
+      >
+        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form data-contact-form class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
+      {
+        fields.map((field) => (
+          <label class="block">
+            <span class="text-xs font-semibold uppercase tracking-widest">{field.label}</span>
+            <input
+              required
+              name={field.name}
+              type={field.type}
+              autocomplete={field.autocomplete}
+              class="mt-2 w-full border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
+            />
+          </label>
+        ))
+      }
+
+      <label class="block">
+        <span class="text-xs font-semibold uppercase tracking-widest">Message</span>
+        <textarea
+          required
+          name="message"
+          rows="6"
+          class="mt-2 w-full resize-y border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
+        ></textarea>
+      </label>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          class="rounded-md border border-white bg-white px-6 py-2.5 text-sm font-extrabold uppercase tracking-widest text-black transition-colors hover:bg-transparent hover:text-white"
+        >
+          Send
+        </button>
+        <p data-contact-status class="hidden text-xs font-semibold uppercase tracking-widest"></p>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('contact')
+
+  const open = () => {
+    if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
+  }
+
+  const close = () => {
+    if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
+  }
+
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('[data-open-contact]')) open()
+    if (event.target.closest('[data-close-contact]')) close()
+  })
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) close()
+  })
+
+  document.querySelector('[data-contact-form]')?.addEventListener('submit', (event) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const status = form.querySelector('[data-contact-status]')
+    if (status) {
+      status.textContent = 'Message sent.'
+      status.classList.remove('hidden')
+    }
+    form.reset()
+  })
+</script>

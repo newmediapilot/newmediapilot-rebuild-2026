@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro'
+import RowActions from '../components/RowActions.astro'
+import ContactModal from '../components/ContactModal.astro'
+import Footer from '../components/Footer.astro'
+
+const lorem =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+
+const intro = [lorem, lorem, lorem].join(' ')
+
+const rows = [
+  { name: 'HomeLife Realty', href: 'https://www.homelife.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'center' },
+  { name: 'CrossFit Cambridge', href: 'https://crossfitcambridge.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'left' },
+  {
+    name: 'World Real Estate Association',
+    href: 'https://thewrea.com/',
+    image: '/uploads/killarney-lodge.webp',
+    alt: 'Placeholder photo',
+    position: 'right',
+  },
+  { name: 'Killarney Lodge', href: 'https://killarneylodge.com/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'bottom' },
+]
+
+const websites = rows.map((row) => ({ label: row.name, href: row.href }))
+
+const technical = ['TypeScript', 'React', 'Astro', 'Node.js', 'Tailwind CSS', 'PostgreSQL']
+const professional = ['Communication', 'Team leadership', 'Problem solving', 'Code review', 'Mentoring', 'Project ownership']
+
+const nav = [
+  { label: 'Send a Message', trigger: 'contact' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/newmediapilot/', blank: true },
+  { label: 'GitHub', href: 'https://github.com/newmediapilot', blank: true },
+  { label: 'Download CV', href: '#', cta: true },
+]
+---
+
+<Base title="Home">
+  <header class="sticky top-0 z-50 w-full bg-black">
+    <div class="flex w-full flex-col gap-3 py-4 sm:h-20 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-0">
+      <a href="/" class="pl-4 text-xl font-extrabold uppercase tracking-widest sm:pl-6 sm:text-3xl">NewMediaPilot.com</a>
+
+      <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 pr-4 sm:pr-6">
+        {
+          nav.map((item) =>
+            item.trigger ? (
+              <button
+                type="button"
+                data-open-contact
+                class="text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-white/70 sm:text-sm"
+              >
+                {item.label}
+              </button>
+            ) : (
+              <a
+                href={item.href}
+                target={item.blank ? '_blank' : undefined}
+                rel={item.blank ? 'noopener noreferrer' : undefined}
+                class:list={[
+                  'text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-white/70 sm:text-sm',
+                  item.cta && 'rounded-md border border-white/70 px-3 py-1.5 hover:bg-white hover:text-black',
+                ]}
+              >
+                {item.label}
+              </a>
+            )
+          )
+        }
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex flex-1 flex-col bg-white/[0.05]">
+    <hr class="hr-wave w-full shrink-0" />
+
+    <div class="page">
+      <p class="wavy mt-10 text-sm leading-relaxed sm:mt-16 sm:text-base">{intro}</p>
+
+      <article class="py-10 sm:py-16">
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
+          <div>
+            <h2 class="text-xl font-extrabold uppercase tracking-widest">Technical skills</h2>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {technical.map((skill) => <li class="rounded-md border border-white/70 px-3 py-1.5 text-sm">{skill}</li>)}
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="text-xl font-extrabold uppercase tracking-widest">Professional skills</h2>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {professional.map((skill) => <li class="rounded-md border border-white/70 px-3 py-1.5 text-sm">{skill}</li>)}
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      {
+        rows.map((row) => (
+          <section class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
+            <p class="flex items-center text-sm leading-relaxed text-white sm:col-span-2 sm:text-base">{lorem}</p>
+            <img
+              src={row.image}
+              alt={row.alt}
+              loading="lazy"
+              class="aspect-square w-full object-cover sm:col-span-1"
+              style={`object-position: ${row.position}`}
+            />
+            <div class="sm:col-span-1">
+              <RowActions gallery={row.href} website={row.href} shareTitle={`${row.name} — NewMediaPilot.com`} />
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+
+  <ContactModal />
+
+  <Footer websites={websites} />
+</Base>

@@ -78,4 +78,76 @@ ul:has(.tile.is-active) .tile:not(.is-active) .tile-chicklet-wrapper {
   --tile-10: #8b5cf6;
   --tile-11: #a855f7;
   --tile-12: #ec4899;
+  --page-max: 32rem;
+  --page-pad: 1rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --page-max: 40rem;
+    --page-pad: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-max: 56rem;
+  }
+}
+
+.page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: calc(var(--page-max) + 2 * var(--page-pad));
+  padding-inline: var(--page-pad);
+  background: rgb(255 255 255 / 0.06);
+}
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+.hr-wave {
+  height: 3px;
+  border: 0;
+  margin: 0;
+  background-image: linear-gradient(90deg, #000 0%, #fff 50%, #000 100%);
+  background-size: 200px 100%;
+  background-repeat: repeat-x;
+  animation: hr-wave 6s linear infinite;
+}
+
+@keyframes hr-wave {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 200px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-wave {
+    animation: none;
+  }
+}
+
+.wavy {
+  --s: 18px;
+  --r: calc(1.05 * var(--s));
+  --wavy-bg: #bf4d28;
+  --wavy-fg: #fff;
+  background: var(--wavy-bg);
+  color: var(--wavy-fg);
+  padding: calc(2.6 * var(--s));
+  -webkit-mask:
+    radial-gradient(circle var(--r) at 50% 0, #0000 calc(100% - 1px), #000) 0 0 / calc(2 * var(--s)) 100%,
+    radial-gradient(circle var(--r) at 50% 100%, #0000 calc(100% - 1px), #000) 0 100% / calc(2 * var(--s)) 100%,
+    radial-gradient(circle var(--r) at 0 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s)),
+    radial-gradient(circle var(--r) at 100% 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s));
+  mask:
+    radial-gradient(circle var(--r) at 50% 0, #0000 calc(100% - 1px), #000) 0 0 / calc(2 * var(--s)) 100%,
+    radial-gradient(circle var(--r) at 50% 100%, #0000 calc(100% - 1px), #000) 0 100% / calc(2 * var(--s)) 100%,
+    radial-gradient(circle var(--r) at 0 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s)),
+    radial-gradient(circle var(--r) at 100% 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s));
 }

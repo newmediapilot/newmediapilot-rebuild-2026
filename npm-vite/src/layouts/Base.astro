@@ -1,12 +1,7 @@
 ---
 import '../styles/global.css'
-import Tile from '../components/Tile.astro'
-import { getCollection } from 'astro:content'
 
-const fm = Astro.props.frontmatter ?? Astro.props.content ?? {}
-const { title = 'Default' } = fm
-
-const tiles = (await getCollection('tiles')).sort((a, b) => a.id.localeCompare(b.id))
+const { title = 'Default' } = Astro.props
 ---
 
 <!doctype html>
@@ -16,24 +11,7 @@ const tiles = (await getCollection('tiles')).sort((a, b) => a.id.localeCompare(b
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
   </head>
-  <body>
-    <main class="flex min-h-dvh items-center justify-center md:h-dvh">
-      <ul class="grid w-full place-content-center grid-cols-2 md:w-[min(100vw,75dvh)] lg:w-[min(100vw,133.333dvh)] md:grid-cols-3 lg:grid-cols-4">
-        {tiles.map((tile) => (
-          <Tile title={tile.data.title} image={tile.data.image} />
-        ))}
-      </ul>
-    </main>
+  <body class="flex min-h-dvh flex-col text-white antialiased">
+    <slot />
   </body>
 </html>
-
-<script is:inline>
-  document.addEventListener('click', (e) => {
-    const tile = e.target.closest('.tile')
-    if (!tile) return
-    document.querySelectorAll('.tile.is-active').forEach(el => {
-      if (el !== tile) el.classList.remove('is-active')
-    })
-    tile.classList.toggle('is-active')
-  })
-</script>

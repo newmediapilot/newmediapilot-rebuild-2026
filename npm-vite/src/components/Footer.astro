@@ -1,0 +1,81 @@
+---
+interface Props {
+  websites?: { label: string; href: string }[]
+}
+
+const { websites = [] } = Astro.props
+
+const brands = [
+  'Labatt',
+  'LG',
+  'Rogers',
+  'Telus',
+  'Global Television',
+  "McDonald's",
+  'Lasenza',
+  'Stella McCartney',
+  'Ford',
+  'Harley Davidson',
+  'Loblaws',
+  'Dairy Farmers of Canada',
+]
+
+const contact = [
+  { label: 'marcin@newmediapilot.com', href: 'mailto:marcin@newmediapilot.com' },
+  { label: '+1 416 554 6798', href: 'tel:+14165546798' },
+  { label: 'Toronto, Ontario, Canada', href: '#' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/newmediapilot/' },
+  { label: 'GitHub', href: 'https://github.com/newmediapilot' },
+]
+
+const pillars = [
+  { heading: 'Websites', items: websites },
+  { heading: 'Brands', items: brands.slice(0, 6).map((label) => ({ label })) },
+  { heading: '', items: brands.slice(6).map((label) => ({ label })) },
+  { heading: 'Contact', items: contact },
+]
+---
+
+<footer class="border-t-[3px] border-dotted border-white shadow-[0_-12px_24px_-18px_#000]">
+  <div class="page py-12">
+    <table class="w-full table-fixed border-collapse text-left">
+      <thead>
+        <tr>
+          {
+            pillars.map((pillar) => (
+              <th
+                scope="col"
+                class="w-1/4 pb-4 align-bottom text-left text-xs font-extrabold uppercase tracking-widest"
+              >
+                {pillar.heading || <span class="sr-only">Brands, continued</span>}
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {
+            pillars.map((pillar) => (
+              <td class="w-1/4 align-top">
+                <ul class="flex flex-col gap-2">
+                  {pillar.items.map((item) => (
+                    <li class="text-xs text-white sm:text-sm">
+                      {item.href ? (
+                        <a href={item.href} class="hover:underline">
+                          {item.label}
+                        </a>
+                      ) : (
+                        item.label
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </td>
+            ))
+          }
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</footer>
