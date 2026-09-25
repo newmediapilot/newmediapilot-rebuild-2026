@@ -60,12 +60,12 @@ const skillGroups = [
     note: 'Builds websites and web applications',
     skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
   },
-  {
-    ident: 'cms',
-    label: 'Content systems',
-    note: 'Lets teams publish and manage their own content',
-    skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'Adobe Experience Manager'],
-  },
+    {
+      ident: 'cms',
+      label: 'Content management systems',
+      note: 'Lets teams publish and manage their own content',
+      skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'Adobe Experience Manager'],
+    },
   {
     ident: 'front-end',
     label: 'Front end',
@@ -154,16 +154,16 @@ const nav = [
 ---
 
 <Base title="Home">
-  <header data-ident="site-header" class="sticky top-0 z-50 w-full bg-black/70 backdrop-blur-[50px]">
-    <div data-ident="header-inner" class="flex w-full flex-col items-center gap-3 py-4 sm:h-40 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-0">
-      <a
-      href="/"
-      data-ident="header-brand"
-      class="font-koho pl-4 text-xl font-normal uppercase tracking-widest sm:pl-6 sm:text-3xl lg:pl-8 lg:text-6xl"
-      >New<b class="font-bold [-webkit-text-stroke:0.6px_currentColor]">media</b><span class="font-light">Pilot</span></a
-    >
 
-      <nav data-ident="header-nav" class="flex flex-wrap items-center gap-x-5 gap-y-2 pr-4 sm:pr-6">
+  <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 sm:gap-8 sm:p-8 lg:grid-cols-3">
+    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+      <a
+        href="/"
+        data-ident="header-brand"
+        class="font-koho text-3xl font-normal uppercase tracking-widest sm:text-4xl lg:text-5xl"
+        >New<b class="font-bold [-webkit-text-stroke:0.6px_currentColor]">media</b><span class="font-light">Pilot</span></a
+      >
+      <nav data-ident="header-nav" class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
         {
           nav.map((item) =>
             item.trigger ? (
@@ -192,15 +192,13 @@ const nav = [
           )
         }
       </nav>
-    </div>
-  </header>
+    </section>
 
-  <main data-ident="site-main" class="flex flex-1 flex-col gap-6 p-4 sm:gap-10 sm:p-8">
-    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000]">
+    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[33vh]">
       <p data-ident="intro-paragraph" class="text-shadow-hard font-serif text-base leading-relaxed sm:text-lg">{intro}</p>
     </section>
 
-    <section data-ident="professional-skills" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000]">
+    <section data-ident="professional-skills" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
       <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
       <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
         {
@@ -214,53 +212,73 @@ const nav = [
       </ul>
     </section>
 
-    <section data-ident="technical-skills" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000]">
-      <h2 data-ident="technical-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Technical skills</h2>
-
-      <div data-ident="technical-skills-grid" class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
-        {
-          skillGroups.map((group) => (
-            <div data-ident={`skill-group-${group.ident}`} class="rounded-panel border border-white/10 bg-transparent p-5 sm:p-6">
-              <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-lg font-bold uppercase tracking-wider text-white sm:text-xl">
-                {group.label}
-              </h3>
-              <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-sm leading-relaxed text-white/60 sm:text-base">
-                {group.note}
-              </p>
-              <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2">
-                {group.skills.map((skill) => (
-                  <li data-ident="skill-item" class="rounded-md border border-white/30 bg-black px-3 py-1.5 text-sm sm:text-base">
-                    {skill}
-                  </li>
-                ))}
-              </ul>
+    {
+      skillGroups.map((group) => (
+        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+          <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">
+            {group.label}
+          </h3>
+          <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2">
+            {group.note}
+          </p>
+          {group.ident === 'frameworks' ? (
+            <div class="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
+              {group.skills.map((skill) => {
+                const iconMap = {
+                  'React': 'react',
+                  'Angular': 'angular',
+                  'Vue': 'vuedotjs',
+                  'Astro': 'astro',
+                  'Symfony': 'symfony',
+                  'Redux': 'redux'
+                };
+                const urlMap = {
+                  'React': 'https://react.dev',
+                  'Angular': 'https://angular.io',
+                  'Vue': 'https://vuejs.org',
+                  'Astro': 'https://astro.build',
+                  'Symfony': 'https://symfony.com',
+                  'Redux': 'https://redux.js.org'
+                };
+                const icon = iconMap[skill] || 'react';
+                const url = urlMap[skill] || '#';
+                return (
+                  <a href={url} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center rounded-md border border-white/20 bg-black/40 p-3 text-center opacity-60 transition-opacity duration-200 hover:opacity-100">
+                    <img src={`https://cdn.simpleicons.org/${icon}/ffffff`} alt={skill} class="mb-2 h-8 w-8 sm:h-10 sm:w-10 transition-transform duration-200 group-hover:scale-110" />
+                    <span class="text-[10px] sm:text-xs">{skill}</span>
+                  </a>
+                );
+              })}
             </div>
-          ))
-        }
+          ) : (
+            <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2 max-h-[12vh] overflow-auto">
+              {group.skills.map((skill) => (
+                <li data-ident="skill-item" class="rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm">
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
 
-        <div data-ident="skill-group-blank" aria-hidden="true" class="rounded-panel border border-white/10 bg-transparent p-5 sm:p-6"></div>
-      </div>
-    </section>
+    <section data-ident="skill-group-blank" aria-hidden="true" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]"></section>
 
-    <section data-ident="recent-work" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000]">
-      <h2 data-ident="recent-work-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Recent work</h2>
-      <div data-ident="recent-work-grid" class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
-        {
-          rows.slice(0,4).map((row) => (
-            <div data-ident={`recent-work-${slug(row.name)}`} class="rounded-panel border border-white/10 bg-transparent p-4 sm:p-5">
-              <img src={row.image} alt={row.alt} loading="lazy" class="aspect-video w-full rounded-lg object-cover" style={`object-position: ${row.position}`} />
-              <h3 class="mt-3 font-serif text-lg sm:text-xl">{row.name}</h3>
-              <p class="mt-1 text-sm text-white/70">Ongoing client work with focus on performance and content systems.</p>
-              <div class="mt-3">
-                <a href={row.href} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit site</a>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </section>
+    {
+      rows.slice(0,4).map((row) => (
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+          <img src={row.image} alt={row.alt} loading="lazy" class="aspect-video w-full rounded-lg object-cover" style={`object-position: ${row.position}`} />
+          <h3 class="mt-4 font-serif text-2xl sm:text-3xl">{row.name}</h3>
+          <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
+          <div class="mt-4">
+            <a href={row.href} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit site</a>
+          </div>
+        </section>
+      ))
+    }
 
-    <section data-ident="portfolio-panel" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000]">
+    <section data-ident="portfolio-panel" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] lg:col-span-3 sm:col-span-2 h-[33vh]">
       {
         rows.map((row) => (
           <section data-ident={`project-row-${slug(row.name)}`} class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
