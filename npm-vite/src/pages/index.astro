@@ -266,7 +266,7 @@ const nav = [
     <section data-ident="skill-group-blank" aria-hidden="true" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]"></section>
 
     {
-      rows.slice(0,4).map((row) => (
+      rows.map((row) => (
         <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
           <img src={row.image} alt={row.alt} loading="lazy" class="aspect-video w-full rounded-lg object-cover" style={`object-position: ${row.position}`} />
           <h3 class="mt-4 font-serif text-2xl sm:text-3xl">{row.name}</h3>
@@ -277,29 +277,6 @@ const nav = [
         </section>
       ))
     }
-
-    <section data-ident="portfolio-panel" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] lg:col-span-3 sm:col-span-2 h-[33vh]">
-      {
-        rows.map((row) => (
-          <section data-ident={`project-row-${slug(row.name)}`} class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
-            <p data-ident="project-description" class="flex items-center text-sm leading-relaxed text-white sm:col-span-2 sm:text-base">
-              {lorem}
-            </p>
-            <img
-              data-ident="project-image"
-              src={row.image}
-              alt={row.alt}
-              loading="lazy"
-              class="aspect-square w-full object-cover sm:col-span-1"
-              style={`object-position: ${row.position}`}
-            />
-            <div data-ident="project-actions" class="sm:col-span-1">
-              <RowActions gallery={row.href} website={row.href} shareTitle={`${row.name} — NewMediaPilot`} />
-            </div>
-          </section>
-        ))
-      }
-    </section>
   </main>
 
   <ContactModal />
