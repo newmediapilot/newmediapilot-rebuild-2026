@@ -15,12 +15,6 @@
     "dev": "npm run dev --workspace=npm-vite",
     "start": "npm run start --workspace=npm-vite",
     "build": "npm run build --workspace=npm-vite",
-    "watch": "npm run watch --workspace=npm-deploy",
-    "deploy": "npm run deploy --workspace=npm-deploy",
-    "flash": "npm run play:remedy --workspace=npm-flash",
-    "record": "npm run record:remedy --workspace=npm-flash",
-    "record:site": "node npm-flash/scripts/record.mjs",
-    "record:sites": "node npm-flash/scripts/record-sites.mjs",
-    "record:live": "node npm-flash/scripts/record-live.mjs"
+    "patch": "npm run build && npm version patch && git push --follow-tags"
   }
 }
