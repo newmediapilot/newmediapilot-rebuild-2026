@@ -8,7 +8,7 @@ const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 
 const intro =
-  'I have spent a couple of decades building things on the internet, and I still enjoy the work as much as I did on the first day. Real problems rarely arrive neat, so I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think ahead.'
+  'I have spent decades building things on the Internet, and I enjoy the work. I have worked in real estate, advertising and marketing, games and entertainment, and the public sector. I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think ahead.'
 
 const rows = [
   { name: 'HomeLife Realty', href: 'https://www.homelife.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'center' },
@@ -195,50 +195,54 @@ const nav = [
     </div>
   </header>
 
-  <main data-ident="site-main" class="flex flex-1 flex-col bg-white/[0.05]">
-    <div data-ident="main-container" class="page">
-      <p data-ident="intro-paragraph" class="mt-5 bg-rust p-8 font-serif text-base leading-relaxed sm:mt-5 sm:p-12 sm:text-lg">{intro}</p>
+  <main data-ident="site-main" class="flex flex-1 flex-col gap-6 p-4 sm:gap-10 sm:p-8">
+    <div data-ident="intro-panel" class="page bg-transparent px-0">
+      <p data-ident="intro-paragraph" class="text-shadow-hard stripes-rust rounded-panel p-8 font-serif text-base leading-relaxed sm:p-12 sm:text-lg">{intro}</p>
+    </div>
 
-      <div data-ident="professional-skills" class="mt-10 sm:mt-14">
-        <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
-        <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-          {
-            professional.map((skill) => (
-              <li data-ident="professional-skill-item" class="flex items-start gap-2 text-sm">
-                <span aria-hidden="true" class="mt-1.5 size-1.5 shrink-0 rounded-full bg-white" />
-                {skill}
-              </li>
-            ))
-          }
-        </ul>
+    <section data-ident="professional-skills" class="page rounded-panel pt-8 pb-10 sm:pt-10 sm:pb-12">
+      <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
+      <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+        {
+          professional.map((skill) => (
+            <li data-ident="professional-skill-item" class="flex items-start gap-2 text-sm">
+              <span aria-hidden="true" class="mt-1.5 size-1.5 shrink-0 rounded-full bg-white" />
+              {skill}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section data-ident="technical-skills" class="page rounded-panel pt-8 pb-10 sm:pt-10 sm:pb-12">
+      <h2 data-ident="technical-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Technical skills</h2>
+
+      <div data-ident="technical-skills-grid" class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
+        {
+          skillGroups.map((group) => (
+            <div data-ident={`skill-group-${group.ident}`} class="rounded-panel border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+              <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-base font-bold uppercase tracking-wider text-white sm:text-lg">
+                {group.label}
+              </h3>
+              <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-xs leading-relaxed text-white/60">
+                {group.note}
+              </p>
+              <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <li data-ident="skill-item" class="rounded-md border border-white/70 bg-black px-2.5 py-1 text-xs sm:text-sm">
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        <div data-ident="skill-group-blank" aria-hidden="true" class="rounded-panel border border-white/10 bg-white/[0.03] p-5 sm:p-6"></div>
       </div>
+    </section>
 
-      <article data-ident="skills-article" class="py-10 sm:py-16">
-        <h2 data-ident="technical-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Technical skills</h2>
-
-        <div data-ident="technical-skills" class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
-          {
-            skillGroups.map((group) => (
-              <div data-ident={`skill-group-${group.ident}`}>
-                <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-base font-bold uppercase tracking-wider text-white sm:text-lg">
-                  {group.label}
-                </h3>
-                <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-xs leading-relaxed text-white/60">
-                  {group.note}
-                </p>
-                <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <li data-ident="skill-item" class="rounded-md border border-white/70 bg-black px-2.5 py-1 text-xs sm:text-sm">
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
-        </div>
-      </article>
-
+    <section data-ident="portfolio-panel" class="page rounded-panel pt-8 pb-10 sm:pt-10 sm:pb-12">
       {
         rows.map((row) => (
           <section data-ident={`project-row-${slug(row.name)}`} class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
@@ -259,7 +263,7 @@ const nav = [
           </section>
         ))
       }
-    </div>
+    </section>
   </main>
 
   <ContactModal />

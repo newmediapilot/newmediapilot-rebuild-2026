@@ -18,7 +18,12 @@ const brands = [
   'Harley Davidson',
   'Loblaws',
   'Dairy Farmers of Canada',
+  'RBC',
+  'ATI',
+  'Three Doors Down',
 ]
+
+const year = new Date().getFullYear()
 
 const contact = [
   { label: 'marcin@newmediapilot.com', href: 'mailto:marcin@newmediapilot.com' },
@@ -30,14 +35,14 @@ const contact = [
 
 const pillars = [
   { ident: 'websites', heading: 'Websites', items: websites },
-  { ident: 'brands', heading: 'Brands', items: brands.slice(0, 6).map((label) => ({ label })) },
-  { ident: 'brands-continued', heading: '', items: brands.slice(6).map((label) => ({ label })) },
+  { ident: 'brands', heading: 'Brands', items: brands.slice(0, 8).map((label) => ({ label })) },
+  { ident: 'brands-continued', heading: '', items: brands.slice(8).map((label) => ({ label })) },
   { ident: 'contact', heading: 'Contact', items: contact },
 ]
 ---
 
 <footer data-ident="site-footer">
-  <div data-ident="footer-container" class="page py-12 shadow-[0_30px_60px_-20px_#000]">
+  <div data-ident="footer-container" class="page rounded-panel pb-8 pt-12 shadow-[0_30px_60px_-20px_#000]">
     <table data-ident="footer-table" class="w-full table-fixed border-collapse text-left">
       <thead>
         <tr>
@@ -78,5 +83,9 @@ const pillars = [
         </tr>
       </tbody>
     </table>
+
+    <p data-ident="footer-attribution" class="mt-8 text-right text-xs font-normal tracking-widest text-white/40">
+      &copy; {year} NEWMEDIAPILOT
+    </p>
   </div>
 </footer>

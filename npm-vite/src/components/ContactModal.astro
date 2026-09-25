@@ -2,14 +2,14 @@
 const fields = [
   { name: 'name', label: 'Name', type: 'text', autocomplete: 'name' },
   { name: 'email', label: 'Email', type: 'email', autocomplete: 'email' },
-  { name: 'number', label: 'Number', type: 'tel', autocomplete: 'tel' },
+  { name: 'number', label: 'Number', type: 'text', autocomplete: 'tel', inputmode: 'numeric', pattern: '[0-9]*', maxlength: 25 },
 ]
 ---
 
 <dialog
   id="contact"
   data-ident="contact-modal"
-  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
 >
   <div data-ident="contact-modal-panel" class="page flex h-full flex-col bg-black!">
     <div data-ident="contact-modal-header" class="flex items-center justify-between gap-4 py-6">
@@ -18,10 +18,10 @@ const fields = [
         type="button"
         data-ident="contact-modal-close"
         data-close-contact
-        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 transition-colors hover:bg-white hover:text-black"
+        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         aria-label="Close"
       >
-        <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18"></path>
         </svg>
       </button>
@@ -30,24 +30,31 @@ const fields = [
     <form data-ident="contact-form" data-contact-form class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
       {
         fields.map((field) => (
-          <label data-ident={`contact-field-${field.name}`} class="block">
-            <span data-ident="contact-field-label" class="text-xs font-semibold uppercase tracking-widest">{field.label}</span>
+          <label data-ident={`contact-field-${field.name}`} for={`contact-${field.name}`} class="block">
+            <span data-ident={`contact-label-${field.name}`} class="block text-sm font-semibold uppercase tracking-widest text-white">
+              {field.label}
+            </span>
             <input
               required
+              id={`contact-${field.name}`}
               name={field.name}
               type={field.type}
               autocomplete={field.autocomplete}
-              data-ident={"contact-input-${field.name}"}
+              inputmode={field.inputmode}
+              pattern={field.pattern}
+              maxlength={field.maxlength}
+              data-ident={`contact-input-${field.name}`}
               class="mt-2 w-full border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
             />
           </label>
         ))
       }
 
-      <label data-ident="contact-field-message" class="block">
-        <span data-ident="contact-field-label" class="text-xs font-semibold uppercase tracking-widest">Message</span>
+      <label data-ident="contact-field-message" for="contact-message" class="block">
+        <span data-ident="contact-label-message" class="block text-sm font-semibold uppercase tracking-widest text-white">Message</span>
         <textarea
           required
+          id="contact-message"
           name="message"
           data-ident="contact-input-message"
           rows="6"
@@ -55,7 +62,7 @@ const fields = [
         ></textarea>
       </label>
 
-      <div data-ident="contact-form-actions" class="flex flex-wrap items-center gap-4">
+      <div data-ident="contact-form-actions" class="flex flex-wrap items-center justify-end gap-4">
         <button
           type="submit"
           data-ident="contact-submit"
@@ -87,6 +94,32 @@ const fields = [
 
   dialog?.addEventListener('click', (event) => {
     if (event.target === dialog) close()
+  })
+
+  const numberInput = document.querySelector('[data-ident="contact-input-number"]')
+
+  const digitsOnly = (value) => value.replace(/\D+/g, '')
+
+  numberInput?.addEventListener('input', (event) => {
+    const input = event.currentTarget
+    input.value = digitsOnly(input.value).slice(0, 25)
+  })
+
+  numberInput?.addEventListener('paste', (event) => {
+    event.preventDefault()
+    const pasted = event.clipboardData?.getData('text') ?? ''
+    const input = event.currentTarget
+    const start = input.selectionStart ?? input.value.length
+    const end = input.selectionEnd ?? input.value.length
+    const next = `${input.value.slice(0, start)}${digitsOnly(pasted)}${input.value.slice(end)}`.slice(0, 25)
+    input.value = next
+    input.setSelectionRange(next.length, next.length)
+  })
+
+  numberInput?.addEventListener('keydown', (event) => {
+    if (event.key.length === 1 && !/\d/.test(event.key) && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault()
+    }
   })
 
   document.querySelector('[data-contact-form]')?.addEventListener('submit', (event) => {
