@@ -35,86 +35,70 @@ const skillGroups = [
   {
     ident: 'ai',
     label: 'AI and automation',
-    note: 'Builds AI assistants and lets agents do the repetitive work',
+    note: 'Builds AI assistants and automates repetitive work',
     skills: [
       'AI agents',
+      'Agentic coding',
+      'Automation',
       'OpenCode',
       'LM Studio',
       'Google ADK',
       'OpenAI API',
+      'Hugging Face',
+      'Local models',
       'GPT OSS',
       'DeepSeek',
       'Nemotron',
       'GLM',
       'Gemma',
-      'Hugging Face',
       'Prompt engineering',
-      'Agentic coding',
-      'Local models',
-      'Automation',
     ],
   },
   {
     ident: 'frameworks',
     label: 'Web frameworks',
-    note: 'Builds websites and web apps that stay fast',
+    note: 'Builds websites and web applications',
     skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
   },
   {
     ident: 'cms',
     label: 'Content systems',
-    note: 'Lets teams publish and edit their own content',
+    note: 'Lets teams publish and manage their own content',
     skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'Adobe Experience Manager'],
   },
   {
     ident: 'front-end',
     label: 'Front end',
-    note: 'Everything the visitor sees and touches in a browser',
-    skills: [
-      'HTML',
-      'CSS',
-      'SCSS',
-      'Tailwind',
-      'JavaScript',
-      'TypeScript',
-      'GSAP',
-      'Service workers',
-      'Socket client',
-      'Vite',
-      'Webpack',
-      'Parcel',
-      'Gulp',
-    ],
+    note: 'Everything the visitor sees and interacts with in a browser',
+    skills: ['HTML', 'CSS', 'SCSS', 'Tailwind', 'JavaScript', 'TypeScript', 'GSAP', 'Service workers', 'Vite'],
   },
   {
     ident: 'back-end',
     label: 'Back end',
-    note: 'Servers, APIs, logins and the plumbing behind the page',
+    note: 'Servers, APIs, authentication and application logic',
     skills: [
       'Node.js',
       'Express',
       'Fastify',
       'PHP',
       'ASP',
-      'Socket.IO',
       'API design',
       'User authentication',
       'Pipeline design',
-      'Unix',
-      'Linux',
-      'Git',
+      'Socket.IO',
+      'WebSockets',
     ],
   },
   {
     ident: 'databases',
     label: 'Databases',
-    note: 'Stores and queries the data a site collects',
-    skills: ['SQL', 'MongoDB', 'DynamoDB', 'SQLite', 'NoSQL'],
+    note: 'Stores and queries application data',
+    skills: ['SQL', 'NoSQL', 'MongoDB', 'DynamoDB', 'SQLite'],
   },
   {
     ident: 'cloud',
-    label: 'Cloud hosting',
-    note: 'Puts the site online, fast and reachable worldwide',
+    label: 'Cloud and infrastructure',
+    note: 'Deploys, hosts and scales applications',
     skills: [
       'AWS',
       'Lambda',
@@ -127,13 +111,21 @@ const skillGroups = [
       'Lightsail',
       'Netlify',
       'Vercel',
+      'Unix',
+      'Linux',
     ],
   },
   {
+    ident: 'build',
+    label: 'Build and development',
+    note: 'Builds, packages and manages web applications',
+    skills: ['Git', 'Webpack', 'Parcel', 'Gulp'],
+  },
+  {
     ident: 'accessibility-security',
-    label: 'Accessibility and security',
-    note: 'Keeps the site usable for everyone and safe to use',
-    skills: ['WCAG', 'AODA', 'i18n', 'Web application security', 'OWASP', 'GDPR', 'Web privacy'],
+    label: 'Accessibility, security and compliance',
+    note: 'Builds accessible, secure and privacy-conscious applications',
+    skills: ['WCAG', 'AODA', 'OWASP', 'Web application security', 'GDPR', 'Web privacy', 'i18n'],
   },
 ]
 
@@ -164,7 +156,7 @@ const nav = [
 <Base title="Home">
   <header data-ident="site-header" class="sticky top-0 z-50 w-full bg-black/70 backdrop-blur-[50px]">
     <div data-ident="header-inner" class="flex w-full flex-col items-center gap-3 py-4 sm:h-40 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-0">
-      <a href="/" data-ident="header-brand" class="pl-4 text-xl font-extrabold uppercase tracking-widest sm:pl-6 sm:text-3xl">NewMediaPilot</a>
+      <a href="/" data-ident="header-brand" class="font-koho pl-4 text-xl font-bold uppercase tracking-widest sm:pl-6 sm:text-3xl">NewMediaPilot</a>
 
       <nav data-ident="header-nav" class="flex flex-wrap items-center gap-x-5 gap-y-2 pr-4 sm:pr-6">
         {
@@ -200,7 +192,21 @@ const nav = [
 
   <main data-ident="site-main" class="flex flex-1 flex-col bg-white/[0.05]">
     <div data-ident="main-container" class="page">
-      <p data-ident="intro-paragraph" class="wavy mt-10 font-serif text-base leading-relaxed sm:mt-16 sm:text-lg">{intro}</p>
+      <p data-ident="intro-paragraph" class="mt-5 bg-rust p-8 font-serif text-base leading-relaxed sm:mt-5 sm:p-12 sm:text-lg">{intro}</p>
+
+      <div data-ident="professional-skills" class="mt-10 sm:mt-14">
+        <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
+        <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+          {
+            professional.map((skill) => (
+              <li data-ident="professional-skill-item" class="flex items-start gap-2 text-sm">
+                <span aria-hidden="true" class="mt-1.5 size-1.5 shrink-0 rounded-full bg-white" />
+                {skill}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
 
       <article data-ident="skills-article" class="py-10 sm:py-16">
         <h2 data-ident="technical-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Technical skills</h2>
@@ -225,22 +231,6 @@ const nav = [
               </div>
             ))
           }
-        </div>
-
-        <div data-ident="professional-skills" class="mt-12 sm:mt-16">
-          <h2 data-ident="professional-skills-heading" class="text-xl font-extrabold uppercase tracking-widest">
-            Professional skills
-          </h2>
-          <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-            {
-              professional.map((skill) => (
-                <li data-ident="professional-skill-item" class="flex items-start gap-2 text-sm">
-                  <span aria-hidden="true" class="mt-1.5 size-1.5 shrink-0 rounded-full bg-white" />
-                  {skill}
-                </li>
-              ))
-            }
-          </ul>
         </div>
       </article>
 
@@ -270,4 +260,6 @@ const nav = [
   <ContactModal />
 
   <Footer websites={websites} />
+
+  <div data-ident="footer-spacer" class="h-[40vh] bg-transparent opacity-0" aria-hidden="true"></div>
 </Base>

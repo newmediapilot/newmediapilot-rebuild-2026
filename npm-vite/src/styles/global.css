@@ -2,14 +2,33 @@
 
 @theme {
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, 'Times New Roman', serif;
+  --color-rust: #bf4d28;
+  --font-koho: 'KoHo', 'Helvetica Neue', Arial, sans-serif;
 }
 
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background: radial-gradient(circle at center center, #000000 0%, #0c0c0c 100%);
-  background-size: 150% 150%;
+  background-color: #000;
+  background-image: linear-gradient(
+    135deg,
+    #000 0%,
+    #141414 6%,
+    #070707 13%,
+    #1c1c1c 19%,
+    #0a0a0a 27%,
+    #161616 34%,
+    #050505 42%,
+    #121212 49%,
+    #000 57%,
+    #191919 65%,
+    #090909 73%,
+    #171717 81%,
+    #060606 90%,
+    #000 100%
+  );
+  background-size: 200% 200%;
   animation: gradient-drift 40s ease-in-out infinite;
 }
 
@@ -112,24 +131,4 @@ ul:has(.tile.is-active) .tile:not(.is-active) .tile-chicklet-wrapper {
 
 body:has(dialog[open]) {
   overflow: hidden;
-}
-
-.wavy {
-  --s: 18px;
-  --r: calc(1.3 * var(--s));
-  --wavy-bg: #bf4d28;
-  --wavy-fg: #fff;
-  background: var(--wavy-bg);
-  color: var(--wavy-fg);
-  padding: calc(2.6 * var(--s));
-  -webkit-mask:
-    radial-gradient(circle var(--r) at 50% 0, #0000 calc(100% - 1px), #000) 0 0 / calc(2 * var(--s)) 100%,
-    radial-gradient(circle var(--r) at 50% 100%, #0000 calc(100% - 1px), #000) 0 100% / calc(2 * var(--s)) 100%,
-    radial-gradient(circle var(--r) at 0 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s)),
-    radial-gradient(circle var(--r) at 100% 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s));
-  mask:
-    radial-gradient(circle var(--r) at 50% 0, #0000 calc(100% - 1px), #000) 0 0 / calc(2 * var(--s)) 100%,
-    radial-gradient(circle var(--r) at 50% 100%, #0000 calc(100% - 1px), #000) 0 100% / calc(2 * var(--s)) 100%,
-    radial-gradient(circle var(--r) at 0 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s)),
-    radial-gradient(circle var(--r) at 100% 50%, #0000 calc(100% - 1px), #000) 0 0 / 100% calc(2 * var(--s));
 }
