@@ -7,7 +7,8 @@ import Footer from '../components/Footer.astro'
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 
-const intro = [lorem, lorem, lorem].join(' ')
+const intro =
+  'I have spent a couple of decades building things on the internet, and I still enjoy the work as much as I did on the first day. Real problems rarely arrive neat, so I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think ahead.'
 
 const rows = [
   { name: 'HomeLife Realty', href: 'https://www.homelife.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'center' },
@@ -24,29 +25,155 @@ const rows = [
 
 const websites = rows.map((row) => ({ label: row.name, href: row.href }))
 
-const technical = ['TypeScript', 'React', 'Astro', 'Node.js', 'Tailwind CSS', 'PostgreSQL']
-const professional = ['Communication', 'Team leadership', 'Problem solving', 'Code review', 'Mentoring', 'Project ownership']
+const slug = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
+const skillGroups = [
+  {
+    ident: 'ai',
+    label: 'AI and automation',
+    note: 'Builds AI assistants and lets agents do the repetitive work',
+    skills: [
+      'AI agents',
+      'OpenCode',
+      'LM Studio',
+      'Google ADK',
+      'OpenAI API',
+      'GPT OSS',
+      'DeepSeek',
+      'Nemotron',
+      'GLM',
+      'Gemma',
+      'Hugging Face',
+      'Prompt engineering',
+      'Agentic coding',
+      'Local models',
+      'Automation',
+    ],
+  },
+  {
+    ident: 'frameworks',
+    label: 'Web frameworks',
+    note: 'Builds websites and web apps that stay fast',
+    skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
+  },
+  {
+    ident: 'cms',
+    label: 'Content systems',
+    note: 'Lets teams publish and edit their own content',
+    skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'Adobe Experience Manager'],
+  },
+  {
+    ident: 'front-end',
+    label: 'Front end',
+    note: 'Everything the visitor sees and touches in a browser',
+    skills: [
+      'HTML',
+      'CSS',
+      'SCSS',
+      'Tailwind',
+      'JavaScript',
+      'TypeScript',
+      'GSAP',
+      'Service workers',
+      'Socket client',
+      'Vite',
+      'Webpack',
+      'Parcel',
+      'Gulp',
+    ],
+  },
+  {
+    ident: 'back-end',
+    label: 'Back end',
+    note: 'Servers, APIs, logins and the plumbing behind the page',
+    skills: [
+      'Node.js',
+      'Express',
+      'Fastify',
+      'PHP',
+      'ASP',
+      'Socket.IO',
+      'API design',
+      'User authentication',
+      'Pipeline design',
+      'Unix',
+      'Linux',
+      'Git',
+    ],
+  },
+  {
+    ident: 'databases',
+    label: 'Databases',
+    note: 'Stores and queries the data a site collects',
+    skills: ['SQL', 'MongoDB', 'DynamoDB', 'SQLite', 'NoSQL'],
+  },
+  {
+    ident: 'cloud',
+    label: 'Cloud hosting',
+    note: 'Puts the site online, fast and reachable worldwide',
+    skills: [
+      'AWS',
+      'Lambda',
+      'S3',
+      'CloudFront',
+      'Route 53',
+      'EC2',
+      'Elastic Beanstalk',
+      'Load balancers',
+      'Lightsail',
+      'Netlify',
+      'Vercel',
+    ],
+  },
+  {
+    ident: 'accessibility-security',
+    label: 'Accessibility and security',
+    note: 'Keeps the site usable for everyone and safe to use',
+    skills: ['WCAG', 'AODA', 'i18n', 'Web application security', 'OWASP', 'GDPR', 'Web privacy'],
+  },
+]
+
+const professional = [
+  'Agency background',
+  'Coordinates stand-ups',
+  'Ships fast under tight deadlines',
+  'Natural problem solver',
+  'Clear and direct communicator',
+  'Performance focused',
+  'Mentors other developers',
+  'Client-facing delivery',
+]
 
 const nav = [
-  { label: 'Send a Message', trigger: 'contact' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/newmediapilot/', blank: true },
-  { label: 'GitHub', href: 'https://github.com/newmediapilot', blank: true },
-  { label: 'Download CV', href: '#', cta: true },
+  { label: 'Send a Message', ident: 'header-nav-send-message', trigger: 'contact' },
+  { label: 'LinkedIn', ident: 'header-nav-linkedin', href: 'https://www.linkedin.com/in/newmediapilot/', blank: true },
+  { label: 'GitHub', ident: 'header-nav-github', href: 'https://github.com/newmediapilot', blank: true },
+  {
+    label: 'Download CV',
+    ident: 'header-nav-download-cv',
+    href: '/uploads/Marcin%20Zajkowski%202026%20-%20Full-stack%20Front-end%20Dev.pdf',
+    cta: true,
+  },
 ]
 ---
 
 <Base title="Home">
-  <header class="sticky top-0 z-50 w-full bg-black">
-    <div class="flex w-full flex-col gap-3 py-4 sm:h-20 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-0">
-      <a href="/" class="pl-4 text-xl font-extrabold uppercase tracking-widest sm:pl-6 sm:text-3xl">NewMediaPilot.com</a>
+  <header data-ident="site-header" class="sticky top-0 z-50 w-full bg-black/70 backdrop-blur-[50px]">
+    <div data-ident="header-inner" class="flex w-full flex-col items-center gap-3 py-4 sm:h-40 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-0">
+      <a href="/" data-ident="header-brand" class="pl-4 text-xl font-extrabold uppercase tracking-widest sm:pl-6 sm:text-3xl">NewMediaPilot</a>
 
-      <nav class="flex flex-wrap items-center gap-x-5 gap-y-2 pr-4 sm:pr-6">
+      <nav data-ident="header-nav" class="flex flex-wrap items-center gap-x-5 gap-y-2 pr-4 sm:pr-6">
         {
           nav.map((item) =>
             item.trigger ? (
               <button
                 type="button"
                 data-open-contact
+                data-ident={item.ident}
                 class="text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-white/70 sm:text-sm"
               >
                 {item.label}
@@ -56,9 +183,10 @@ const nav = [
                 href={item.href}
                 target={item.blank ? '_blank' : undefined}
                 rel={item.blank ? 'noopener noreferrer' : undefined}
+                data-ident={item.ident}
                 class:list={[
-                  'text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:text-white/70 sm:text-sm',
-                  item.cta && 'rounded-md border border-white/70 px-3 py-1.5 hover:bg-white hover:text-black',
+                  'text-xs font-semibold uppercase tracking-widest text-white transition-colors sm:text-sm',
+                  item.cta ? 'rounded-md border border-white/70 px-3 py-1.5 hover:bg-white hover:text-black' : 'hover:text-white/70',
                 ]}
               >
                 {item.label}
@@ -70,43 +198,68 @@ const nav = [
     </div>
   </header>
 
-  <main class="flex flex-1 flex-col bg-white/[0.05]">
-    <hr class="w-full shrink-0" />
+  <main data-ident="site-main" class="flex flex-1 flex-col bg-white/[0.05]">
+    <div data-ident="main-container" class="page">
+      <p data-ident="intro-paragraph" class="wavy mt-10 font-serif text-base leading-relaxed sm:mt-16 sm:text-lg">{intro}</p>
 
-    <div class="page">
-      <p class="wavy mt-10 text-sm leading-relaxed sm:mt-16 sm:text-base">{intro}</p>
+      <article data-ident="skills-article" class="py-10 sm:py-16">
+        <h2 data-ident="technical-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Technical skills</h2>
 
-      <article class="py-10 sm:py-16">
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
-          <div>
-            <h2 class="text-xl font-extrabold uppercase tracking-widest">Technical skills</h2>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              {technical.map((skill) => <li class="rounded-md border border-white/70 px-3 py-1.5 text-sm">{skill}</li>)}
-            </ul>
-          </div>
+        <div data-ident="technical-skills" class="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-6">
+          {
+            skillGroups.map((group) => (
+              <div data-ident={`skill-group-${group.ident}`}>
+                <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-base font-bold uppercase tracking-wider text-white sm:text-lg">
+                  {group.label}
+                </h3>
+                <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-xs leading-relaxed text-white/60">
+                  {group.note}
+                </p>
+                <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <li data-ident="skill-item" class="rounded-md border border-white/70 bg-black px-2.5 py-1 text-xs sm:text-sm">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
 
-          <div>
-            <h2 class="text-xl font-extrabold uppercase tracking-widest">Professional skills</h2>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              {professional.map((skill) => <li class="rounded-md border border-white/70 px-3 py-1.5 text-sm">{skill}</li>)}
-            </ul>
-          </div>
+        <div data-ident="professional-skills" class="mt-12 sm:mt-16">
+          <h2 data-ident="professional-skills-heading" class="text-xl font-extrabold uppercase tracking-widest">
+            Professional skills
+          </h2>
+          <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+            {
+              professional.map((skill) => (
+                <li data-ident="professional-skill-item" class="flex items-start gap-2 text-sm">
+                  <span aria-hidden="true" class="mt-1.5 size-1.5 shrink-0 rounded-full bg-white" />
+                  {skill}
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </article>
 
       {
         rows.map((row) => (
-          <section class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
-            <p class="flex items-center text-sm leading-relaxed text-white sm:col-span-2 sm:text-base">{lorem}</p>
+          <section data-ident={`project-row-${slug(row.name)}`} class="grid min-h-[max(200px,20vh)] grid-cols-1 gap-4 py-6 sm:grid-cols-4 sm:gap-6">
+            <p data-ident="project-description" class="flex items-center text-sm leading-relaxed text-white sm:col-span-2 sm:text-base">
+              {lorem}
+            </p>
             <img
+              data-ident="project-image"
               src={row.image}
               alt={row.alt}
               loading="lazy"
               class="aspect-square w-full object-cover sm:col-span-1"
               style={`object-position: ${row.position}`}
             />
-            <div class="sm:col-span-1">
-              <RowActions gallery={row.href} website={row.href} shareTitle={`${row.name} — NewMediaPilot.com`} />
+            <div data-ident="project-actions" class="sm:col-span-1">
+              <RowActions gallery={row.href} website={row.href} shareTitle={`${row.name} — NewMediaPilot`} />
             </div>
           </section>
         ))

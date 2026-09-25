@@ -29,22 +29,23 @@ const contact = [
 ]
 
 const pillars = [
-  { heading: 'Websites', items: websites },
-  { heading: 'Brands', items: brands.slice(0, 6).map((label) => ({ label })) },
-  { heading: '', items: brands.slice(6).map((label) => ({ label })) },
-  { heading: 'Contact', items: contact },
+  { ident: 'websites', heading: 'Websites', items: websites },
+  { ident: 'brands', heading: 'Brands', items: brands.slice(0, 6).map((label) => ({ label })) },
+  { ident: 'brands-continued', heading: '', items: brands.slice(6).map((label) => ({ label })) },
+  { ident: 'contact', heading: 'Contact', items: contact },
 ]
 ---
 
-<footer class="border-t-[3px] border-dotted border-white shadow-[0_-12px_24px_-18px_#000]">
-  <div class="page py-12">
-    <table class="w-full table-fixed border-collapse text-left">
+<footer data-ident="site-footer" class="mt-12">
+  <div data-ident="footer-container" class="page py-12">
+    <table data-ident="footer-table" class="w-full table-fixed border-collapse text-left">
       <thead>
         <tr>
           {
             pillars.map((pillar) => (
               <th
                 scope="col"
+                data-ident={`footer-column-${pillar.ident}`}
                 class="w-1/4 pb-4 align-bottom text-left text-xs font-extrabold uppercase tracking-widest"
               >
                 {pillar.heading || <span class="sr-only">Brands, continued</span>}
@@ -57,12 +58,12 @@ const pillars = [
         <tr>
           {
             pillars.map((pillar) => (
-              <td class="w-1/4 align-top">
-                <ul class="flex flex-col gap-2">
+              <td data-ident={`footer-column-${pillar.ident}`} class="w-1/4 align-top">
+                <ul data-ident={`footer-list-${pillar.ident}`} class="flex flex-col gap-2">
                   {pillar.items.map((item) => (
-                    <li class="text-xs text-white sm:text-sm">
+                    <li data-ident="footer-item" class="text-xs text-white sm:text-sm">
                       {item.href ? (
-                        <a href={item.href} class="hover:underline">
+                        <a href={item.href} data-ident="footer-link" class="hover:underline">
                           {item.label}
                         </a>
                       ) : (

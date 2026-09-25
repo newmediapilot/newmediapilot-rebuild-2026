@@ -8,13 +8,15 @@ const fields = [
 
 <dialog
   id="contact"
+  data-ident="contact-modal"
   class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70"
 >
-  <div class="page flex h-full flex-col bg-black!">
-    <div class="flex items-center justify-between gap-4 py-6">
-      <h2 class="text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Send a message</h2>
+  <div data-ident="contact-modal-panel" class="page flex h-full flex-col bg-black!">
+    <div data-ident="contact-modal-header" class="flex items-center justify-between gap-4 py-6">
+      <h2 data-ident="contact-modal-title" class="text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Send a message</h2>
       <button
         type="button"
+        data-ident="contact-modal-close"
         data-close-contact
         class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 transition-colors hover:bg-white hover:text-black"
         aria-label="Close"
@@ -25,40 +27,43 @@ const fields = [
       </button>
     </div>
 
-    <form data-contact-form class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
+    <form data-ident="contact-form" data-contact-form class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
       {
         fields.map((field) => (
-          <label class="block">
-            <span class="text-xs font-semibold uppercase tracking-widest">{field.label}</span>
+          <label data-ident={`contact-field-${field.name}`} class="block">
+            <span data-ident="contact-field-label" class="text-xs font-semibold uppercase tracking-widest">{field.label}</span>
             <input
               required
               name={field.name}
               type={field.type}
               autocomplete={field.autocomplete}
+              data-ident={"contact-input-${field.name}"}
               class="mt-2 w-full border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
             />
           </label>
         ))
       }
 
-      <label class="block">
-        <span class="text-xs font-semibold uppercase tracking-widest">Message</span>
+      <label data-ident="contact-field-message" class="block">
+        <span data-ident="contact-field-label" class="text-xs font-semibold uppercase tracking-widest">Message</span>
         <textarea
           required
           name="message"
+          data-ident="contact-input-message"
           rows="6"
           class="mt-2 w-full resize-y border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
         ></textarea>
       </label>
 
-      <div class="flex flex-wrap items-center gap-4">
+      <div data-ident="contact-form-actions" class="flex flex-wrap items-center gap-4">
         <button
           type="submit"
+          data-ident="contact-submit"
           class="rounded-md border border-white bg-white px-6 py-2.5 text-sm font-extrabold uppercase tracking-widest text-black transition-colors hover:bg-transparent hover:text-white"
         >
           Send
         </button>
-        <p data-contact-status class="hidden text-xs font-semibold uppercase tracking-widest"></p>
+        <p data-ident="contact-status" data-contact-status class="hidden text-xs font-semibold uppercase tracking-widest"></p>
       </div>
     </form>
   </div>

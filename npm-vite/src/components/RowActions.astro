@@ -12,8 +12,8 @@ const base =
   'flex items-center gap-2 rounded-md border border-white/70 px-3 py-2 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:border-white hover:bg-white hover:text-black'
 ---
 
-<nav class="flex flex-col gap-2 sm:justify-center">
-  <a href={gallery} class={base} aria-label="View gallery">
+<nav data-ident="row-actions" class="flex flex-col gap-2 sm:justify-center">
+  <a href={gallery} data-ident="row-actions-gallery" class={base} aria-label="View gallery">
     <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
       <rect x="3" y="4" width="18" height="16" rx="2"></rect>
       <circle cx="8.5" cy="9.5" r="1.5"></circle>
@@ -22,7 +22,7 @@ const base =
     <span data-label>Gallery</span>
   </a>
 
-  <a href={website} class={base} aria-label="Open website" rel="noopener noreferrer" target="_blank">
+  <a href={website} data-ident="row-actions-website" class={base} aria-label="Open website" rel="noopener noreferrer" target="_blank">
     <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
       <path d="M14 4h6v6"></path>
       <path d="M20 4l-9 9"></path>
@@ -34,6 +34,7 @@ const base =
   <button
     type="button"
     class={base}
+    data-ident="row-actions-share"
     data-share
     data-share-title={shareTitle}
     data-share-url={shareUrl}
