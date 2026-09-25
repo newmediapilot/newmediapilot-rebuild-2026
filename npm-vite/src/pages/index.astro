@@ -11,16 +11,15 @@ const intro =
   'I have spent decades building things on the Internet, and I enjoy the work. I have worked in real estate, advertising and marketing, games and entertainment, and the public sector. I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think\u00A0ahead.'
 
 const rows = [
-  { name: 'HomeLife Realty', href: 'https://www.homelife.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'center' },
-  { name: 'CrossFit Cambridge', href: 'https://crossfitcambridge.ca/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'left' },
-  {
-    name: 'World Real Estate Association',
-    href: 'https://thewrea.com/',
-    image: '/uploads/killarney-lodge.webp',
-    alt: 'Placeholder photo',
-    position: 'right',
-  },
-  { name: 'Killarney Lodge', href: 'https://killarneylodge.com/', image: '/uploads/killarney-lodge.webp', alt: 'Placeholder photo', position: 'bottom' },
+  { name: 'preview-wrea', href: '#', image: '/uploads/preview-wrea.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-remedy', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-oakcountry', href: '#', image: '/uploads/preview-oakcountry.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-novo', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-mazda', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-klodge', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-homelife', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-ccambridge', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
+  { name: 'preview-archmedia', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
 ]
 
 const websites = rows.map((row) => ({ label: row.name, href: row.href }))
@@ -34,7 +33,7 @@ const slug = (value) =>
 const skillGroups = [
   {
     ident: 'ai',
-    label: 'AI and automation',
+    label: 'AI & automation',
     note: 'Builds AI assistants and automates repetitive work',
     skills: [
       'AI agents',
@@ -64,7 +63,7 @@ const skillGroups = [
       ident: 'cms',
       label: 'Content management systems',
       note: 'Lets teams publish and manage their own content',
-      skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'Adobe Experience Manager'],
+      skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'AEM'],
     },
   {
     ident: 'front-end',
@@ -97,7 +96,7 @@ const skillGroups = [
   },
   {
     ident: 'cloud',
-    label: 'Cloud and infrastructure',
+    label: 'Cloud & infrastructure',
     note: 'Deploys, hosts and scales applications',
     skills: [
       'AWS',
@@ -117,17 +116,43 @@ const skillGroups = [
   },
   {
     ident: 'build',
-    label: 'Build and development',
+    label: 'Build & development',
     note: 'Builds, packages and manages web applications',
     skills: ['Git', 'Webpack', 'Parcel', 'Gulp'],
   },
   {
     ident: 'accessibility-security',
-    label: 'Accessibility, security and compliance',
+    label: 'Accessibility, security & compliance',
     note: 'Builds accessible, secure and privacy-conscious applications',
     skills: ['WCAG', 'AODA', 'OWASP', 'Web application security', 'GDPR', 'Web privacy', 'i18n'],
   },
 ]
+
+const aiDescriptions = {
+  'AI agents': 'Autonomous assistants that plan and execute multi-step tasks.',
+  'Agentic coding': 'Code generation with agents that reason about requirements.',
+  'Automation': 'Scripted workflows that remove repetitive manual work.',
+  'OpenCode': 'Open-source coding agent for local development.',
+  'LM Studio': 'Run local large models on your own machine.',
+  'Google ADK': 'Build and orchestrate agents with Google’s Agent Development Kit.',
+  'OpenAI API': 'Integrate OpenAI models for text, image and code tasks.',
+  'Hugging Face': 'Access open models and datasets for AI projects.',
+  'Local models': 'Self-hosted models for privacy and offline use.',
+  'GPT OSS': 'Open-source GPT-style models for custom applications.',
+  'DeepSeek': 'High-performance open models for reasoning and coding.',
+  'Nemotron': 'NVIDIA’s open model family for enterprise AI.',
+  'GLM': 'Zhipu AI’s open large language models.',
+  'Gemma': 'Google’s lightweight open models for on-device AI.',
+  'Prompt engineering': 'Crafting prompts to get reliable outputs from models.',
+};
+
+const cmsMapping = {
+  'Contentful': { authored: 'yes', integrated: 'yes', extended: 'no' },
+  'Decap CMS': { authored: 'yes', integrated: 'yes', extended: 'yes' },
+  'WordPress': { authored: 'yes', integrated: 'yes', extended: 'yes' },
+  'TeamSite': { authored: 'yes', integrated: 'no', extended: 'no' },
+  'AEM': { authored: 'no', integrated: 'yes', extended: 'no' },
+};
 
 const professional = [
   'Agency background',
@@ -156,7 +181,7 @@ const nav = [
 <Base title="Home">
 
   <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:grid-cols-2 sm:gap-8 sm:p-8 lg:grid-cols-3">
-    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
       <a
         href="/"
         data-ident="header-brand"
@@ -194,11 +219,11 @@ const nav = [
       </nav>
     </section>
 
-    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[36vh]">
       <p data-ident="intro-paragraph" class="text-shadow-hard font-serif text-base leading-relaxed sm:text-lg">{intro}</p>
     </section>
 
-    <section data-ident="professional-skills" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
       <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
       <ul data-ident="professional-skills-list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
         {
@@ -214,14 +239,28 @@ const nav = [
 
     {
       skillGroups.map((group) => (
-        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
           <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">
             {group.label}
           </h3>
-          <p data-ident={`skill-group-${group.ident}-note`} class="mt-2 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2">
+          <p data-ident={`skill-group-${group.ident}-note`} class="mt-0 -mt-1 mb-3 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2">
             {group.note}
           </p>
-          {group.ident === 'frameworks' ? (
+          {group.ident === 'ai' ? (
+            <ul class="mt-3 flex flex-wrap gap-2">
+              {group.skills.map((skill) => (
+                <li>
+                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm" data-note={group.note} data-desc={aiDescriptions[skill] || ''}>
+                    <span>{skill}</span>
+                    <button class="flex h-5 w-5 items-center justify-center rounded border border-white/20 bg-black/40 text-[10px] text-white/60 transition hover:text-white" aria-label={`More about ${skill}`}>
+                      ?
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div data-ai-message class="mt-3 hidden text-xs text-white/70"></div>
+          ) : group.ident === 'frameworks' ? (
             <div class="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
               {group.skills.map((skill) => {
                 const iconMap = {
@@ -243,12 +282,39 @@ const nav = [
                 const icon = iconMap[skill] || 'react';
                 const url = urlMap[skill] || '#';
                 return (
-                  <a href={url} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center rounded-md border border-white/20 bg-black/40 p-3 text-center opacity-60 transition-opacity duration-200 hover:opacity-100">
+                  <a href={url} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center rounded-md border border-white/30 bg-black p-3 text-center transition duration-200 hover:bg-black/80">
                     <img src={`https://cdn.simpleicons.org/${icon}/ffffff`} alt={skill} class="mb-2 h-8 w-8 sm:h-10 sm:w-10 transition-transform duration-200 group-hover:scale-110" />
                     <span class="text-[10px] sm:text-xs">{skill}</span>
                   </a>
                 );
               })}
+            </div>
+          ) : group.ident === 'cms' ? (
+            <div class="mt-2 overflow-auto">
+              <table class="w-full table-fixed border-collapse text-[11px] sm:text-xs">
+                <thead>
+                  <tr class="border-b border-white/20">
+                    <th class="p-1.5 font-semibold uppercase tracking-wider text-left">System</th>
+                    <th class="p-1.5 font-semibold uppercase tracking-wider text-center">Authored</th>
+                    <th class="p-1.5 font-semibold uppercase tracking-wider text-center">Integrated</th>
+                    <th class="p-1.5 font-semibold uppercase tracking-wider text-center">Extended</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {group.skills.map((skill) => {
+                    const row = cmsMapping[skill] || { authored: '—', integrated: '—', extended: '—' };
+                    const Icon = (val) => val === 'yes' ? '✓' : val === 'no' ? '✗' : '—';
+                    return (
+                      <tr class="border-b border-white/10">
+                        <td class="p-1.5 align-top text-left">{skill}</td>
+                        <td class="p-1.5 align-top text-center">{Icon(row.authored)}</td>
+                        <td class="p-1.5 align-top text-center">{Icon(row.integrated)}</td>
+                        <td class="p-1.5 align-top text-center">{Icon(row.extended)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           ) : (
             <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2 max-h-[12vh] overflow-auto">
@@ -263,11 +329,11 @@ const nav = [
       ))
     }
 
-    <section data-ident="skill-group-blank" aria-hidden="true" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]"></section>
+    <section data-ident="skill-group-blank" aria-hidden="true" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]"></section>
 
     {
       rows.map((row) => (
-        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[33vh]">
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
           <img src={row.image} alt={row.alt} loading="lazy" class="aspect-video w-full rounded-lg object-cover" style={`object-position: ${row.position}`} />
           <h3 class="mt-4 font-serif text-2xl sm:text-3xl">{row.name}</h3>
           <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
@@ -277,11 +343,71 @@ const nav = [
         </section>
       ))
     }
+
+    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Websites</h3>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {websites.map((w) => (
+          <li><a href={w.href} target="_blank" rel="noopener" class="hover:underline">{w.label}</a></li>
+        ))}
+      </ul>
+    </section>
+
+    <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Brands</h3>
+      <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        {[
+          'Labatt','LG','Rogers','Telus','Global Television',"McDonald's",'Lasenza','Stella McCartney','Ford','Harley Davidson','Loblaws','Dairy Farmers of Canada','RBC','ATI','Three Doors Down'
+        ].map((b) => (
+          <li>{b}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section data-ident="footer-contact" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Contact</h3>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {[
+          {label:'marcin@newmediapilot.com', href:'mailto:marcin@newmediapilot.com'},
+          {label:'+1 416 554 6798', href:'tel:+14165546798'},
+          {label:'Toronto, Ontario, Canada', href:'#'},
+          {label:'LinkedIn', href:'https://www.linkedin.com/in/newmediapilot/'},
+          {label:'GitHub', href:'https://github.com/newmediapilot'}
+        ].map((c) => (
+          <li>{c.href ? <a href={c.href} target="_blank" rel="noopener" class="hover:underline">{c.label}</a> : c.label}</li>
+        ))}
+      </ul>
+      <p class="mt-6 text-xs tracking-widest text-white/40">&copy; {new Date().getFullYear()} NEWMEDIAPILOT</p>
+    </section>
   </main>
 
   <ContactModal />
 
-  <Footer websites={websites} />
+  <style>
+    [data-chip].inverted { background-color: white; color: black; border-color: black; }
+    [data-chip].inverted button { background-color: black; color: white; border-color: black; }
+    main > section:nth-child(n+3) { font-size: 0.9em; }
+  </style>
 
-  <div data-ident="footer-spacer" class="h-[40vh] bg-transparent opacity-0" aria-hidden="true"></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = document.querySelectorAll('[data-chip]');
+      chips.forEach(chip => {
+        chip.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const section = chip.closest('section');
+          const allChips = section.querySelectorAll('[data-chip]');
+          allChips.forEach(c => c.classList.remove('inverted'));
+          const messageEl = section.querySelector('[data-ai-message]');
+          if (!messageEl) return;
+          messageEl.classList.add('hidden');
+          messageEl.textContent = '';
+          chip.classList.add('inverted');
+          const desc = chip.dataset.desc || chip.dataset.note || '';
+          messageEl.textContent = desc;
+          messageEl.classList.remove('hidden');
+        });
+      });
+    });
+  </script>
 </Base>
