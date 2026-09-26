@@ -62,7 +62,7 @@ const skillGroups = [
     {
       ident: 'cms',
       label: 'Content management systems',
-      note: 'Lets teams publish and manage their own content',
+      note: 'Enables teams to publish and manage their own content',
       skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'AEM'],
     },
   {
@@ -129,29 +129,80 @@ const skillGroups = [
 ]
 
 const aiDescriptions = {
-  'AI agents': 'Autonomous assistants that plan and execute multi-step tasks.',
-  'Agentic coding': 'Code generation with agents that reason about requirements.',
-  'Automation': 'Scripted workflows that remove repetitive manual work.',
-  'OpenCode': 'Open-source coding agent for local development.',
-  'LM Studio': 'Run local large models on your own machine.',
-  'Google ADK': 'Build and orchestrate agents with Google’s Agent Development Kit.',
-  'OpenAI API': 'Integrate OpenAI models for text, image and code tasks.',
-  'Hugging Face': 'Access open models and datasets for AI projects.',
-  'Local models': 'Self-hosted models for privacy and offline use.',
-  'GPT OSS': 'Open-source GPT-style models for custom applications.',
-  'DeepSeek': 'High-performance open models for reasoning and coding.',
-  'Nemotron': 'NVIDIA’s open model family for enterprise AI.',
-  'GLM': 'Zhipu AI’s open large language models.',
-  'Gemma': 'Google’s lightweight open models for on-device AI.',
-  'Prompt engineering': 'Crafting prompts to get reliable outputs from models.',
+  'AI agents': 'Helpers that can do multi-step work for you.',
+  'Agentic coding': 'AI that helps write and reason about code.',
+  'Automation': 'Repeating tasks done automatically.',
+  'OpenCode': 'Local coding assistant you can run on your own machine.',
+  'LM Studio': 'Run AI models locally on your computer.',
+  'Google ADK': 'Tools to build and connect AI agents.',
+  'OpenAI API': 'Connect to OpenAI models for text and images.',
+  'Hugging Face': 'Library of open AI models and datasets.',
+  'Local models': 'AI models that run privately on your hardware.',
+  'GPT OSS': 'Open source models similar to ChatGPT.',
+  'DeepSeek': 'Open models good at reasoning and coding.',
+  'Nemotron': 'NVIDIA’s family of open AI models.',
+  'GLM': 'Open language models from Zhipu AI.',
+  'Gemma': 'Small AI models from Google for devices.',
+  'Prompt engineering': 'Writing good questions to get good AI answers.',
 };
 
 const cmsMapping = {
-  'Contentful': { authored: 'yes', integrated: 'yes', extended: 'no' },
-  'Decap CMS': { authored: 'yes', integrated: 'yes', extended: 'yes' },
-  'WordPress': { authored: 'yes', integrated: 'yes', extended: 'yes' },
-  'TeamSite': { authored: 'yes', integrated: 'no', extended: 'no' },
-  'AEM': { authored: 'no', integrated: 'yes', extended: 'no' },
+  'Contentful': { authored: 'yes', integrated: 'yes', extended: 'no', url: 'https://www.contentful.com' },
+  'Decap CMS': { authored: 'yes', integrated: 'yes', extended: 'yes', url: 'https://decapcms.org' },
+  'WordPress': { authored: 'yes', integrated: 'yes', extended: 'yes', url: 'https://wordpress.org' },
+  'TeamSite': { authored: 'yes', integrated: 'no', extended: 'no', url: 'https://www.opentext.com/products/teamsite' },
+  'AEM': { authored: 'no', integrated: 'yes', extended: 'no', url: 'https://business.adobe.com/products/experience-manager/adobe-experience-manager.html' },
+};
+
+const skillDescriptions = {
+  'HTML': 'The basic building blocks of web pages.',
+  'CSS': 'Styling that makes web pages look good.',
+  'SCSS': 'A friendlier way to write CSS with reusable styles.',
+  'Tailwind': 'A toolkit for building layouts quickly.',
+  'JavaScript': 'Code that makes websites interactive.',
+  'TypeScript': 'JavaScript with added type checking.',
+  'GSAP': 'Smooth animations for websites.',
+  'Service workers': 'Background helpers for offline use.',
+  'Vite': 'Fast tool for building and testing sites.',
+  'Node.js': 'Running JavaScript on servers.',
+  'Express': 'Simple server setup for web apps.',
+  'Fastify': 'Fast server framework for APIs.',
+  'PHP': 'Server language for dynamic websites.',
+  'ASP': 'Microsoft server technology for web apps.',
+  'API design': 'Planning how apps talk to each other.',
+  'User authentication': 'Checking who users are and keeping them logged in.',
+  'Pipeline design': 'Automating build and release steps.',
+  'Socket.IO': 'Real-time messaging between browser and server.',
+  'WebSockets': 'Live two-way connection for updates.',
+  'SQL': 'Standard language for relational databases.',
+  'NoSQL': 'Flexible databases for varied data.',
+  'MongoDB': 'Database that stores data as documents.',
+  'DynamoDB': 'Managed key-value database service.',
+  'SQLite': 'Small file-based database for apps.',
+  'AWS': 'Cloud platform for hosting apps and data.',
+  'Lambda': 'Run code without managing servers.',
+  'S3': 'Online storage for files and media.',
+  'CloudFront': 'Fast delivery of content worldwide.',
+  'Route 53': 'Domain name management and routing.',
+  'EC2': 'Virtual computers in the cloud.',
+  'Elastic Beanstalk': 'Easy deployment for web apps.',
+  'Load balancers': 'Spread traffic across servers.',
+  'Lightsail': 'Simple virtual servers.',
+  'Netlify': 'Platform for deploying websites.',
+  'Vercel': 'Platform for frontend apps and serverless.',
+  'Unix': 'Classic multi-user operating system.',
+  'Linux': 'Open-source server operating system.',
+  'Git': 'Tracking changes to code over time.',
+  'Webpack': 'Bundling code for the browser.',
+  'Parcel': 'Zero-config bundler for quick starts.',
+  'Gulp': 'Automation for repetitive tasks.',
+  'WCAG': 'Guidelines for accessible websites.',
+  'AODA': 'Ontario rules for digital accessibility.',
+  'OWASP': 'Common web security risks and fixes.',
+  'Web application security': 'Keeping apps safe from attacks.',
+  'GDPR': 'European privacy rules for data.',
+  'Web privacy': 'Protecting user data and limiting tracking.',
+  'i18n': 'Making sites work in multiple languages.',
 };
 
 const professional = [
@@ -302,11 +353,13 @@ const nav = [
                 </thead>
                 <tbody>
                   {group.skills.map((skill) => {
-                    const row = cmsMapping[skill] || { authored: '—', integrated: '—', extended: '—' };
+                    const row = cmsMapping[skill] || { authored: '—', integrated: '—', extended: '—', url: '' };
                     const Icon = (val) => val === 'yes' ? '✓' : val === 'no' ? '✗' : '—';
                     return (
                       <tr class="border-b border-white/10">
-                        <td class="p-1.5 align-top text-left">{skill}</td>
+                        <td class="p-1.5 align-top text-left">
+                          {row.url ? <a href={row.url} target="_blank" rel="noopener noreferrer" class="hover:underline">{skill}</a> : skill}
+                        </td>
                         <td class="p-1.5 align-top text-center">{Icon(row.authored)}</td>
                         <td class="p-1.5 align-top text-center">{Icon(row.integrated)}</td>
                         <td class="p-1.5 align-top text-center">{Icon(row.extended)}</td>
@@ -317,13 +370,19 @@ const nav = [
               </table>
             </div>
           ) : (
-            <ul data-ident={`skill-group-${group.ident}-list`} class="mt-3 flex flex-wrap gap-2 max-h-[12vh] overflow-auto">
+            <ul class="mt-3 flex flex-wrap gap-2">
               {group.skills.map((skill) => (
-                <li data-ident="skill-item" class="rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm">
-                  {skill}
+                <li>
+                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm" data-note={group.note} data-desc={skillDescriptions[skill] || ''}>
+                    <span>{skill}</span>
+                    <button class="flex h-5 w-5 items-center justify-center rounded border border-white/20 bg-black/40 text-[10px] text-white/60 transition hover:text-white" aria-label={`More about ${skill}`}>
+                      ?
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
+            <div data-ai-message class="mt-3 hidden text-xs text-white/70"></div>
           )}
         </section>
       ))
@@ -384,9 +443,10 @@ const nav = [
   <ContactModal />
 
   <style>
-    [data-chip].inverted { background-color: white; color: black; border-color: black; }
-    [data-chip].inverted button { background-color: black; color: white; border-color: black; }
+    [data-chip].active { background-color: white; color: black; border-color: black; }
+    [data-chip].active button { background-color: black; color: white; border-color: black; }
     main > section:nth-child(n+3) { font-size: 0.9em; }
+    [data-chip]:not(.active) span { opacity: 0.6; }
   </style>
 
   <script>
@@ -397,16 +457,50 @@ const nav = [
           e.stopPropagation();
           const section = chip.closest('section');
           const allChips = section.querySelectorAll('[data-chip]');
-          allChips.forEach(c => c.classList.remove('inverted'));
-          const messageEl = section.querySelector('[data-ai-message]');
-          if (!messageEl) return;
-          messageEl.classList.add('hidden');
-          messageEl.textContent = '';
-          chip.classList.add('inverted');
-          const desc = chip.dataset.desc || chip.dataset.note || '';
-          messageEl.textContent = desc;
-          messageEl.classList.remove('hidden');
+          allChips.forEach(c => c.classList.remove('active'));
+          const isChecked = chip.classList.contains('inverted');
+          const btn = chip.querySelector('button');
+          if (isChecked) {
+            chip.classList.remove('inverted');
+            if (btn) btn.textContent = '?';
+            const messageEl = section.querySelector('[data-ai-message]');
+            if (messageEl) { messageEl.classList.add('hidden'); messageEl.textContent = ''; }
+          } else {
+            chip.classList.add('inverted');
+            chip.classList.add('active');
+            if (btn) btn.textContent = '✓';
+            const messageEl = section.querySelector('[data-ai-message]');
+            if (messageEl) {
+              messageEl.classList.remove('hidden');
+              const desc = chip.dataset.desc || chip.dataset.note || '';
+              let i = 0;
+              messageEl.textContent = '';
+              const speed = 18;
+              const type = () => {
+                if (i <= desc.length) {
+                  messageEl.textContent = desc.slice(0, i);
+                  i++;
+                  setTimeout(type, speed);
+                }
+              };
+              type();
+            }
+          }
         });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const fwSection = document.querySelector('[data-ident="skill-group-frameworks"]');
+      if (!fwSection) return;
+      fwSection.addEventListener('click', (e) => {
+        const a = e.target.closest('a[target="_blank"]');
+        if (!a) return;
+        e.preventDefault();
+        const ok = confirm('You are about to open a new window, are you sure?');
+        if (ok) window.open(a.href, '_blank', 'noopener,noreferrer');
       });
     });
   </script>
