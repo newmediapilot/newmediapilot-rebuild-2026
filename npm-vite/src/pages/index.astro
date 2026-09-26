@@ -30,6 +30,8 @@ const websites = [
   { label: 'Killarney Lodge Website', href: '#' },
 ]
 
+const recentWebsiteLabels = new Set(websites.map(w => w.label));
+
 const slug = (value) =>
   value
     .toLowerCase()
@@ -236,9 +238,10 @@ const nav = [
 ---
 
 <Base title="Home">
+  <div id="bg-gradient" class="fixed inset-0 -z-10"></div>
 
-  <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8">
-    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+  <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8 site-main">
+    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[36vh] site-header">
       <a
         href="/"
         data-ident="header-brand"
@@ -274,26 +277,20 @@ const nav = [
           )
         }
       </nav>
+      <button type="button" data-open-contact-card class="mt-6 text-xs font-semibold uppercase tracking-widest text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">View contact card</button>
     </section>
 
-    <section data-ident="contact-card" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col items-center justify-center">
-      <h2 data-ident="contact-card-heading" class="font-serif text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Contact</h2>
-      <div class="mt-6">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 59 59" shape-rendering="crispEdges" class="w-48 h-48 opacity-90"><path fill="#ffffff" d="M0 0h59v59H0z"/><path stroke="#000000" d="M1 1.5h7m1 0h1m3 0h1m1 0h1m2 0h5m1 0h2m1 0h1m1 0h2m1 0h1m3 0h4m3 0h2m1 0h3m2 0h7M1 2.5h1m5 0h1m2 0h1m2 0h1m1 0h2m6 0h1m2 0h3m1 0h1m2 0h1m3 0h3m3 0h4m1 0h1m2 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m2 0h5m1 0h2m2 0h1m2 0h5m1 0h1m6 0h2m3 0h2m2 0h4m2 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h5m1 0h1m2 0h1m1 0h1m1 0h3m2 0h2m1 0h4m1 0h5m1 0h2m5 0h1m2 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h4m2 0h2m1 0h1m3 0h1m1 0h1m2 0h6m4 0h4m4 0h1m2 0h1m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h2m2 0h2m3 0h1m3 0h2m2 0h2m3 0h1m2 0h1m2 0h1m2 0h1m4 0h1m1 0h1m3 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h4m3 0h1m2 0h1m1 0h2m4 0h1m3 0h2m1 0h5m1 0h5m2 0h3M1 9.5h1m3 0h1m1 0h3m2 0h1m2 0h4m1 0h5m2 0h5m2 0h1m1 0h1m6 0h1m2 0h1m1 0h7m2 0h1M3 10.5h1m1 0h2m1 0h1m9 0h4m3 0h2m2 0h3m5 0h1m1 0h2m1 0h1m1 0h4m1 0h1m1 0h2m2 0h1M3 11.5h2m1 0h2m1 0h4m4 0h1m3 0h7m1 0h1m3 0h1m1 0h1m2 0h4m3 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1M6 12.5h1m3 0h2m2 0h2m1 0h1m5 0h1m3 0h4m1 0h1m1 0h3m7 0h1m2 0h1m1 0h5m1 0h3M1 13.5h1m5 0h4m1 0h1m3 0h5m3 0h2m1 0h4m2 0h4m1 0h4m1 0h2m2 0h2m2 0h2m1 0h4M1 14.5h1m7 0h1m1 0h2m3 0h1m2 0h2m1 0h1m2 0h3m1 0h3m1 0h1m1 0h1m2 0h1m2 0h2m5 0h1m1 0h3M3 15.5h2m2 0h1m2 0h1m1 0h2m3 0h3m2 0h1m3 0h1m7 0h1m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m4 0h1m1 0h3M1 16.5h1m2 0h3m1 0h1m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m1 0h2m4 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m3 0h1m2 0h1m2 0h3m1 0h4M1 17.5h2m2 0h1m1 0h1m1 0h4m1 0h1m1 0h1m1 0h3m1 0h4m1 0h1m1 0h3m5 0h3m1 0h3m2 0h5m2 0h3m1 0h1M1 18.5h1m3 0h1m2 0h7m1 0h1m3 0h1m1 0h1m1 0h7m1 0h7m1 0h2m1 0h4m1 0h1m2 0h1m2 0h1m2 0h1M4 19.5h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m4 0h3m3 0h1m4 0h2m1 0h2m1 0h1m4 0h1m1 0h5m1 0h1M1 20.5h1m1 0h1m5 0h1m3 0h1m1 0h1m1 0h1m4 0h1m1 0h2m1 0h4m1 0h9m4 0h2m3 0h1m3 0h1M2 21.5h3m1 0h2m7 0h2m1 0h1m1 0h2m2 0h2m4 0h3m3 0h1m1 0h1m2 0h3m3 0h1m1 0h8M4 22.5h1m3 0h2m3 0h2m4 0h1m1 0h1m2 0h1m2 0h3m1 0h2m3 0h2m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1M1 23.5h2m2 0h1m1 0h1m1 0h4m2 0h1m1 0h2m1 0h5m2 0h3m2 0h1m2 0h3m2 0h1m1 0h3m2 0h2m2 0h2M12 24.5h1m4 0h2m5 0h2m1 0h1m1 0h1m2 0h1m8 0h1m2 0h1m1 0h3m1 0h1m2 0h1M2 25.5h2m2 0h2m2 0h2m2 0h8m1 0h3m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h3m1 0h10m1 0h2M3 26.5h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m2 0h1m5 0h1m2 0h3m1 0h1m3 0h1m3 0h6m1 0h1m3 0h2m1 0h3M1 27.5h1m3 0h6m5 0h1m4 0h1m2 0h8m3 0h2m2 0h4m1 0h1m1 0h2m1 0h5m1 0h2M1 28.5h1m3 0h1m3 0h2m2 0h2m1 0h1m1 0h4m4 0h2m3 0h1m4 0h3m1 0h1m1 0h2m1 0h3m1 0h1m3 0h5M1 29.5h2m1 0h2m1 0h1m1 0h3m2 0h2m1 0h2m2 0h3m2 0h2m1 0h1m1 0h1m3 0h1m5 0h2m1 0h1m4 0h1m1 0h1m1 0h2m2 0h1M1 30.5h1m1 0h1m1 0h1m3 0h1m1 0h3m1 0h4m1 0h3m2 0h1m1 0h1m3 0h1m2 0h2m1 0h6m1 0h6m3 0h1m1 0h2M5 31.5h5m1 0h4m3 0h1m1 0h1m1 0h2m1 0h1m1 0h5m1 0h4m1 0h4m2 0h1m2 0h1m1 0h6m1 0h2M6 32.5h1m1 0h2m1 0h4m1 0h1m1 0h1m7 0h2m1 0h1m1 0h2m2 0h1m2 0h1m3 0h2m3 0h3m2 0h1m1 0h2m1 0h1M2 33.5h1m3 0h2m2 0h3m8 0h3m1 0h8m1 0h1m2 0h2m2 0h2m1 0h4m1 0h2m1 0h1m4 0h1M1 34.5h4m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h3m2 0h1m1 0h1m2 0h2m1 0h1m2 0h4m2 0h3m1 0h1m3 0h1m1 0h2m3 0h1M3 35.5h1m3 0h1m2 0h2m2 0h2m1 0h1m4 0h1m1 0h2m1 0h2m5 0h1m1 0h1m4 0h1m2 0h3m9 0h1M2 36.5h1m1 0h1m3 0h2m1 0h1m1 0h1m7 0h3m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m4 0h1m1 0h1m2 0h1m1 0h1m3 0h1M4 37.5h2m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m1 0h4m2 0h1m2 0h2m1 0h1m2 0h1m2 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h4M1 38.5h1m1 0h4m2 0h2m1 0h2m1 0h5m1 0h5m1 0h1m3 0h1m6 0h2m6 0h4m3 0h1m3 0h1M4 39.5h2m1 0h1m1 0h1m1 0h1m3 0h1m2 0h4m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m1 0h2m3 0h1m2 0h1m1 0h1m1 0h1m2 0h6M4 40.5h3m9 0h1m1 0h2m1 0h5m2 0h2m3 0h5m2 0h1m3 0h1m1 0h1m3 0h1m2 0h1m3 0h1M6 41.5h5m4 0h4m1 0h1m3 0h3m3 0h1m1 0h1m1 0h1m4 0h3m2 0h1m1 0h3m2 0h2m1 0h3M2 42.5h1m2 0h2m1 0h1m1 0h1m1 0h1m4 0h5m5 0h6m1 0h1m3 0h2m1 0h1m1 0h2m3 0h2m2 0h2m1 0h1m1 0h1M1 43.5h3m2 0h3m5 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h1m1 0h1m1 0h2m1 0h5m5 0h1m2 0h2m1 0h1m1 0h2m3 0h1M1 44.5h3m4 0h2m2 0h1m2 0h2m2 0h1m1 0h1m3 0h1m1 0h1m12 0h2m3 0h5m2 0h2m2 0h2M4 45.5h1m1 0h3m4 0h1m6 0h1m1 0h1m2 0h1m2 0h1m1 0h1m9 0h1m2 0h1m1 0h1m1 0h1m3 0h3m1 0h2M2 46.5h2m1 0h1m2 0h2m1 0h1m1 0h6m2 0h1m1 0h1m1 0h4m3 0h1m1 0h2m2 0h6m1 0h1m1 0h1m2 0h3m2 0h1M1 47.5h1m1 0h1m2 0h2m2 0h6m3 0h3m1 0h1m1 0h1m2 0h1m2 0h5m4 0h2m2 0h1m1 0h2m1 0h3m3 0h3M1 48.5h5m4 0h1m7 0h1m2 0h3m2 0h5m3 0h2m2 0h1m1 0h4m2 0h4m1 0h5m1 0h1M7 49.5h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h9m1 0h1m1 0h1m1 0h1m1 0h3m1 0h2m2 0h7m2 0h1M9 50.5h1m3 0h1m5 0h2m4 0h3m3 0h2m4 0h2m3 0h4m1 0h1m1 0h1m3 0h3m1 0h1M1 51.5h7m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h2m1 0h2m1 0h2m2 0h2m1 0h2m1 0h1m1 0h1m3 0h1M1 52.5h1m5 0h1m2 0h2m1 0h3m6 0h1m4 0h1m3 0h1m3 0h2m3 0h1m2 0h2m2 0h3m3 0h1m3 0h1M1 53.5h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h4m1 0h2m1 0h2m1 0h5m1 0h1m1 0h2m1 0h1m2 0h2m4 0h7m1 0h1m1 0h1M1 54.5h1m1 0h3m1 0h1m2 0h2m2 0h2m3 0h2m1 0h2m1 0h1m1 0h2m1 0h2m6 0h2m1 0h2m5 0h2m1 0h2m1 0h1m1 0h2M1 55.5h1m1 0h3m1 0h1m4 0h2m1 0h4m2 0h1m4 0h2m3 0h1m3 0h1m1 0h1m1 0h1m1 0h2m2 0h1m6 0h2M1 56.5h1m5 0h1m2 0h1m3 0h1m1 0h4m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h2m4 0h1m2 0h4m4 0h1m1 0h1M1 57.5h7m1 0h1m1 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m2 0h1m4 0h1m1 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h5"/></svg>
-      </div>
-    </section>
-
-    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[36vh] intro-panel">
       <p data-ident="intro-paragraph" class="text-shadow-hard font-serif text-base leading-relaxed sm:text-lg">{intro}</p>
     </section>
 
-    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
-      <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl">Professional skills</h2>
+    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] professional-skills">
+      <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl professional-skills-heading">Professional skills</h2>
       <div data-ident="professional-skills-list" class="mt-6 flex flex-wrap gap-2">
         {
           professional.map((skill) => (
-            <div class="flex items-center gap-2 rounded-full border border-white/30 px-3 py-1.5 text-xs sm:text-sm">
-              <span class="size-3 rounded-full border border-white/60" aria-hidden="true" />
+            <div class="flex items-center gap-2 rounded-full border border-white/30 px-3 py-1.5 text-xs sm:text-sm professional-chip">
+              <span class="size-4 rounded-full border-2 border-white/80" aria-hidden="true" />
               <span>{skill}</span>
             </div>
           ))
@@ -303,18 +300,18 @@ const nav = [
 
     {
       skillGroups.map((group) => (
-        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
-          <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">
+        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] skill-group skill-group-${group.ident}">
+          <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl skill-group-heading">
             {group.label}
           </h3>
-          <p data-ident={`skill-group-${group.ident}-note`} class="mt-0 -mt-1 mb-3 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2">
+          <p data-ident={`skill-group-${group.ident}-note`} class="mt-0 -mt-1 mb-3 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2 skill-note">
             {group.note}
           </p>
           {group.ident === 'ai' ? (
             <ul class="mt-3 flex flex-wrap gap-2">
               {group.skills.map((skill) => (
                 <li>
-                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm" data-note={group.note} data-desc={aiDescriptions[skill] || ''}>
+                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm skill-chip" data-note={group.note} data-desc={aiDescriptions[skill] || ''}>
                     <span>{skill}</span>
                     <button class="flex h-5 w-5 items-center justify-center rounded border border-white/20 bg-black/40 text-[10px] text-white/60 transition hover:text-white" aria-label={`More about ${skill}`}>
                       ?
@@ -386,7 +383,7 @@ const nav = [
             <ul class="mt-3 flex flex-wrap gap-2">
               {group.skills.map((skill) => (
                 <li>
-                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm" data-note={group.note} data-desc={skillDescriptions[skill] || ''}>
+                  <div data-chip class="group relative flex cursor-pointer items-center gap-2 rounded-md border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm skill-chip" data-note={group.note} data-desc={skillDescriptions[skill] || ''}>
                     <span>{skill}</span>
                     <button class="flex h-5 w-5 items-center justify-center rounded border border-white/20 bg-black/40 text-[10px] text-white/60 transition hover:text-white" aria-label={`More about ${skill}`}>
                       ?
@@ -403,7 +400,7 @@ const nav = [
 
     {
       rows.map((row) => (
-        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden">
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work">
           <div class="overflow-hidden rounded-lg">
             <Image src={row.image} alt={row.alt} class="h-full w-full object-cover scale-[1.08]" style={`object-position: ${row.position}`} />
           </div>
@@ -415,13 +412,16 @@ const nav = [
               {row.href && row.href !== '#' && (
                 <a href={row.href} target="_blank" rel="noopener" class="text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">Launch website</a>
               )}
+              {recentWebsiteLabels.has(row.name) && (
+                <a href="#" target="_blank" rel="noopener" class="text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit website</a>
+              )}
             </div>
           </div>
         </section>
       ))
     }
 
-    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
+    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]" footer-websites">
       <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Recent websites</h3>
       <ul class="mt-4 flex flex-col gap-2 text-sm">
         {websites.map((w) => (
@@ -430,7 +430,7 @@ const nav = [
       </ul>
     </section>
 
-    <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col">
+    <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col footer-brands">
       <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl shrink-0">Brands & agencies</h3>
       <div class="mt-4 overflow-y-auto pr-2 border-y border-white/10 scroll-snap-y">
         <ul class="divide-y divide-white/10 text-sm leading-snug">
@@ -493,28 +493,176 @@ const nav = [
     &copy; 2026 NEWMEDIAPILOT
   </footer>
 
+  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4">
+    <div class="relative page bg-black p-8 max-w-md w-full text-center">
+      <button type="button" data-close-contact-card class="absolute top-4 right-4 flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Close">
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+      <h2 class="font-serif text-2xl font-extrabold uppercase tracking-widest mb-6">Contact</h2>
+      <div class="flex justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 59 59" shape-rendering="crispEdges" class="w-64 h-64 opacity-90"><path fill="#ffffff" d="M0 0h59v59H0z"/><path stroke="#000000" d="M1 1.5h7m1 0h1m3 0h1m1 0h1m2 0h5m1 0h2m1 0h1m1 0h2m1 0h1m3 0h4m3 0h2m1 0h3m2 0h7M1 2.5h1m5 0h1m2 0h1m2 0h1m1 0h2m6 0h1m2 0h3m1 0h1m2 0h1m3 0h3m3 0h4m1 0h1m2 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m2 0h5m1 0h2m2 0h1m2 0h5m1 0h1m6 0h2m3 0h2m2 0h4m2 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h5m1 0h1m2 0h1m1 0h1m1 0h3m2 0h2m1 0h4m1 0h5m1 0h2m5 0h1m2 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h4m2 0h2m1 0h1m3 0h1m1 0h1m2 0h6m4 0h4m4 0h1m2 0h1m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h2m2 0h2m3 0h1m3 0h2m2 0h2m3 0h1m2 0h1m2 0h1m2 0h1m4 0h1m1 0h1m3 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h4m3 0h1m2 0h1m1 0h2m4 0h1m3 0h2m1 0h5m1 0h5m2 0h3M1 9.5h1m3 0h1m1 0h3m2 0h1m2 0h4m1 0h5m2 0h5m2 0h1m1 0h1m6 0h1m2 0h1m1 0h7m2 0h1M3 10.5h1m1 0h2m1 0h1m9 0h4m3 0h2m2 0h3m5 0h1m1 0h2m1 0h1m1 0h4m1 0h1m1 0h2m2 0h1M3 11.5h2m1 0h2m1 0h4m4 0h1m3 0h7m1 0h1m3 0h1m1 0h1m2 0h4m3 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1M6 12.5h1m3 0h2m2 0h2m1 0h1m5 0h1m3 0h4m1 0h1m1 0h3m7 0h1m2 0h1m1 0h5m1 0h3M1 13.5h1m5 0h4m1 0h1m3 0h5m3 0h2m1 0h4m2 0h4m1 0h4m1 0h2m2 0h2m2 0h2m1 0h4M1 14.5h1m7 0h1m1 0h2m3 0h1m2 0h2m1 0h1m2 0h3m1 0h3m1 0h1m1 0h1m2 0h1m2 0h2m5 0h1m1 0h3M3 15.5h2m2 0h1m2 0h1m1 0h2m3 0h3m2 0h1m3 0h1m7 0h1m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m4 0h1m1 0h3M1 16.5h1m2 0h3m1 0h1m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m1 0h2m4 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m3 0h1m2 0h1m2 0h3m1 0h4M1 17.5h2m2 0h1m1 0h1m1 0h4m1 0h1m1 0h1m1 0h3m1 0h4m1 0h1m1 0h3m5 0h3m1 0h3m2 0h5m2 0h3m1 0h1M1 18.5h1m3 0h1m2 0h7m1 0h1m3 0h1m1 0h1m1 0h7m1 0h7m1 0h2m1 0h4m1 0h1m2 0h1m2 0h1m2 0h1M4 19.5h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m4 0h3m3 0h1m4 0h2m1 0h2m1 0h1m4 0h1m1 0h5m1 0h1M1 20.5h1m1 0h1m5 0h1m3 0h1m1 0h1m1 0h1m4 0h1m1 0h2m1 0h4m1 0h9m4 0h2m3 0h1m3 0h1M2 21.5h3m1 0h2m7 0h2m1 0h1m1 0h2m2 0h2m4 0h3m3 0h1m1 0h1m2 0h3m3 0h1m1 0h8M4 22.5h1m3 0h2m3 0h2m4 0h1m1 0h1m2 0h1m2 0h3m1 0h2m3 0h2m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1M1 23.5h2m2 0h1m1 0h1m1 0h4m2 0h1m1 0h2m1 0h5m2 0h3m2 0h1m2 0h3m2 0h1m1 0h3m2 0h2m2 0h2M12 24.5h1m4 0h2m5 0h2m1 0h1m1 0h1m2 0h1m8 0h1m2 0h1m1 0h3m1 0h1m2 0h1M2 25.5h2m2 0h2m2 0h2m2 0h8m1 0h3m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h3m1 0h10m1 0h2M3 26.5h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m2 0h1m5 0h1m2 0h3m1 0h1m3 0h1m3 0h6m1 0h1m3 0h2m1 0h3M1 27.5h1m3 0h6m5 0h1m4 0h1m2 0h8m3 0h2m2 0h4m1 0h1m1 0h2m1 0h5m1 0h2M1 28.5h1m3 0h1m3 0h2m2 0h2m1 0h1m1 0h4m4 0h2m3 0h1m4 0h3m1 0h1m1 0h2m1 0h3m1 0h1m3 0h5M1 29.5h2m1 0h2m1 0h1m1 0h3m2 0h2m1 0h2m2 0h3m2 0h2m1 0h1m1 0h1m3 0h1m5 0h2m1 0h1m4 0h1m1 0h1m1 0h2m2 0h1M1 30.5h1m1 0h1m1 0h1m3 0h1m1 0h3m1 0h4m1 0h3m2 0h1m1 0h1m3 0h1m2 0h2m1 0h6m1 0h6m3 0h1m1 0h2M5 31.5h5m1 0h4m3 0h1m1 0h1m1 0h2m1 0h1m1 0h5m1 0h4m1 0h4m2 0h1m2 0h1m1 0h6m1 0h2M6 32.5h1m1 0h2m1 0h4m1 0h1m1 0h1m7 0h2m1 0h1m1 0h2m2 0h1m2 0h1m3 0h2m3 0h3m2 0h1m1 0h2m1 0h1M2 33.5h1m3 0h2m2 0h3m8 0h3m1 0h8m1 0h1m2 0h2m2 0h2m1 0h4m1 0h2m1 0h1m4 0h1M1 34.5h4m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h3m2 0h1m1 0h1m2 0h2m1 0h1m2 0h4m2 0h3m1 0h1m3 0h1m1 0h2m3 0h1M3 35.5h1m3 0h1m2 0h2m2 0h2m1 0h1m4 0h1m1 0h2m1 0h2m5 0h1m1 0h1m4 0h1m2 0h3m9 0h1M2 36.5h1m1 0h1m3 0h2m1 0h1m1 0h1m7 0h3m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m4 0h1m1 0h1m2 0h1m1 0h1m3 0h1M4 37.5h2m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m1 0h4m2 0h1m2 0h2m1 0h1m2 0h1m2 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h4M1 38.5h1m1 0h4m2 0h2m1 0h2m1 0h5m1 0h5m1 0h1m3 0h1m6 0h2m6 0h4m3 0h1m3 0h1M4 39.5h2m1 0h1m1 0h1m1 0h1m3 0h1m2 0h4m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m1 0h2m3 0h1m2 0h1m1 0h1m1 0h1m2 0h6M4 40.5h3m9 0h1m1 0h2m1 0h5m2 0h2m3 0h5m2 0h1m3 0h1m1 0h1m3 0h1m2 0h1m3 0h1M6 41.5h5m4 0h4m1 0h1m3 0h3m3 0h1m1 0h1m1 0h1m4 0h3m2 0h1m1 0h3m2 0h2m1 0h3M2 42.5h1m2 0h2m1 0h1m1 0h1m1 0h1m4 0h5m5 0h6m1 0h1m3 0h2m1 0h1m1 0h2m3 0h2m2 0h2m1 0h1m1 0h1M1 43.5h3m2 0h3m5 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h1m1 0h1m1 0h2m1 0h5m5 0h1m2 0h2m1 0h1m1 0h2m3 0h1M1 44.5h3m4 0h2m2 0h1m2 0h2m2 0h1m1 0h1m3 0h1m1 0h1m12 0h2m3 0h5m2 0h2m2 0h2M4 45.5h1m1 0h3m4 0h1m6 0h1m1 0h1m2 0h1m2 0h1m1 0h1m9 0h1m2 0h1m1 0h1m1 0h1m3 0h3m1 0h2M2 46.5h2m1 0h1m2 0h2m1 0h1m1 0h6m2 0h1m1 0h1m1 0h4m3 0h1m1 0h2m2 0h6m1 0h1m1 0h1m2 0h3m2 0h1M1 47.5h1m1 0h1m2 0h2m2 0h6m3 0h3m1 0h1m1 0h1m2 0h1m2 0h5m4 0h2m2 0h1m1 0h2m1 0h3m3 0h3M1 48.5h5m4 0h1m7 0h1m2 0h3m2 0h5m3 0h2m2 0h1m1 0h4m2 0h4m1 0h5m1 0h1M7 49.5h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h9m1 0h1m1 0h1m1 0h1m1 0h3m1 0h2m2 0h7m2 0h1M9 50.5h1m3 0h1m5 0h2m4 0h3m3 0h2m4 0h2m3 0h4m1 0h1m1 0h1m3 0h3m1 0h1M1 51.5h7m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h2m1 0h2m1 0h2m2 0h2m1 0h2m1 0h1m1 0h1m3 0h1M1 52.5h1m5 0h1m2 0h2m1 0h3m6 0h1m4 0h1m3 0h1m3 0h2m3 0h1m2 0h2m2 0h3m3 0h1m3 0h1M1 53.5h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h4m1 0h2m1 0h2m1 0h5m1 0h1m1 0h2m1 0h1m2 0h2m4 0h7m1 0h1m1 0h1M1 54.5h1m1 0h3m1 0h1m2 0h2m2 0h2m3 0h2m1 0h2m1 0h1m1 0h2m1 0h2m6 0h2m1 0h2m5 0h2m1 0h2m1 0h1m1 0h2M1 55.5h1m1 0h3m1 0h1m4 0h2m1 0h4m2 0h1m4 0h2m3 0h1m3 0h1m1 0h1m1 0h1m1 0h2m2 0h1m6 0h2M1 56.5h1m5 0h1m2 0h1m3 0h1m1 0h4m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h2m4 0h1m2 0h4m4 0h1m1 0h1M1 57.5h7m1 0h1m1 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m2 0h1m4 0h1m1 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h5"/></svg>
+      </div>
+    </div>
+  </div>
+
   <ContactModal />
 
   <style>
-    [data-chip].active { background-color: white; color: black; border-color: black; }
-    [data-chip].active button { background-color: black; color: white; border-color: black; }
+    .skill-chip.active { background-color: white !important; color: black; border-color: black; filter: brightness(1.15); }
+    .skill-chip.active button { background-color: black; color: white; border-color: black; }
     main > section:nth-child(n+3) { font-size: 0.9em; }
-    [data-chip]:not(.active) span { opacity: 0.6; }
-    [data-ident="professional-skills-heading"] { font-family: 'KoHo', serif; font-weight: 700; letter-spacing: 0.02em; }
-    main[data-ident="site-main"] { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+    .skill-chip:not(.active) span { opacity: 0.6; }
+    .professional-skills-heading { font-family: 'KoHo', serif; font-weight: 700; letter-spacing: 0.02em; }
+    .skill-group-heading { font-size: 1.6em; }
+    .skill-note { margin-bottom: 0.75rem !important; min-height: 2.75rem; }    .skill-group { position: relative; overflow: hidden; }
+    .skill-group::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
+      filter: contrast(170%) brightness(400%);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      background-blend-mode: overlay;
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .skill-group > * { position: relative; z-index: 1; }
+    .skill-group,
+    .professional-skills,
+    .site-header { background: transparent !important; }
+    .site-header {
+      --sz: 20px;
+      --c0: #ffffff00;
+      --c1: #0a0a0a;
+      --c2: #111111;
+      --c3: #050505;
+      --ts: 50%/ calc(var(--sz) * 13.25) calc(var(--sz) * 11.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-conic-gradient(#3b354730 0.000001%, var(--c0) 0.00005%, var(--c0) 0.00035%, var(--c0) 0.00005%) var(--ts),
+        repeating-conic-gradient(#35638b59 0.00002%, var(--c0) 0.00008%, var(--c0) 0.0008%, var(--c0) 0.00008%) var(--ts),
+        repeating-linear-gradient(90deg, var(--c0) 0 24.33%, var(--c3) 0 25%) var(--ts),
+        linear-gradient(210deg, var(--c0) 0 80%, var(--c3) calc(80% + 1px) 80.5%, var(--c0) calc(80.5% + 1px) 100%) var(--ts),
+        conic-gradient(from -90deg at 49.75% 100%, var(--c1) 0 30deg, var(--c0) 0 150deg, var(--c2) 0 60deg) var(--ts),
+        conic-gradient(from -180deg at 24.5% 50.5%, var(--c1) 0 119deg, var(--c0) 0 100%) var(--ts),
+        conic-gradient(from 120deg at 74.5% 50%, var(--c3) 0 120deg, var(--c0) 0 100%) var(--ts),
+        conic-gradient(from 180deg at 49.5% 34%, var(--c2) 0 60deg, var(--c0) 0 100%) var(--ts),
+        conic-gradient(from -120deg at 50% 34%, var(--c3) 0 60deg, var(--c0) 0 100%) var(--ts),
+        conic-gradient(from 0deg at 74.5% 17.5%, var(--c2) 0 60deg, var(--c3) 0 121deg, var(--c0) 0 100%) var(--ts),
+        linear-gradient(150deg, var(--c0) 0 40%, var(--c3) calc(40% + 1px) 40.5%, var(--c0) calc(40.5% + 1px) 100%) var(--ts),
+        linear-gradient(90deg, var(--c0) 0 50%, var(--c2) 0 75%, var(--c0) 0 100%) var(--ts),
+        repeating-linear-gradient(90deg, var(--c1) 0 24.33%, var(--c3) 0 25%) var(--ts);
+      z-index: 0;
+    }
+    .site-header > * { position: relative; z-index: 1; }
+
+    .professional-skills {
+      --sz: 20px;
+      --c0: #ffffff00;
+      --c1: #0a0a0a;
+      --c2: #111111;
+      --c3: #050505;
+      --ts: 50%/ calc(var(--sz) * 13.25) calc(var(--sz) * 11.7);
+      position: relative;
+      overflow: hidden;
+    }
+        .professional-skills::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
+      filter: contrast(170%) brightness(400%);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      background-blend-mode: overlay;
+      opacity: 0.4;
+      z-index: 0;
+    }
+.professional-skills > * { position: relative; z-index: 1; }
+    .skill-chip {
+      background: transparent !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    main.site-main { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
+    main.site-main { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
     @media (max-width: 1600px) {
-      main[data-ident="site-main"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+      main.site-main { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
     }
     @media (max-width: 900px) {
-      main[data-ident="site-main"] { grid-template-columns: repeat(1, minmax(0,1fr)) !important; }
+      main.site-main { grid-template-columns: repeat(1, minmax(0,1fr)) !important; }
     }
-    [data-ident="footer-brands"] div::-webkit-scrollbar { width: 8px; }
-    [data-ident="footer-brands"] div::-webkit-scrollbar-track { background: transparent; }
-    [data-ident="footer-brands"] div::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-    [data-ident="footer-brands"] div::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
+    .footer-brands div::-webkit-scrollbar { width: 8px; }
+    .footer-brands div::-webkit-scrollbar-track { background: transparent; }
+    .footer-brands div::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+    .footer-brands div::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
     .scroll-snap-y { scroll-snap-type: y mandatory; }
     .scroll-snap-y .snap-start { scroll-snap-align: start; }
-  </style>
+  
+    .professional-skills .size-4 {
+      border-style: dotted;
+      display: inline-block;
+      animation: spin-slow 240s linear infinite;
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .recent-work {
+      position: relative;
+      overflow: hidden;
+      background: transparent !important;
+    }
+    .recent-work::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
+      filter: contrast(170%) brightness(400%);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      background-blend-mode: overlay;
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .recent-work > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .professional-chip { transition: border-color 0.2s ease; }
+    .professional-chip:hover {
+      border-color: rgba(255,255,255,0.6);
+    }
+    .skill-chip { transition: border-color 0.2s ease; }
+    .skill-chip:hover {
+      border-color: rgba(255,255,255,0.6);
+    }
+    .site-header {
+      transition: filter 0.3s ease;
+    }
+    .site-header {
+      transition: filter 0.3s ease;
+    }
+    /* Nav children: 1 = button, 2 = LinkedIn, 3 = GitHub, 4 = Download CV */
+    .site-header:has(nav a:nth-child(2):hover) {
+      filter: hue-rotate(10deg);
+    }
+    .site-header:has(nav a:nth-child(3):hover) {
+      filter: hue-rotate(20deg);
+    }
+    .site-header:has(nav a:nth-child(4):hover) {
+      filter: hue-rotate(30deg);
+    }
+</style>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -527,16 +675,19 @@ const nav = [
           allChips.forEach(c => c.classList.remove('active'));
           const isChecked = chip.classList.contains('inverted');
           const btn = chip.querySelector('button');
+          const messageEl = section.querySelector('[data-ai-message]');
+          if (messageEl && messageEl._typingTimeout) {
+            clearTimeout(messageEl._typingTimeout);
+            delete messageEl._typingTimeout;
+          }
           if (isChecked) {
             chip.classList.remove('inverted');
             if (btn) btn.textContent = '?';
-            const messageEl = section.querySelector('[data-ai-message]');
             if (messageEl) { messageEl.classList.add('hidden'); messageEl.textContent = ''; }
           } else {
             chip.classList.add('inverted');
             chip.classList.add('active');
             if (btn) btn.textContent = '✓';
-            const messageEl = section.querySelector('[data-ai-message]');
             if (messageEl) {
               messageEl.classList.remove('hidden');
               const desc = chip.dataset.desc || chip.dataset.note || '';
@@ -547,7 +698,9 @@ const nav = [
                 if (i <= desc.length) {
                   messageEl.textContent = desc.slice(0, i);
                   i++;
-                  setTimeout(type, speed);
+                  messageEl._typingTimeout = setTimeout(type, speed);
+                } else {
+                  delete messageEl._typingTimeout;
                 }
               };
               type();
@@ -556,5 +709,54 @@ const nav = [
         });
       });
     });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('contact-card-modal');
+      const openBtn = document.querySelector('[data-open-contact-card]');
+      const closeBtn = document.querySelector('[data-close-contact-card]');
+      if (openBtn && modal) {
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+      }
+      if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+      }
+    });
+  </script>
+
+  <style>
+    #bg-gradient {
+      background: linear-gradient(135deg, #0a0a0a, #121212, #1a1a1a, #0f0f0f);
+      background-size: 400% 400%;
+    }
+  </style>
+
+  <script>
+    // Load GSAP via CDN
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+    s.onload = () => {
+      const st = document.createElement('script');
+      st.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+      st.onload = () => {
+        const bg = document.getElementById('bg-gradient');
+        if (!bg || !window.gsap || !window.ScrollTrigger) return;
+        window.gsap.registerPlugin(window.ScrollTrigger);
+        window.gsap.to(bg, {
+          backgroundPosition: '100% 100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: 'main',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: true,
+          }
+        });
+      };
+      document.head.appendChild(st);
+    };
+    document.head.appendChild(s);
   </script>
 </Base>
