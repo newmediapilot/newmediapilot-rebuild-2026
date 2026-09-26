@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro'
 import RowActions from '../components/RowActions.astro'
-import ContactModal from '../components/ContactModal.astro'
 import Footer from '../components/Footer.astro'
 import Image from '../components/Image.astro'
 
@@ -247,7 +246,7 @@ const nav = [
         href="/"
         data-ident="header-brand"
         class="font-koho text-4xl font-normal uppercase tracking-widest sm:text-4xl lg:text-5xl"
-        >New<b class="font-bold [-webkit-text-stroke:0.6px_currentColor]">media</b><span class="font-light">Pilot</span></a
+        ><span class="brand-word">New</span><b class="brand-word font-bold [-webkit-text-stroke:0.6px_currentColor]">media</b><span class="brand-word font-light">Pilot</span></a
       >
       <nav data-ident="header-nav" class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
         {
@@ -278,7 +277,6 @@ const nav = [
           )
         }
       </nav>
-      <button type="button" data-open-contact-card class="mt-6 text-xs font-semibold uppercase tracking-widest text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">View contact card</button>
     </section>
 
     <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[36vh] intro-panel">
@@ -491,51 +489,11 @@ const nav = [
       </div>
     </section>
 
-    <section data-ident="footer-contact" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col">
-      <h3 class="font-serif text-xl font-bold text-white sm:text-2xl shrink-0">Contact</h3>
-      <div class="mt-4 flex-1 grid grid-cols-2 gap-6 items-start min-h-0">
-        <ul class="flex flex-col gap-2 text-sm">
-          {[
-            {label:'marcin@newmediapilot.com', href:'mailto:marcin@newmediapilot.com'},
-            {label:'+1 416 554 6798', href:'tel:+14165546798'},
-            {label:'Toronto, Ontario, Canada', href:'#'},
-            {label:'LinkedIn', href:'https://www.linkedin.com/in/newmediapilot/'},
-            {label:'GitHub', href:'https://github.com/newmediapilot'}
-          ].map((c) => (
-            <li>{c.href ? <a href={c.href} target="_blank" rel="noopener" class="hover:underline">{c.label}</a> : c.label}</li>
-          ))}
-        </ul>
-        <div class="flex justify-center items-start">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=marcin@newmediapilot.com" alt="QR code" class="w-44 h-44 opacity-90 shadow-[0_0_40px_12px_rgba(0,0,0,0.45)]">
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="w-full text-center py-6 text-xs tracking-widest text-white/40">
     &copy; 2026 NEWMEDIAPILOT
   </footer>
-
-  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="relative page bg-black p-8 h-[36vh] max-w-md w-full text-center translate-y-full transition-transform duration-500 ease-out flex flex-col justify-center">
-      <button type="button" data-close-contact-card class="absolute top-4 right-4 flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Close">
-        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
-      <h2 class="font-serif text-2xl font-extrabold mb-6">Contact</h2>
-      <div class="flex justify-center">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=marcin@newmediapilot.com" alt="QR code" class="w-64 h-64 opacity-90">
-      </div>
-      <div class="mt-6 space-y-1 text-sm text-white/80">
-        <p><a href="mailto:marcin@newmediapilot.com" class="hover:underline">marcin@newmediapilot.com</a></p>
-        <p><a href="tel:+14165546798" class="hover:underline">+1 416 554 6798</a></p>
-        <p>Toronto, Ontario, Canada</p>
-      </div>
-    </div>
-  </div>
-
-  <ContactModal />
 
   <style>
     .skill-chip.active { background-color: white !important; color: black; border-color: black; filter: brightness(1.15); }
@@ -618,7 +576,20 @@ const nav = [
     }
     .professional-skills > * { position: relative; z-index: 1; }
     .page { min-height: 335px; }
-    .skill-group, .professional-skills { min-height: 360px; }
+    section.page.skill-group, section.page.professional-skills { min-height: 360px; }
+    @media (max-width: 768px) {
+      .page { height: auto; min-height: auto; }
+      section.page.skill-group, section.page.professional-skills { height: auto; min-height: auto; }
+    }
+    @media (max-width: 375px) {
+      .page { height: auto; min-height: auto; }
+      section.page.skill-group, section.page.professional-skills { height: auto; min-height: auto; }
+    }
+    @media (max-width: 640px) {
+      [data-ident="header-brand"] .brand-word { display: block; line-height: 1.1; }
+      [data-ident="header-nav"] { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      [data-ident="header-nav-download-cv"] { margin-top: 1rem; }
+    }
     .skill-chip {
       background: transparent !important;
       backdrop-filter: blur(8px);
@@ -714,13 +685,6 @@ const nav = [
     .professional-skills {
       /* background reverted to default */
     }
-    #contact-card-modal.is-open {
-      opacity: 1 !important;
-      pointer-events: auto !important;
-    }
-    #contact-card-modal.is-open .page {
-      transform: translateY(0) !important;
-    }
     #brands-list-wrap {
       background: #000;
       border-radius: 12px;
@@ -747,7 +711,7 @@ const nav = [
       border-radius: 8px;
       position: relative;
       z-index: 1;
-      padding: 4rem 0.5rem 0.5rem 0.5rem;
+      padding: 1.5rem 0.5rem 0.5rem 0.5rem;
     }
     #cursor-ball {
       position: fixed;
@@ -808,33 +772,6 @@ const nav = [
           }
         });
       });
-    });
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('contact-card-modal');
-      const openBtn = document.querySelector('[data-open-contact-card]');
-      const closeBtn = document.querySelector('[data-close-contact-card]');
-      const modalContent = modal?.querySelector('.page');
-      if (openBtn && modal) {
-        openBtn.addEventListener('click', () => {
-          modal.classList.remove('hidden');
-          requestAnimationFrame(() => {
-            modal.classList.add('is-open');
-            modalContent?.classList.add('is-open');
-          });
-        });
-      }
-      const closeModal = () => {
-        modal?.classList.remove('is-open');
-        modalContent?.classList.remove('is-open');
-        setTimeout(() => modal?.classList.add('hidden'), 300);
-      };
-      if (closeBtn && modal) {
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-      }
     });
   </script>
 
