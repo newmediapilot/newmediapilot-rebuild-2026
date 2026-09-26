@@ -11,18 +11,23 @@ const intro =
   'I have spent decades building things on the Internet, and I enjoy the work. I have worked in real estate, advertising and marketing, games and entertainment, and the public sector. I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think\u00A0ahead.'
 
 const rows = [
-  { name: 'preview-wrea', href: '#', image: '/uploads/preview-wrea.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-remedy', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-oakcountry', href: '#', image: '/uploads/preview-oakcountry.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-novo', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-mazda', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-klodge', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-homelife', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-ccambridge', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
-  { name: 'preview-archmedia', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
+  { name: 'World Real Estate Association Portal', href: '#', image: '/uploads/preview-wrea.png', alt: 'Preview', position: 'center' },
+  { name: 'Remedy Design Portfolio Website', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
+  { name: 'Oak & Country Samples', href: '#', image: '/uploads/preview-oakcountry.png', alt: 'Preview', position: 'center' },
+  { name: 'Novo Nordisk Sales Module', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
+  { name: 'Mazda SkyDrive Module', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
+  { name: 'Killarney Lodge Website', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
+  { name: 'HomeLife Realty Website', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
+  { name: 'CrossFit Cambridge Website', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
+  { name: 'Architectural Media Website', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
 ]
 
-const websites = rows.map((row) => ({ label: row.name, href: row.href }))
+const websites = [
+  { label: 'HomeLife Realty Website', href: '#' },
+  { label: 'World Real Estate Association Portal', href: '#' },
+  { label: 'CrossFit Cambridge Website', href: '#' },
+  { label: 'Killarney Lodge Website', href: '#' },
+]
 
 const slug = (value) =>
   value
@@ -31,6 +36,12 @@ const slug = (value) =>
     .replace(/(^-|-$)/g, '')
 
 const skillGroups = [
+  {
+    ident: 'frameworks',
+    label: 'Web frameworks',
+    note: 'Builds websites and web applications',
+    skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
+  },
   {
     ident: 'ai',
     label: 'AI & automation',
@@ -52,12 +63,6 @@ const skillGroups = [
       'Gemma',
       'Prompt engineering',
     ],
-  },
-  {
-    ident: 'frameworks',
-    label: 'Web frameworks',
-    note: 'Builds websites and web applications',
-    skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
   },
     {
       ident: 'cms',
@@ -129,80 +134,80 @@ const skillGroups = [
 ]
 
 const aiDescriptions = {
-  'AI agents': 'Helpers that can do multi-step work for you.',
-  'Agentic coding': 'AI that helps write and reason about code.',
-  'Automation': 'Repeating tasks done automatically.',
-  'OpenCode': 'Local coding assistant you can run on your own machine.',
-  'LM Studio': 'Run AI models locally on your computer.',
-  'Google ADK': 'Tools to build and connect AI agents.',
-  'OpenAI API': 'Connect to OpenAI models for text and images.',
-  'Hugging Face': 'Library of open AI models and datasets.',
-  'Local models': 'AI models that run privately on your hardware.',
-  'GPT OSS': 'Open source models similar to ChatGPT.',
-  'DeepSeek': 'Open models good at reasoning and coding.',
-  'Nemotron': 'NVIDIA’s family of open AI models.',
-  'GLM': 'Open language models from Zhipu AI.',
-  'Gemma': 'Small AI models from Google for devices.',
-  'Prompt engineering': 'Writing good questions to get good AI answers.',
+  'AI agents': 'Helpers that can do multi-step work for you. They plan tasks, call tools, and keep track of progress. They act like a digital assistant in your workflow.',
+  'Agentic coding': 'AI that helps write and reason about code. It can understand requirements and suggest changes. It speeds up development while you stay in control.',
+  'Automation': 'Repeating tasks done automatically. It frees you from manual work and reduces errors. It’s like setting up rules your computer follows.',
+  'OpenCode': 'Local coding assistant you can run on your own machine. It keeps your code private and offline. It’s open source and customizable.',
+  'LM Studio': 'Run AI models locally on your computer. You can experiment without sending data online. It’s good for privacy and quick tests.',
+  'Google ADK': 'Tools to build and connect AI agents. It provides building blocks for workflows and memory. It helps create reliable agent systems.',
+  'OpenAI API': 'Connect to OpenAI models for text and images. It powers chat, summarization, and generation features. It integrates into apps with simple calls.',
+  'Hugging Face': 'Library of open AI models and datasets. It’s a community hub for sharing models. It makes AI more accessible to developers.',
+  'Local models': 'AI models that run privately on your hardware. They don’t send data to external servers. They’re ideal for sensitive work.',
+  'GPT OSS': 'Open source models similar to ChatGPT. They can be customized for specific tasks. They give you control over data and training.',
+  'DeepSeek': 'Open models good at reasoning and coding. They perform well on technical problems. They’re popular for developer tools.',
+  'Nemotron': 'NVIDIA’s family of open AI models. They’re optimized for enterprise use cases. They support large-scale deployment.',
+  'GLM': 'Open language models from Zhipu AI. They handle multilingual and reasoning tasks. They’re used in research and products.',
+  'Gemma': 'Small AI models from Google for devices. They run efficiently on limited hardware. They enable on-device privacy.',
+  'Prompt engineering': 'Writing good questions to get good AI answers. It’s about clarity and context. It improves reliability of AI outputs.',
 };
 
 const cmsMapping = {
   'Contentful': { authored: 'yes', integrated: 'yes', extended: 'no', url: 'https://www.contentful.com' },
   'Decap CMS': { authored: 'yes', integrated: 'yes', extended: 'yes', url: 'https://decapcms.org' },
   'WordPress': { authored: 'yes', integrated: 'yes', extended: 'yes', url: 'https://wordpress.org' },
-  'TeamSite': { authored: 'yes', integrated: 'no', extended: 'no', url: 'https://www.opentext.com/products/teamsite' },
+  'TeamSite': { authored: 'yes', integrated: 'no', extended: 'no', url: 'https://www.opentext.info/teamsite/' },
   'AEM': { authored: 'no', integrated: 'yes', extended: 'no', url: 'https://business.adobe.com/products/experience-manager/adobe-experience-manager.html' },
 };
 
 const skillDescriptions = {
-  'HTML': 'The basic building blocks of web pages.',
-  'CSS': 'Styling that makes web pages look good.',
-  'SCSS': 'A friendlier way to write CSS with reusable styles.',
-  'Tailwind': 'A toolkit for building layouts quickly.',
-  'JavaScript': 'Code that makes websites interactive.',
-  'TypeScript': 'JavaScript with added type checking.',
-  'GSAP': 'Smooth animations for websites.',
-  'Service workers': 'Background helpers for offline use.',
-  'Vite': 'Fast tool for building and testing sites.',
-  'Node.js': 'Running JavaScript on servers.',
-  'Express': 'Simple server setup for web apps.',
-  'Fastify': 'Fast server framework for APIs.',
-  'PHP': 'Server language for dynamic websites.',
-  'ASP': 'Microsoft server technology for web apps.',
-  'API design': 'Planning how apps talk to each other.',
-  'User authentication': 'Checking who users are and keeping them logged in.',
-  'Pipeline design': 'Automating build and release steps.',
-  'Socket.IO': 'Real-time messaging between browser and server.',
-  'WebSockets': 'Live two-way connection for updates.',
-  'SQL': 'Standard language for relational databases.',
-  'NoSQL': 'Flexible databases for varied data.',
-  'MongoDB': 'Database that stores data as documents.',
-  'DynamoDB': 'Managed key-value database service.',
-  'SQLite': 'Small file-based database for apps.',
-  'AWS': 'Cloud platform for hosting apps and data.',
-  'Lambda': 'Run code without managing servers.',
-  'S3': 'Online storage for files and media.',
-  'CloudFront': 'Fast delivery of content worldwide.',
-  'Route 53': 'Domain name management and routing.',
-  'EC2': 'Virtual computers in the cloud.',
-  'Elastic Beanstalk': 'Easy deployment for web apps.',
-  'Load balancers': 'Spread traffic across servers.',
-  'Lightsail': 'Simple virtual servers.',
-  'Netlify': 'Platform for deploying websites.',
-  'Vercel': 'Platform for frontend apps and serverless.',
-  'Unix': 'Classic multi-user operating system.',
-  'Linux': 'Open-source server operating system.',
-  'Git': 'Tracking changes to code over time.',
-  'Webpack': 'Bundling code for the browser.',
-  'Parcel': 'Zero-config bundler for quick starts.',
-  'Gulp': 'Automation for repetitive tasks.',
-  'WCAG': 'Guidelines for accessible websites.',
-  'AODA': 'Ontario rules for digital accessibility.',
-  'OWASP': 'Common web security risks and fixes.',
-  'Web application security': 'Keeping apps safe from attacks.',
-  'GDPR': 'European privacy rules for data.',
-  'Web privacy': 'Protecting user data and limiting tracking.',
-  'i18n': 'Making sites work in multiple languages.',
+  'HTML': 'The basic building blocks of web pages. It structures content like headings, paragraphs, and images. Think of it as the skeleton of a site.',
+  'CSS': 'Styling that makes web pages look good. It controls colors, fonts, spacing, and layout. It turns raw content into a polished design.',
+  'SCSS': 'A friendlier way to write CSS with reusable styles. It lets you organize styles into modules and use variables. It makes large sites easier to maintain.',
+  'Tailwind': 'A toolkit for building layouts quickly. It provides small utility classes you compose in HTML. It speeds up styling without writing custom CSS.',
+  'JavaScript': 'Code that makes websites interactive. It adds behavior like buttons, forms, and animations. It brings pages to life beyond static content.',
+  'TypeScript': 'JavaScript with added type checking. It helps catch mistakes before the site runs. It makes larger codebases safer to work on.',
+  'GSAP': 'Smooth animations for websites. It gives fine control over motion and timing. It’s used for polished, performant effects.',
+  'Service workers': 'Background helpers for offline use. They cache files so sites work without internet. They also enable push notifications.',
+  'Vite': 'Fast tool for building and testing sites. It starts instantly and updates in real time. It simplifies modern front-end workflows.',
+  'Node.js': 'Running JavaScript on servers. It lets the same language power back-end services. It’s widely used for APIs and tools.',
+  'Express': 'Simple server setup for web apps. It provides routing and middleware for Node.js. It’s a lightweight foundation for APIs.',
+  'Fastify': 'Fast server framework for APIs. It focuses on speed and low overhead. It’s great for high-performance services.',
+  'PHP': 'Server language for dynamic websites. It powers many content platforms and e-commerce sites. It runs on most web hosts.',
+  'ASP': 'Microsoft server technology for web apps. It integrates with Windows and .NET. It’s used for enterprise internal sites.',
+  'API design': 'Planning how apps talk to each other. It defines endpoints, data shapes, and behavior. Good design makes integration reliable.',
+  'User authentication': 'Checking who users are and keeping them logged in. It protects private areas and personal data. It’s essential for secure apps.',
+  'Pipeline design': 'Automating build and release steps. It runs tests and deploys automatically. It reduces manual errors and speeds delivery.',
+  'Socket.IO': 'Real-time messaging between browser and server. It enables chat and live updates. It works over WebSockets with fallbacks.',
+  'WebSockets': 'Live two-way connection for updates. It keeps a persistent link between client and server. It’s ideal for real-time features.',
+  'SQL': 'Standard language for relational databases. It lets you query and update structured data. It’s the workhorse for many business systems.',
+  'NoSQL': 'Flexible databases for varied data. They handle unstructured and rapidly changing data well. They scale horizontally.',
+  'MongoDB': 'Database that stores data as documents. It’s flexible and developer friendly. It’s popular for modern web apps.',
+  'DynamoDB': 'Managed key-value database service. It scales automatically with traffic. It’s used for low-latency applications.',
+  'SQLite': 'Small file-based database for apps. It requires no server setup. It’s great for local storage and prototypes.',
+  'AWS': 'Cloud platform for hosting apps and data. It offers compute, storage, and services on demand. It scales from small to massive.',
+  'Lambda': 'Run code without managing servers. It scales automatically with requests. It’s cost effective for event-driven work.',
+  'S3': 'Online storage for files and media. It’s durable and globally accessible. It’s used for images, backups, and assets.',
+  'CloudFront': 'Fast delivery of content worldwide. It caches sites close to users. It improves speed and reliability.',
+  'Route 53': 'Domain name management and routing. It directs traffic to the right servers. It provides reliable DNS.',
+  'EC2': 'Virtual computers in the cloud. You control the OS and software. It’s flexible compute for apps.',
+  'Elastic Beanstalk': 'Easy deployment for web apps. It handles servers and scaling for you. It simplifies AWS launches.',
+  'Load balancers': 'Spread traffic across servers. They keep sites responsive under load. They improve reliability.',
+  'Lightsail': 'Simple virtual servers. It’s an easy entry to cloud hosting. It bundles compute, storage, and networking.',
+  'Netlify': 'Platform for deploying websites. It offers continuous deployment from git. It’s popular for static sites.',
+  'Vercel': 'Platform for frontend apps and serverless. It optimizes performance and edge delivery. It’s widely used for modern frameworks.',
+  'Unix': 'Classic multi-user operating system. It powers servers and developer tools. It emphasizes simplicity and pipes.',
+  'Linux': 'Open-source server operating system. It runs most of the internet. It’s customizable and stable.',
+  'Git': 'Tracking changes to code over time. It lets teams collaborate safely. It supports branching and history.',
+  'Webpack': 'Bundling code for the browser. It combines modules into optimized files. It’s a core build tool.',
+  'Parcel': 'Zero-config bundler for quick starts. It works out of the box with modern code. It speeds up prototyping.',
+  'Gulp': 'Automation for repetitive tasks. It runs scripts for build and test. It streamlines developer workflows.',
+  'WCAG': 'Guidelines for accessible websites. They ensure sites work for people with disabilities. They improve usability for everyone.',
+  'AODA': 'Ontario rules for digital accessibility. They require inclusive public websites. Compliance is a legal obligation.',
+  'OWASP': 'Common web security risks and fixes. It provides checklists for safe development. It helps prevent breaches.',
+  'Web application security': 'Keeping apps safe from attacks. It involves secure coding and monitoring. It protects user data.',
+  'GDPR': 'European privacy rules for data. It governs how personal data is handled. It requires transparency and consent.',
+  'Web privacy': 'Protecting user data and limiting tracking. It respects user choices and minimizes collection. It builds trust.',
+  'i18n': 'Making sites work in multiple languages. It supports translation and localization. It reaches global audiences.',
 };
 
 const professional = [
@@ -388,16 +393,18 @@ const nav = [
       ))
     }
 
-    <section data-ident="skill-group-blank" aria-hidden="true" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]"></section>
-
     {
       rows.map((row) => (
-        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
-          <img src={row.image} alt={row.alt} loading="lazy" class="aspect-video w-full rounded-lg object-cover" style={`object-position: ${row.position}`} />
-          <h3 class="mt-4 font-serif text-2xl sm:text-3xl">{row.name}</h3>
-          <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
-          <div class="mt-4">
-            <a href={row.href} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit site</a>
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden">
+          <div class="overflow-hidden rounded-lg">
+            <img src={row.image} alt={row.alt} loading="lazy" class="h-full w-full object-cover scale-[1.05]" style={`object-position: ${row.position}`} />
+          </div>
+          <div class="flex flex-col justify-center">
+            <h3 class="font-serif text-lg sm:text-xl">{row.name}</h3>
+            <p class="mt-2 text-xs text-white/70 sm:text-sm">Ongoing client work with focus on performance and content systems.</p>
+            <div class="mt-3">
+              <a href={row.href} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit site</a>
+            </div>
           </div>
         </section>
       ))
@@ -414,11 +421,11 @@ const nav = [
 
     <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
       <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Brands</h3>
-      <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+      <ul class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2 text-sm leading-snug">
         {[
           'Labatt','LG','Rogers','Telus','Global Television',"McDonald's",'Lasenza','Stella McCartney','Ford','Harley Davidson','Loblaws','Dairy Farmers of Canada','RBC','ATI','Three Doors Down'
         ].map((b) => (
-          <li>{b}</li>
+          <li class="opacity-80">{b}</li>
         ))}
       </ul>
     </section>
@@ -447,6 +454,7 @@ const nav = [
     [data-chip].active button { background-color: black; color: white; border-color: black; }
     main > section:nth-child(n+3) { font-size: 0.9em; }
     [data-chip]:not(.active) span { opacity: 0.6; }
+    [data-ident="professional-skills-heading"] { font-family: 'KoHo', serif; font-weight: 700; letter-spacing: 0.02em; }
   </style>
 
   <script>
@@ -487,20 +495,6 @@ const nav = [
             }
           }
         });
-      });
-    });
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const fwSection = document.querySelector('[data-ident="skill-group-frameworks"]');
-      if (!fwSection) return;
-      fwSection.addEventListener('click', (e) => {
-        const a = e.target.closest('a[target="_blank"]');
-        if (!a) return;
-        e.preventDefault();
-        const ok = confirm('You are about to open a new window, are you sure?');
-        if (ok) window.open(a.href, '_blank', 'noopener,noreferrer');
       });
     });
   </script>
