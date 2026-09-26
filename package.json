@@ -15,6 +15,10 @@
     "dev": "npm run dev --workspace=npm-vite",
     "start": "npm run start --workspace=npm-vite",
     "build": "npm run build --workspace=npm-vite",
-    "patch": "npm run build && npm version patch && git push --follow-tags"
+    "patch": "npm run build && npm version patch && git push --follow-tags",
+    "deploy": "npm run deploy:s3 && npm run deploy:lambda && npm run deploy:cloudfront",
+    "deploy:s3": "npm run deploy --workspace=npm-deploy",
+    "deploy:lambda": "npm run deploy --workspace=npm-deploy",
+    "deploy:cloudfront": "npm run deploy --workspace=npm-deploy"
   }
 }

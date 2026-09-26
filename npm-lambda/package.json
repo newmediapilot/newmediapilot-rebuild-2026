@@ -1,0 +1,10 @@
+﻿{
+  "name": "npm-lambda",
+  "version": "1.0.0",
+  "description": "Lambda handler for send message",
+  "private": true,
+  "main": "handler.js",
+  "scripts": {
+    "start": "node handler.js"
+  }
+}

@@ -491,9 +491,55 @@ const nav = [
 
   </main>
 
+  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative page bg-black p-8 h-[36vh] max-w-md w-full text-center translate-y-full transition-transform duration-500 ease-out flex flex-col justify-center">
+      <button type="button" data-close-contact-card class="absolute top-4 right-4 flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Close">
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+      <h2 class="font-serif text-2xl font-extrabold mb-6">Contact</h2>
+      <div class="flex justify-center">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=marcin@newmediapilot.com" alt="QR code" class="w-64 h-64 opacity-90">
+      </div>
+      <div class="mt-6 space-y-1 text-sm text-white/80">
+        <p><a href="mailto:marcin@newmediapilot.com" class="hover:underline">marcin@newmediapilot.com</a></p>
+        <p><a href="tel:+14165546798" class="hover:underline">+1 416 554 6798</a></p>
+        <p>Toronto, Ontario, Canada</p>
+      </div>
+    </div>
+  </div>
+
   <footer class="w-full text-center py-6 text-xs tracking-widest text-white/40">
     &copy; 2026 NEWMEDIAPILOT
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('contact-card-modal');
+      const openBtn = document.querySelector('[data-ident="header-nav-send-message"]');
+      const closeBtn = document.querySelector('[data-close-contact-card]');
+      const modalContent = modal?.querySelector('.page');
+      if (openBtn && modal) {
+        openBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            modal.classList.add('is-open');
+            modalContent?.classList.add('is-open');
+          });
+        });
+      }
+      const closeModal = () => {
+        modal?.classList.remove('is-open');
+        modalContent?.classList.remove('is-open');
+        setTimeout(() => modal?.classList.add('hidden'), 300);
+      };
+      if (closeBtn && modal) {
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+      }
+    });
+  </script>
 
   <style>
     .skill-chip.active { background-color: white !important; color: black; border-color: black; filter: brightness(1.15); }
@@ -577,13 +623,21 @@ const nav = [
     .professional-skills > * { position: relative; z-index: 1; }
     .page { min-height: 335px; }
     section.page.skill-group, section.page.professional-skills { min-height: 360px; }
-    @media (max-width: 768px) {
-      .page { height: auto; min-height: auto; }
-      section.page.skill-group, section.page.professional-skills { height: auto; min-height: auto; }
+    #contact-card-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
     }
-    @media (max-width: 375px) {
-      .page { height: auto; min-height: auto; }
-      section.page.skill-group, section.page.professional-skills { height: auto; min-height: auto; }
+    #contact-card-modal.is-open .page {
+      transform: translateY(0);
+    }
+    @media (min-width: 1201px) {
+      .page { height: 400px !important; min-height: 400px !important; }
+    }
+    @media (min-width: 769px) and (max-width: 1200px) {
+      .page { height: 500px !important; min-height: 500px !important; }
+    }
+    @media (max-width: 768px) {
+      .page { height: 450px !important; min-height: 450px !important; }
     }
     @media (max-width: 640px) {
       [data-ident="header-brand"] .brand-word { display: block; line-height: 1.1; }
@@ -595,7 +649,6 @@ const nav = [
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
-    main.site-main { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
     main.site-main { grid-template-columns: repeat(3, minmax(0,1fr)) !important; }
     @media (max-width: 1600px) {
       main.site-main { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }

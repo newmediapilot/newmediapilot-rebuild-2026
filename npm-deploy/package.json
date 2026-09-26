@@ -1,0 +1,11 @@
+﻿{
+  "name": "npm-deploy",
+  "version": "1.0.0",
+  "description": "Deploy script: build & deploy s3, invalidate cloudfront",
+  "private": true,
+  "scripts": {
+    "build:s3": "node deploy.js",
+    "invalidate:cloudfront": "node deploy.js",
+    "deploy": "npm run build:s3 && npm run invalidate:cloudfront"
+  }
+}

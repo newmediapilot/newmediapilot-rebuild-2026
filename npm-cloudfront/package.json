@@ -1,0 +1,9 @@
+﻿{
+  "name": "npm-cloudfront",
+  "version": "1.0.0",
+  "description": "CloudFront package placeholder",
+  "private": true,
+  "scripts": {
+    "build": "echo CloudFront package"
+  }
+}
