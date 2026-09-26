@@ -42,13 +42,13 @@ const slug = (value) =>
 const skillGroups = [
   {
     ident: 'frameworks',
-    label: 'Web frameworks',
+    label: 'Web Frameworks',
     note: 'Builds websites and web applications',
     skills: ['React', 'Angular', 'Vue', 'Astro', 'Symfony', 'Redux'],
   },
   {
     ident: 'ai',
-    label: 'AI & automation',
+    label: 'AI & Automation',
     note: 'Builds AI assistants and automates repetitive work',
     skills: [
       'AI agents',
@@ -70,19 +70,19 @@ const skillGroups = [
   },
     {
       ident: 'cms',
-      label: 'Content management systems',
+      label: 'Content Management Systems',
       note: 'Enables teams to publish and manage their own content',
       skills: ['Contentful', 'Decap CMS', 'WordPress', 'TeamSite', 'AEM'],
     },
   {
     ident: 'front-end',
-    label: 'Front end',
+    label: 'Front-end',
     note: 'Everything the visitor sees and interacts with in a browser',
     skills: ['HTML', 'CSS', 'SCSS', 'Tailwind', 'JavaScript', 'TypeScript', 'GSAP', 'Service workers', 'Vite'],
   },
   {
     ident: 'back-end',
-    label: 'Back end',
+    label: 'Back-end',
     note: 'Servers, APIs, authentication and application logic',
     skills: [
       'Node.js',
@@ -286,7 +286,7 @@ const nav = [
     </section>
 
     <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] professional-skills">
-      <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold uppercase tracking-widest sm:text-3xl professional-skills-heading">Professional skills</h2>
+      <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold sm:text-3xl professional-skills-heading">Professional Skills</h2>
       <div data-ident="professional-skills-list" class="mt-6 flex flex-wrap gap-2">
         {
           professional.map((skill) => (
@@ -302,7 +302,7 @@ const nav = [
     {
       skillGroups.map((group) => (
         <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] skill-group skill-group-${group.ident}">
-          <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl skill-group-heading">
+          <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-serif text-xl font-bold text-white sm:text-2xl skill-group-heading">
             {group.label}
           </h3>
           <p data-ident={`skill-group-${group.ident}-note`} class="mt-0 -mt-1 mb-3 text-sm leading-relaxed text-white/60 sm:text-base line-clamp-2 skill-note">
@@ -408,20 +408,20 @@ const nav = [
           <div class="flex flex-col justify-center">
             <h3 class="font-serif text-lg sm:text-xl">{row.name}</h3>
             <p class="mt-2 text-xs text-white/70 sm:text-sm">Ongoing client work with focus on performance and content systems.</p>
-            <div class="mt-3 flex flex-col gap-1 text-xs">
-              <button class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <div class="mt-3 flex flex-col items-start gap-2 text-sm">
+              <button class="flex items-center gap-2 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 View gallery
               </button>
               {row.href && row.href !== '#' && (
-                <a href={row.href} target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                <a href={row.href} target="_blank" rel="noopener" class="flex items-center gap-2 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Launch website
                 </a>
               )}
               {recentWebsiteLabels.has(row.name) && (
-                <a href={websiteUrlMap[row.name] || '#'} target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                <a href={websiteUrlMap[row.name] || '#'} target="_blank" rel="noopener" class="flex items-center gap-2 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Visit website
                 </a>
               )}
@@ -432,24 +432,23 @@ const nav = [
     }
 
     <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]" footer-websites">
-      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Recent websites</h3>
+      <h3 class="font-serif text-xl font-bold text-white sm:text-2xl">Recent Websites</h3>
       <ul class="mt-4 flex flex-col gap-2 text-sm">
         {websites.map((w) => (
-          <li><a href={w.href} target="_blank" rel="noopener" class="hover:underline">{w.label}</a></li>
+          <li>
+            <a href={w.href} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm hover:underline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              {w.label}
+            </a>
+          </li>
         ))}
       </ul>
     </section>
 
     <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col footer-brands">
-      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl shrink-0">Brands & agencies</h3>
-      <div class="mt-2 flex flex-wrap gap-1 text-[10px]" id="brands-alphabet">
-        {Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)).map(letter => (
-          <button type="button" data-letter={letter} class="size-8 rounded-full border-2 border-white/30 text-white/70 hover:bg-white/10 hover:text-white transition cursor-pointer">{letter.toUpperCase()}</button>
-        ))}
-        <button type="button" data-letter="all" class="px-3 h-8 rounded-full border-2 border-white/30 text-white/70 hover:bg-white/10 hover:text-white transition cursor-pointer">All</button>
-      </div>
-      <div class="mt-2 flex-1 overflow-y-auto pr-2 border-y border-white/10 snap-y snap-mandatory" id="brands-list-wrap">
-        <ul class="divide-y divide-white/10 text-sm leading-snug" id="brands-list">
+      <h3 class="font-serif text-xl font-bold text-white sm:text-2xl shrink-0">Brands & Agencies</h3>
+      <div class="mt-3 flex-1 overflow-y-auto pr-2 border-y border-white/10 snap-y snap-mandatory" id="brands-list-wrap">
+        <ul class="text-sm leading-snug" id="brands-list">
           {[
             'ATI',
             'Breaker Crossfit',
@@ -492,19 +491,24 @@ const nav = [
       </div>
     </section>
 
-    <section data-ident="footer-contact" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]">
-      <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl">Contact</h3>
-      <ul class="mt-4 flex flex-col gap-2 text-sm">
-        {[
-          {label:'marcin@newmediapilot.com', href:'mailto:marcin@newmediapilot.com'},
-          {label:'+1 416 554 6798', href:'tel:+14165546798'},
-          {label:'Toronto, Ontario, Canada', href:'#'},
-          {label:'LinkedIn', href:'https://www.linkedin.com/in/newmediapilot/'},
-          {label:'GitHub', href:'https://github.com/newmediapilot'}
-        ].map((c) => (
-          <li>{c.href ? <a href={c.href} target="_blank" rel="noopener" class="hover:underline">{c.label}</a> : c.label}</li>
-        ))}
-      </ul>
+    <section data-ident="footer-contact" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col">
+      <h3 class="font-serif text-xl font-bold text-white sm:text-2xl shrink-0">Contact</h3>
+      <div class="mt-4 flex-1 grid grid-cols-2 gap-6 items-start min-h-0">
+        <ul class="flex flex-col gap-2 text-sm">
+          {[
+            {label:'marcin@newmediapilot.com', href:'mailto:marcin@newmediapilot.com'},
+            {label:'+1 416 554 6798', href:'tel:+14165546798'},
+            {label:'Toronto, Ontario, Canada', href:'#'},
+            {label:'LinkedIn', href:'https://www.linkedin.com/in/newmediapilot/'},
+            {label:'GitHub', href:'https://github.com/newmediapilot'}
+          ].map((c) => (
+            <li>{c.href ? <a href={c.href} target="_blank" rel="noopener" class="hover:underline">{c.label}</a> : c.label}</li>
+          ))}
+        </ul>
+        <div class="flex justify-center items-start">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=marcin@newmediapilot.com" alt="QR code" class="w-44 h-44 opacity-90 shadow-[0_0_40px_12px_rgba(0,0,0,0.45)]">
+        </div>
+      </div>
     </section>
   </main>
 
@@ -512,16 +516,21 @@ const nav = [
     &copy; 2026 NEWMEDIAPILOT
   </footer>
 
-  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4">
-    <div class="relative page bg-black p-8 max-w-md w-full text-center">
+  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative page bg-black p-8 h-[36vh] max-w-md w-full text-center translate-y-full transition-transform duration-500 ease-out flex flex-col justify-center">
       <button type="button" data-close-contact-card class="absolute top-4 right-4 flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Close">
         <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18"></path>
         </svg>
       </button>
-      <h2 class="font-serif text-2xl font-extrabold uppercase tracking-widest mb-6">Contact</h2>
+      <h2 class="font-serif text-2xl font-extrabold mb-6">Contact</h2>
       <div class="flex justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 59 59" shape-rendering="crispEdges" class="w-64 h-64 opacity-90"><path fill="#ffffff" d="M0 0h59v59H0z"/><path stroke="#000000" d="M1 1.5h7m1 0h1m3 0h1m1 0h1m2 0h5m1 0h2m1 0h1m1 0h2m1 0h1m3 0h4m3 0h2m1 0h3m2 0h7M1 2.5h1m5 0h1m2 0h1m2 0h1m1 0h2m6 0h1m2 0h3m1 0h1m2 0h1m3 0h3m3 0h4m1 0h1m2 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m2 0h5m1 0h2m2 0h1m2 0h5m1 0h1m6 0h2m3 0h2m2 0h4m2 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h5m1 0h1m2 0h1m1 0h1m1 0h3m2 0h2m1 0h4m1 0h5m1 0h2m5 0h1m2 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h4m2 0h2m1 0h1m3 0h1m1 0h1m2 0h6m4 0h4m4 0h1m2 0h1m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h2m2 0h2m3 0h1m3 0h2m2 0h2m3 0h1m2 0h1m2 0h1m2 0h1m4 0h1m1 0h1m3 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h4m3 0h1m2 0h1m1 0h2m4 0h1m3 0h2m1 0h5m1 0h5m2 0h3M1 9.5h1m3 0h1m1 0h3m2 0h1m2 0h4m1 0h5m2 0h5m2 0h1m1 0h1m6 0h1m2 0h1m1 0h7m2 0h1M3 10.5h1m1 0h2m1 0h1m9 0h4m3 0h2m2 0h3m5 0h1m1 0h2m1 0h1m1 0h4m1 0h1m1 0h2m2 0h1M3 11.5h2m1 0h2m1 0h4m4 0h1m3 0h7m1 0h1m3 0h1m1 0h1m2 0h4m3 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1M6 12.5h1m3 0h2m2 0h2m1 0h1m5 0h1m3 0h4m1 0h1m1 0h3m7 0h1m2 0h1m1 0h5m1 0h3M1 13.5h1m5 0h4m1 0h1m3 0h5m3 0h2m1 0h4m2 0h4m1 0h4m1 0h2m2 0h2m2 0h2m1 0h4M1 14.5h1m7 0h1m1 0h2m3 0h1m2 0h2m1 0h1m2 0h3m1 0h3m1 0h1m1 0h1m2 0h1m2 0h2m5 0h1m1 0h3M3 15.5h2m2 0h1m2 0h1m1 0h2m3 0h3m2 0h1m3 0h1m7 0h1m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m4 0h1m1 0h3M1 16.5h1m2 0h3m1 0h1m1 0h1m1 0h2m1 0h2m2 0h1m1 0h1m1 0h2m4 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m3 0h1m2 0h1m2 0h3m1 0h4M1 17.5h2m2 0h1m1 0h1m1 0h4m1 0h1m1 0h1m1 0h3m1 0h4m1 0h1m1 0h3m5 0h3m1 0h3m2 0h5m2 0h3m1 0h1M1 18.5h1m3 0h1m2 0h7m1 0h1m3 0h1m1 0h1m1 0h7m1 0h7m1 0h2m1 0h4m1 0h1m2 0h1m2 0h1m2 0h1M4 19.5h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h2m3 0h1m4 0h3m3 0h1m4 0h2m1 0h2m1 0h1m4 0h1m1 0h5m1 0h1M1 20.5h1m1 0h1m5 0h1m3 0h1m1 0h1m1 0h1m4 0h1m1 0h2m1 0h4m1 0h9m4 0h2m3 0h1m3 0h1M2 21.5h3m1 0h2m7 0h2m1 0h1m1 0h2m2 0h2m4 0h3m3 0h1m1 0h1m2 0h3m3 0h1m1 0h8M4 22.5h1m3 0h2m3 0h2m4 0h1m1 0h1m2 0h1m2 0h3m1 0h2m3 0h2m2 0h1m3 0h1m1 0h1m2 0h1m1 0h1m1 0h3m1 0h1M1 23.5h2m2 0h1m1 0h1m1 0h4m2 0h1m1 0h2m1 0h5m2 0h3m2 0h1m2 0h3m2 0h1m1 0h3m2 0h2m2 0h2M12 24.5h1m4 0h2m5 0h2m1 0h1m1 0h1m2 0h1m8 0h1m2 0h1m1 0h3m1 0h1m2 0h1M2 25.5h2m2 0h2m2 0h2m2 0h8m1 0h3m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h3m1 0h10m1 0h2M3 26.5h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m2 0h1m5 0h1m2 0h3m1 0h1m3 0h1m3 0h6m1 0h1m3 0h2m1 0h3M1 27.5h1m3 0h6m5 0h1m4 0h1m2 0h8m3 0h2m2 0h4m1 0h1m1 0h2m1 0h5m1 0h2M1 28.5h1m3 0h1m3 0h2m2 0h2m1 0h1m1 0h4m4 0h2m3 0h1m4 0h3m1 0h1m1 0h2m1 0h3m1 0h1m3 0h5M1 29.5h2m1 0h2m1 0h1m1 0h3m2 0h2m1 0h2m2 0h3m2 0h2m1 0h1m1 0h1m3 0h1m5 0h2m1 0h1m4 0h1m1 0h1m1 0h2m2 0h1M1 30.5h1m1 0h1m1 0h1m3 0h1m1 0h3m1 0h4m1 0h3m2 0h1m1 0h1m3 0h1m2 0h2m1 0h6m1 0h6m3 0h1m1 0h2M5 31.5h5m1 0h4m3 0h1m1 0h1m1 0h2m1 0h1m1 0h5m1 0h4m1 0h4m2 0h1m2 0h1m1 0h6m1 0h2M6 32.5h1m1 0h2m1 0h4m1 0h1m1 0h1m7 0h2m1 0h1m1 0h2m2 0h1m2 0h1m3 0h2m3 0h3m2 0h1m1 0h2m1 0h1M2 33.5h1m3 0h2m2 0h3m8 0h3m1 0h8m1 0h1m2 0h2m2 0h2m1 0h4m1 0h2m1 0h1m4 0h1M1 34.5h4m1 0h1m1 0h1m3 0h1m1 0h1m1 0h2m1 0h3m2 0h1m1 0h1m2 0h2m1 0h1m2 0h4m2 0h3m1 0h1m3 0h1m1 0h2m3 0h1M3 35.5h1m3 0h1m2 0h2m2 0h2m1 0h1m4 0h1m1 0h2m1 0h2m5 0h1m1 0h1m4 0h1m2 0h3m9 0h1M2 36.5h1m1 0h1m3 0h2m1 0h1m1 0h1m7 0h3m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m4 0h1m1 0h1m2 0h1m1 0h1m3 0h1M4 37.5h2m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m1 0h4m2 0h1m2 0h2m1 0h1m2 0h1m2 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h4M1 38.5h1m1 0h4m2 0h2m1 0h2m1 0h5m1 0h5m1 0h1m3 0h1m6 0h2m6 0h4m3 0h1m3 0h1M4 39.5h2m1 0h1m1 0h1m1 0h1m3 0h1m2 0h4m1 0h1m1 0h1m1 0h1m1 0h1m4 0h1m1 0h2m3 0h1m2 0h1m1 0h1m1 0h1m2 0h6M4 40.5h3m9 0h1m1 0h2m1 0h5m2 0h2m3 0h5m2 0h1m3 0h1m1 0h1m3 0h1m2 0h1m3 0h1M6 41.5h5m4 0h4m1 0h1m3 0h3m3 0h1m1 0h1m1 0h1m4 0h3m2 0h1m1 0h3m2 0h2m1 0h3M2 42.5h1m2 0h2m1 0h1m1 0h1m1 0h1m4 0h5m5 0h6m1 0h1m3 0h2m1 0h1m1 0h2m3 0h2m2 0h2m1 0h1m1 0h1M1 43.5h3m2 0h3m5 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h1m1 0h1m1 0h2m1 0h5m5 0h1m2 0h2m1 0h1m1 0h2m3 0h1M1 44.5h3m4 0h2m2 0h1m2 0h2m2 0h1m1 0h1m3 0h1m1 0h1m12 0h2m3 0h5m2 0h2m2 0h2M4 45.5h1m1 0h3m4 0h1m6 0h1m1 0h1m2 0h1m2 0h1m1 0h1m9 0h1m2 0h1m1 0h1m1 0h1m3 0h3m1 0h2M2 46.5h2m1 0h1m2 0h2m1 0h1m1 0h6m2 0h1m1 0h1m1 0h4m3 0h1m1 0h2m2 0h6m1 0h1m1 0h1m2 0h3m2 0h1M1 47.5h1m1 0h1m2 0h2m2 0h6m3 0h3m1 0h1m1 0h1m2 0h1m2 0h5m4 0h2m2 0h1m1 0h2m1 0h3m3 0h3M1 48.5h5m4 0h1m7 0h1m2 0h3m2 0h5m3 0h2m2 0h1m1 0h4m2 0h4m1 0h5m1 0h1M7 49.5h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m2 0h9m1 0h1m1 0h1m1 0h1m1 0h3m1 0h2m2 0h7m2 0h1M9 50.5h1m3 0h1m5 0h2m4 0h3m3 0h2m4 0h2m3 0h4m1 0h1m1 0h1m3 0h3m1 0h1M1 51.5h7m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m1 0h2m1 0h2m1 0h2m2 0h2m1 0h2m1 0h1m1 0h1m3 0h1M1 52.5h1m5 0h1m2 0h2m1 0h3m6 0h1m4 0h1m3 0h1m3 0h2m3 0h1m2 0h2m2 0h3m3 0h1m3 0h1M1 53.5h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h4m1 0h2m1 0h2m1 0h5m1 0h1m1 0h2m1 0h1m2 0h2m4 0h7m1 0h1m1 0h1M1 54.5h1m1 0h3m1 0h1m2 0h2m2 0h2m3 0h2m1 0h2m1 0h1m1 0h2m1 0h2m6 0h2m1 0h2m5 0h2m1 0h2m1 0h1m1 0h2M1 55.5h1m1 0h3m1 0h1m4 0h2m1 0h4m2 0h1m4 0h2m3 0h1m3 0h1m1 0h1m1 0h1m1 0h2m2 0h1m6 0h2M1 56.5h1m5 0h1m2 0h1m3 0h1m1 0h4m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m2 0h2m4 0h1m2 0h4m4 0h1m1 0h1M1 57.5h7m1 0h1m1 0h2m2 0h2m1 0h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h1m2 0h1m4 0h1m1 0h2m1 0h1m1 0h1m1 0h1m3 0h1m1 0h5"/></svg>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=marcin@newmediapilot.com" alt="QR code" class="w-64 h-64 opacity-90">
+      </div>
+      <div class="mt-6 space-y-1 text-sm text-white/80">
+        <p><a href="mailto:marcin@newmediapilot.com" class="hover:underline">marcin@newmediapilot.com</a></p>
+        <p><a href="tel:+14165546798" class="hover:underline">+1 416 554 6798</a></p>
+        <p>Toronto, Ontario, Canada</p>
       </div>
     </div>
   </div>
@@ -532,10 +541,13 @@ const nav = [
     .skill-chip.active { background-color: white !important; color: black; border-color: black; filter: brightness(1.15); }
     .skill-chip.active button { background-color: black; color: white; border-color: black; }
     main > section:nth-child(n+3) { font-size: 0.9em; }
+    .page h2, .page h3 { text-transform: capitalize; }
     .skill-chip:not(.active) span { opacity: 0.6; }
     .professional-skills-heading { font-family: 'KoHo', serif; font-weight: 700; letter-spacing: 0.02em; }
     .skill-group-heading { font-size: 1.6em; }
     .skill-note { margin-bottom: 0.75rem !important; min-height: 2.75rem; }    .skill-group { position: relative; overflow: hidden; }
+    .professional-chip span:first-child { transition: transform 300ms ease; display: inline-block; }
+    .professional-chip:hover span:first-child { transform: rotate(180deg); }
     .skill-group::before {
       content: "";
       position: absolute;
@@ -549,7 +561,6 @@ const nav = [
     }
     .skill-group > * { position: relative; z-index: 1; }
     .skill-group,
-    .professional-skills,
     .site-header { background: transparent !important; }
     .site-header {
       --sz: 20px;
@@ -595,15 +606,7 @@ const nav = [
       overflow: hidden;
     }
         .professional-skills::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
-      filter: contrast(170%) brightness(400%);
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
-      background-blend-mode: overlay;
-      opacity: 0.4;
-      z-index: 0;
+      display: none;
     }
 .professional-skills > * { position: relative; z-index: 1; }
     .skill-chip {
@@ -681,6 +684,74 @@ const nav = [
     .site-header:has(nav a:nth-child(4):hover) {
       filter: hue-rotate(30deg);
     }
+    .professional-skills { pointer-events: none; }
+    .is-hover-locked {
+      filter: brightness(1.3) saturate(1.2);
+      outline: 2px solid rgba(255,255,255,0.6);
+      outline-offset: 2px;
+    }
+    @keyframes hue-rotate-slow {
+      from { filter: hue-rotate(0deg); }
+      to { filter: hue-rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    [data-ident="site-header"] {
+      animation: hue-rotate-slow 5s linear infinite;
+    }
+    .professional-skills {
+      /* background reverted to default */
+    }
+    #contact-card-modal.is-open {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    #contact-card-modal.is-open .page {
+      transform: translateY(0) !important;
+    }
+    #brands-list-wrap {
+      background: #000;
+      border-radius: 12px;
+      padding: 0.5rem;
+      position: relative;
+      background-image: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%, transparent 70%, rgba(255,255,255,0.04));
+      background-attachment: fixed;
+    }
+    #brands-list-wrap::-webkit-scrollbar {
+      width: 10px;
+    }
+    #brands-list-wrap::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #brands-list-wrap::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      border-radius: 6px;
+      border: 2px solid #000;
+    }
+    #brands-list-wrap::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(255,255,255,0.35), rgba(255,255,255,0.1));
+    }
+    #brands-list {
+      border-radius: 8px;
+      position: relative;
+      z-index: 1;
+      padding: 4rem 0.5rem 0.5rem 0.5rem;
+    }
+    #cursor-ball {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 360vw;
+      height: 360vh;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+      background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
 </style>
 
   <script>
@@ -735,12 +806,24 @@ const nav = [
       const modal = document.getElementById('contact-card-modal');
       const openBtn = document.querySelector('[data-open-contact-card]');
       const closeBtn = document.querySelector('[data-close-contact-card]');
+      const modalContent = modal?.querySelector('.page');
       if (openBtn && modal) {
-        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        openBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            modal.classList.add('is-open');
+            modalContent?.classList.add('is-open');
+          });
+        });
       }
+      const closeModal = () => {
+        modal?.classList.remove('is-open');
+        modalContent?.classList.remove('is-open');
+        setTimeout(() => modal?.classList.add('hidden'), 300);
+      };
       if (closeBtn && modal) {
-        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
       }
     });
   </script>
@@ -839,5 +922,44 @@ const nav = [
       document.head.appendChild(st);
     };
     document.head.appendChild(s);
+  </script>
+  <div id="cursor-ball"></div>
+  <script>
+    const ball = document.getElementById('cursor-ball');
+    if (ball) {
+      let targetX = window.innerWidth / 2;
+      let targetY = window.innerHeight / 2;
+      let currentX = targetX;
+      let currentY = targetY;
+      const ease = 0.01;
+      window.addEventListener('pointermove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+      });
+      function animate() {
+        currentX += (targetX - currentX) * ease;
+        currentY += (targetY - currentY) * ease;
+        ball.style.left = currentX + 'px';
+        ball.style.top = currentY + 'px';
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+    // Sticky hover on click
+    let lockedEl = null;
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button, a');
+      if (btn) {
+        if (lockedEl) lockedEl.classList.remove('is-hover-locked');
+        lockedEl = btn;
+        btn.classList.add('is-hover-locked');
+      }
+    });
+    window.addEventListener('pointermove', () => {
+      if (lockedEl) {
+        lockedEl.classList.remove('is-hover-locked');
+        lockedEl = null;
+      }
+    });
   </script>
 </Base>
