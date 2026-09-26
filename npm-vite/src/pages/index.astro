@@ -245,7 +245,7 @@ const nav = [
       <a
         href="/"
         data-ident="header-brand"
-        class="font-koho text-3xl font-normal uppercase tracking-widest sm:text-4xl lg:text-5xl"
+        class="font-koho text-4xl font-normal uppercase tracking-widest sm:text-4xl lg:text-5xl"
         >New<b class="font-bold [-webkit-text-stroke:0.6px_currentColor]">media</b><span class="font-light">Pilot</span></a
       >
       <nav data-ident="header-nav" class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -289,7 +289,7 @@ const nav = [
       <div data-ident="professional-skills-list" class="mt-6 flex flex-wrap gap-2">
         {
           professional.map((skill) => (
-            <div class="flex items-center gap-2 rounded-full border border-white/30 px-3 py-1.5 text-xs sm:text-sm professional-chip">
+            <div class="flex items-center gap-2 rounded-full border border-white/30 bg-black px-3 py-1.5 text-xs sm:text-sm professional-chip">
               <span class="size-4 rounded-full border-2 border-white/80" aria-hidden="true" />
               <span>{skill}</span>
             </div>
@@ -343,7 +343,7 @@ const nav = [
                 const icon = iconMap[skill] || 'react';
                 const url = urlMap[skill] || '#';
                 return (
-                  <a href={url} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center rounded-md border border-white/30 bg-black p-3 text-center transition duration-200 hover:bg-black/80">
+                  <a href={url} target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center justify-center rounded-md border border-white/30 bg-black p-3 text-center transition duration-200 hover:bg-black/80 hover:border-white/60">
                     <img src={`https://cdn.simpleicons.org/${icon}/ffffff`} alt={skill} class="mb-2 h-8 w-8 sm:h-10 sm:w-10 transition-transform duration-200 group-hover:scale-110" />
                     <span class="text-[10px] sm:text-xs">{skill}</span>
                   </a>
@@ -407,13 +407,22 @@ const nav = [
           <div class="flex flex-col justify-center">
             <h3 class="font-serif text-lg sm:text-xl">{row.name}</h3>
             <p class="mt-2 text-xs text-white/70 sm:text-sm">Ongoing client work with focus on performance and content systems.</p>
-            <div class="mt-3 flex items-center gap-3">
-              <button class="text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">View gallery</button>
+            <div class="mt-3 flex flex-col gap-1 text-xs">
+              <button class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                View gallery
+              </button>
               {row.href && row.href !== '#' && (
-                <a href={row.href} target="_blank" rel="noopener" class="text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">Launch website</a>
+                <a href={row.href} target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Launch website
+                </a>
               )}
               {recentWebsiteLabels.has(row.name) && (
-                <a href="#" target="_blank" rel="noopener" class="text-xs underline decoration-white/40 underline-offset-4 hover:decoration-white">Visit website</a>
+                <a href="#" target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Visit website
+                </a>
               )}
             </div>
           </div>
@@ -432,7 +441,7 @@ const nav = [
 
     <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col footer-brands">
       <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl shrink-0">Brands & agencies</h3>
-      <div class="mt-4 overflow-y-auto pr-2 border-y border-white/10 scroll-snap-y">
+      <div class="mt-4 flex-1 overflow-y-auto pr-2 border-y border-white/10 snap-y snap-mandatory">
         <ul class="divide-y divide-white/10 text-sm leading-snug">
           {[
             'ATI',
@@ -610,7 +619,7 @@ const nav = [
     .professional-skills .size-4 {
       border-style: dotted;
       display: inline-block;
-      animation: spin-slow 240s linear infinite;
+      animation: spin-slow 90s linear infinite;
     }
     @keyframes spin-slow {
       from { transform: rotate(0deg); }
