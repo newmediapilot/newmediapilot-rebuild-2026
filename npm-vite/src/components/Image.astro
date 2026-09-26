@@ -1,0 +1,10 @@
+---
+const {
+  src,
+  alt = '',
+  loading = 'lazy',
+  class: cls = '',
+  style = '',
+} = Astro.props;
+---
+<img src={src} alt={alt} loading={loading} class={cls} style={style} />
