@@ -24,13 +24,14 @@ const rows = [
 ]
 
 const websites = [
-  { label: 'HomeLife Realty Website', href: '#' },
-  { label: 'World Real Estate Association Portal', href: '#' },
-  { label: 'CrossFit Cambridge Website', href: '#' },
-  { label: 'Killarney Lodge Website', href: '#' },
+  { label: 'HomeLife Realty Website', href: 'https://www.homelife.ca/' },
+  { label: 'World Real Estate Association Portal', href: 'https://thewrea.com/' },
+  { label: 'CrossFit Cambridge Website', href: 'https://crossfitcambridge.ca/' },
+  { label: 'Killarney Lodge Website', href: 'https://killarneylodge.com/' },
 ]
 
 const recentWebsiteLabels = new Set(websites.map(w => w.label));
+const websiteUrlMap = Object.fromEntries(websites.map(w => [w.label, w.href]));
 
 const slug = (value) =>
   value
@@ -419,7 +420,7 @@ const nav = [
                 </a>
               )}
               {recentWebsiteLabels.has(row.name) && (
-                <a href="#" target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
+                <a href={websiteUrlMap[row.name] || '#'} target="_blank" rel="noopener" class="flex items-center gap-1 underline decoration-white/40 underline-offset-4 hover:decoration-white">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Visit website
                 </a>
@@ -441,8 +442,14 @@ const nav = [
 
     <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col footer-brands">
       <h3 class="font-serif text-xl font-bold uppercase tracking-wider text-white sm:text-2xl shrink-0">Brands & agencies</h3>
-      <div class="mt-4 flex-1 overflow-y-auto pr-2 border-y border-white/10 snap-y snap-mandatory">
-        <ul class="divide-y divide-white/10 text-sm leading-snug">
+      <div class="mt-2 flex flex-wrap gap-1 text-[10px]" id="brands-alphabet">
+        {Array.from({ length: 26 }, (_, i) => String.fromCharCode(97 + i)).map(letter => (
+          <button type="button" data-letter={letter} class="size-8 rounded-full border-2 border-white/30 text-white/70 hover:bg-white/10 hover:text-white transition cursor-pointer">{letter.toUpperCase()}</button>
+        ))}
+        <button type="button" data-letter="all" class="px-3 h-8 rounded-full border-2 border-white/30 text-white/70 hover:bg-white/10 hover:text-white transition cursor-pointer">All</button>
+      </div>
+      <div class="mt-2 flex-1 overflow-y-auto pr-2 border-y border-white/10 snap-y snap-mandatory" id="brands-list-wrap">
+        <ul class="divide-y divide-white/10 text-sm leading-snug" id="brands-list">
           {[
             'ATI',
             'Breaker Crossfit',
@@ -475,9 +482,12 @@ const nav = [
             'Telus',
             'Three Doors Down',
             'Trojan One'
-          ].map((b) => (
-            <li class="py-1.5 opacity-80 snap-start">{b}</li>
-          ))}
+          ].map((b) => {
+            const first = b.trim().toLowerCase().charAt(0);
+            return (
+              <li class="py-1.5 opacity-80 snap-start" data-first={first}>{b}</li>
+            )
+          })}
         </ul>
       </div>
     </section>
@@ -735,12 +745,74 @@ const nav = [
     });
   </script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const alphabet = document.getElementById('brands-alphabet');
+      const list = document.getElementById('brands-list');
+      if (!alphabet || !list) return;
+      const items = Array.from(list.querySelectorAll('li'));
+      const buttons = Array.from(alphabet.querySelectorAll('button[data-letter]'));
+      // gray out letters with no members
+      const present = new Set(items.map(li => li.dataset.first));
+      buttons.forEach(btn => {
+        const letter = btn.dataset.letter;
+        if (letter === 'all') return;
+        if (!present.has(letter)) {
+          btn.classList.add('opacity-30','pointer-events-none');
+        }
+      });
+      let active = null;
+      const setActive = (btn) => {
+        buttons.forEach(b => {
+          b.classList.remove('bg-white','text-black');
+          b.classList.add('border-white/30','text-white/70');
+        });
+        if (btn) {
+          btn.classList.add('bg-white','text-black');
+          btn.classList.remove('border-white/30','text-white/70');
+        }
+      };
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const letter = btn.dataset.letter;
+          if (btn.classList.contains('pointer-events-none')) return;
+          if (letter === 'all') {
+            active = null;
+            items.forEach(li => li.classList.remove('hidden'));
+            setActive(null);
+            return;
+          }
+          if (active === letter) return;
+          active = letter;
+          items.forEach(li => {
+            const first = li.dataset.first || '';
+            li.classList.toggle('hidden', first !== letter);
+          });
+          setActive(btn);
+        });
+      });
+    });
+  </script>
+
   <style>
     #bg-gradient {
       background: linear-gradient(135deg, #0a0a0a, #121212, #1a1a1a, #0f0f0f);
       background-size: 400% 400%;
     }
+    #brands-alphabet button.bg-white:hover {
+      background-color: white !important;
+      color: black !important;
+    }
   </style>
+
+  <script>
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const openModals = document.querySelectorAll('.fixed.inset-0.z-50:not(.hidden)');
+        openModals.forEach(m => m.classList.add('hidden'));
+      }
+    });
+  </script>
 
   <script>
     // Load GSAP via CDN
