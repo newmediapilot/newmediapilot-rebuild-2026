@@ -1,7 +1,7 @@
 ﻿{
   "name": "npm-cloudfront",
   "version": "1.0.0",
-  "description": "CloudFront package placeholder",
+  "description": "CloudFront Function source: resolves extensionless and root URIs to index.html",
   "private": true,
   "scripts": {
     "build": "echo CloudFront package"

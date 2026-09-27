@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Deploy script: build & deploy s3, invalidate cloudfront",
   "private": true,
+  "type": "module",
   "scripts": {
-    "build:s3": "node deploy.js",
-    "invalidate:cloudfront": "node deploy.js",
-    "deploy": "npm run build:s3 && npm run invalidate:cloudfront"
+    "s3": "node deploy.js s3",
+    "cloudfront": "node deploy.js cloudfront",
+    "deploy": "node deploy.js all"
   }
 }

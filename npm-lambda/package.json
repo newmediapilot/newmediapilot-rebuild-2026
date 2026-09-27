@@ -1,10 +1,14 @@
 ﻿{
   "name": "npm-lambda",
   "version": "1.0.0",
-  "description": "Lambda handler for send message",
+  "description": "Lambda handlers for newmediapilot.com. One .js file per function; the filename is the function name.",
   "private": true,
-  "main": "handler.js",
+  "type": "module",
+  "main": "newmediapilot-emailer.js",
   "scripts": {
-    "start": "node handler.js"
+    "start": "node -e \"import('./newmediapilot-emailer.js').then(m => console.log(Object.keys(m)))\""
+  },
+  "dependencies": {
+    "@aws-sdk/client-ses": "3.1024.0"
   }
 }
