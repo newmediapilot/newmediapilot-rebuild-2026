@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro'
 import RowActions from '../components/RowActions.astro'
+import ContactModal from '../components/ContactModal.astro'
+import GalleryModal from '../components/GalleryModal.astro'
 import Footer from '../components/Footer.astro'
 import Image from '../components/Image.astro'
 
@@ -12,21 +14,21 @@ const intro =
 
 const rows = [
   { name: 'World Real Estate Association Portal', href: '#', image: '/uploads/preview-wrea.png', alt: 'Preview', position: 'center' },
-  { name: 'Remedy Design Portfolio Website', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
+  { name: 'Remedy Design Portfolio', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
   { name: 'Oak & Country Samples', href: '#', image: '/uploads/preview-oakcountry.png', alt: 'Preview', position: 'center' },
-  { name: 'Novo Nordisk Sales Module', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
-  { name: 'Mazda SkyDrive Module', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
-  { name: 'Killarney Lodge Website', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
-  { name: 'HomeLife Realty Website', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
-  { name: 'CrossFit Cambridge Website', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
-  { name: 'Architectural Media Website', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
+  { name: 'Novo Nordisk Sales', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
+  { name: 'Mazda SkyDrive', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
+  { name: 'Killarney Lodge', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
+  { name: 'HomeLife Realty', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
+  { name: 'CrossFit Cambridge', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
+  { name: 'Architectural Media', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
 ]
 
 const websites = [
-  { label: 'HomeLife Realty Website', href: 'https://www.homelife.ca/' },
+  { label: 'HomeLife Realty', href: 'https://www.homelife.ca/' },
   { label: 'World Real Estate Association Portal', href: 'https://thewrea.com/' },
-  { label: 'CrossFit Cambridge Website', href: 'https://crossfitcambridge.ca/' },
-  { label: 'Killarney Lodge Website', href: 'https://killarneylodge.com/' },
+  { label: 'CrossFit Cambridge', href: 'https://crossfitcambridge.ca/' },
+  { label: 'Killarney Lodge', href: 'https://killarneylodge.com/' },
 ]
 
 const recentWebsiteLabels = new Set(websites.map(w => w.label));
@@ -407,7 +409,7 @@ const nav = [
             <h3 class="font-koho text-2xl font-bold text-white sm:text-3xl">{row.name}</h3>
             <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
             <div class="mt-3 flex flex-col items-start gap-2 text-base">
-              <a href={`#gallery-${slug(row.name)}`} class="flex items-center gap-2 no-underline">
+              <a href={`#gallery-${slug(row.name)}`} data-gallery-name={row.name} class="flex items-center gap-2 no-underline">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 View gallery
               </a>
@@ -445,7 +447,7 @@ const nav = [
 
     <section data-ident="footer-brands" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] flex flex-col footer-brands">
       <h3 class="font-koho text-xl font-bold text-white sm:text-2xl shrink-0">Brands & Agencies</h3>
-      <div class="mt-3 flex-1 overflow-y-auto pr-8 border-y border-white/10 snap-y snap-mandatory" id="brands-list-wrap">
+      <div class="mt-2 flex-1 overflow-y-auto pr-8 border-y border-white/10 snap-y snap-mandatory" id="brands-list-wrap">
         <ul class="text-sm leading-snug" id="brands-list">
           {[
             'ATI',
@@ -494,54 +496,71 @@ const nav = [
 
   </main>
 
-  <div id="contact-card-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-3xl p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="relative page bg-black p-8 h-[36vh] max-w-md w-full text-center translate-y-full transition-transform duration-500 ease-out flex flex-col justify-center">
-      <button type="button" data-close-contact-card class="absolute top-4 right-4 flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" aria-label="Close">
-        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M6 6l12 12M18 6L6 18"></path>
-        </svg>
-      </button>
-      <h2 class="font-koho text-2xl font-extrabold mb-6">Contact</h2>
-      <div class="flex justify-center">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=marcin@newmediapilot.com" alt="QR code" class="w-64 h-64 opacity-90">
+  <ContactModal />
+
+  <GalleryModal />
+
+  <dialog
+    id="contact-card"
+    data-ident="contact-card-modal"
+    class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
+  >
+    <div data-ident="contact-card-modal-panel" class="page flex h-full flex-col bg-black!">
+      <div data-ident="contact-card-modal-header" class="flex items-center justify-between gap-4 py-6">
+        <h2 data-ident="contact-card-modal-title" class="font-koho text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Contact</h2>
+        <button
+          type="button"
+          data-ident="contact-card-modal-close"
+          data-close-contact-card
+          class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          aria-label="Close"
+        >
+          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </button>
       </div>
-      <div class="mt-6 space-y-1 text-sm text-white/80">
-        <p><a href="mailto:marcin@newmediapilot.com" class="hover:underline">marcin@newmediapilot.com</a></p>
-        <p><a href="tel:+14165546798" class="hover:underline">+1 416 554 6798</a></p>
-        <p>Toronto, Ontario, Canada</p>
+
+      <div data-ident="contact-card-modal-body" class="flex flex-1 flex-col items-center justify-center gap-6 overflow-y-auto pb-6 text-center">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=marcin@newmediapilot.com" alt="QR code" class="w-64 max-w-full opacity-90">
+        <div class="space-y-1 text-sm text-white/80">
+          <p><a href="mailto:marcin@newmediapilot.com" class="hover:underline">marcin@newmediapilot.com</a></p>
+          <p><a href="tel:+14165546798" class="hover:underline">+1 416 554 6798</a></p>
+          <p>Toronto, Ontario, Canada</p>
+        </div>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <footer class="w-full text-center py-6 text-xs tracking-widest text-white/40">
+    <button
+      type="button"
+      data-ident="footer-view-contact-card"
+      data-open-contact-card
+      class="mb-3 block w-full font-semibold uppercase tracking-widest text-white/60 transition-colors hover:text-white"
+    >
+      View contact card
+    </button>
     &copy; 2026 NEWMEDIAPILOT
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const modal = document.getElementById('contact-card-modal');
-      const openBtn = document.querySelector('[data-ident="header-nav-send-message"]');
-      const closeBtn = document.querySelector('[data-close-contact-card]');
-      const modalContent = modal?.querySelector('.page');
-      if (openBtn && modal) {
-        openBtn.addEventListener('click', () => {
-          modal.classList.remove('hidden');
-          requestAnimationFrame(() => {
-            modal.classList.add('is-open');
-            modalContent?.classList.add('is-open');
-          });
-        });
+    const contactCard = document.getElementById('contact-card')
+
+    document.addEventListener('click', (event) => {
+      // Scoped to this card's own attributes so it can never be opened by the
+      // send-a-message trigger, and vice versa.
+      if (event.target.closest('[data-open-contact-card]')) {
+        if (contactCard instanceof HTMLDialogElement && !contactCard.open) contactCard.showModal()
       }
-      const closeModal = () => {
-        modal?.classList.remove('is-open');
-        modalContent?.classList.remove('is-open');
-        setTimeout(() => modal?.classList.add('hidden'), 300);
-      };
-      if (closeBtn && modal) {
-        closeBtn.addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+      if (event.target.closest('[data-close-contact-card]')) {
+        if (contactCard instanceof HTMLDialogElement && contactCard.open) contactCard.close()
       }
-    });
+    })
+
+    contactCard?.addEventListener('click', (event) => {
+      if (event.target === contactCard) contactCard.close()
+    })
   </script>
 
   <style>
@@ -626,13 +645,6 @@ const nav = [
     .professional-skills > * { position: relative; z-index: 1; }
     .page { min-height: 335px; }
     section.page.skill-group, section.page.professional-skills { min-height: 360px; }
-    #contact-card-modal.is-open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    #contact-card-modal.is-open .page {
-      transform: translateY(0);
-    }
     @media (min-width: 1201px) {
       .page { height: 400px !important; min-height: 400px !important; }
     }
@@ -760,11 +772,11 @@ const nav = [
     #brands-list-wrap {
       background: #000;
       border-radius: 12px;
-      padding: 0.5rem;
+      padding: 0.25rem;
       position: relative;
       /* Without this, mandatory snap pins the first <li> to the scrollport top and
          eats the list's top padding, leaving ATI flush against the border. */
-      scroll-padding-top: 2rem;
+      scroll-padding-top: 0.5rem;
       background-image: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 30%, transparent 70%, rgba(255,255,255,0.04));
       background-attachment: fixed;
     }
@@ -909,15 +921,6 @@ const nav = [
       color: black !important;
     }
   </style>
-
-  <script>
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const openModals = document.querySelectorAll('.fixed.inset-0.z-50:not(.hidden)');
-        openModals.forEach(m => m.classList.add('hidden'));
-      }
-    });
-  </script>
 
   <script>
     // Load GSAP via CDN
