@@ -14,6 +14,7 @@ const fields = [
   <div
     data-ident="contact-modal-panel"
     data-contact-endpoint={import.meta.env.PUBLIC_LAMBDA_URL ?? ''}
+    data-form-token={import.meta.env.PUBLIC_FORM_TOKEN ?? ''}
     class="page flex h-full flex-col bg-black!"
   >
     <div data-ident="contact-modal-header" class="flex items-center justify-between gap-4 py-6">
@@ -70,6 +71,13 @@ const fields = [
           class="mt-2 w-full resize-y border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
         ></textarea>
       </label>
+      <!-- Honeypot. Off-screen rather than display:none / hidden, so a bot driving a
+           real browser still fills it while a human never can. The Lambda answers 200
+           without sending whenever this arrives non-empty. -->
+      <div class="absolute -left-[9999px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
+        <label for="contact-website">Website</label>
+        <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
     </form>
 
     <!-- Kept outside the scrolling form so the button holds one fixed position
@@ -155,6 +163,11 @@ const fields = [
   const ENDPOINT =
     document.querySelector('[data-contact-endpoint]')?.getAttribute('data-contact-endpoint') ?? ''
 
+  // Same reason as ENDPOINT: read at runtime so an empty var cannot get the whole
+  // fetch block tree-shaken out of the bundle.
+  const FORM_TOKEN =
+    document.querySelector('[data-form-token]')?.getAttribute('data-form-token') ?? ''
+
   const setStatus = (state, text) => {
     if (!(status instanceof HTMLElement)) return
     status.dataset.state = state
@@ -184,7 +197,7 @@ const fields = [
       const payload = Object.fromEntries(new FormData(form).entries())
       const response = await fetch(ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-nmp-form-token': FORM_TOKEN },
         body: JSON.stringify(payload),
       })
 
