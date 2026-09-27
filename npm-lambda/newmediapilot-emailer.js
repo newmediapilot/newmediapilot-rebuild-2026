@@ -103,6 +103,11 @@ export const handler = async (event = {}) => {
         return respond(403, { ok: false, error: 'Forbidden' }, headers)
     }
 
+    if (!tokensMatch(headerValue(event.headers, TOKEN_HEADER))) {
+        console.warn('Rejected contact submission with a bad or missing form token')
+        return respond(403, { ok: false, error: 'Forbidden' }, headers)
+    }
+
     let payload = {}
     try {
         const raw = event.isBase64Encoded
