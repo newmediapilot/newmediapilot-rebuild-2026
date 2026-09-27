@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "npm-lambda",
   "version": "1.0.0",
   "description": "Lambda handlers for newmediapilot.com. One .js file per function; the filename is the function name.",
@@ -9,6 +9,8 @@
     "start": "node -e \"import('./newmediapilot-emailer.js').then(m => console.log(Object.keys(m)))\""
   },
   "dependencies": {
-    "@aws-sdk/client-ses": "3.1024.0"
+    "@aws-sdk/client-iam": "3.1141.0",
+    "@aws-sdk/client-ses": "3.1141.0",
+    "archiver": "8.0.0"
   }
 }

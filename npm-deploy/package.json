@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.1141.0",
+    "@aws-sdk/client-iam": "3.1141.0",
     "@aws-sdk/client-s3": "^3.1141.0",
     "dotenv": "^10.0.0",
     "glob": "^13.0.6"

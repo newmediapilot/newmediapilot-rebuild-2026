@@ -1,4 +1,5 @@
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
+import crypto from 'node:crypto'
 
 // The deploy script derives the function name from this filename:
 //   npm-lambda/newmediapilot-emailer.js  ->  newmediapilot-emailer
@@ -17,6 +18,15 @@ const ALLOWED_ORIGINS = (
 
 const LIMITS = { name: 100, email: 254, number: 25, message: 5000 }
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+// Shared header the browser must present. NOTE: this ships in the page source,
+// so it only deters naive copy-paste, not a determined caller.
+const TOKEN_HEADER = 'x-nmp-form-token'
+const FORM_TOKEN = process.env.FORM_TOKEN || ''
+
+if (!FORM_TOKEN) {
+    console.error('FORM_TOKEN is not set on the function; every submission will be rejected')
+}
 
 const ses = new SESClient({ region: REGION })
 
@@ -48,11 +58,20 @@ const methodOf = (event) => {
     return (event?.requestContext?.http?.method || event?.httpMethod || 'POST').toUpperCase()
 }
 
+// Constant-time compare so a wrong token cannot be recovered byte by byte.
+const tokensMatch = (provided) => {
+    if (!FORM_TOKEN) return false
+    const a = Buffer.from(oneLine(provided))
+    const b = Buffer.from(FORM_TOKEN)
+    if (a.length !== b.length) return false
+    return crypto.timingSafeEqual(a, b)
+}
+
 const cors = (origin) =>
     ALLOWED_ORIGINS.includes(origin)
         ? {
               'Access-Control-Allow-Origin': origin,
-              'Access-Control-Allow-Headers': 'content-type',
+              'Access-Control-Allow-Headers': `content-type, ${TOKEN_HEADER}`,
               'Access-Control-Allow-Methods': 'POST, OPTIONS',
               Vary: 'Origin'
           }

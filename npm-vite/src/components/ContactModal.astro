@@ -11,7 +11,11 @@ const fields = [
   data-ident="contact-modal"
   class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
 >
-  <div data-ident="contact-modal-panel" class="page flex h-full flex-col bg-black!">
+  <div
+    data-ident="contact-modal-panel"
+    data-contact-endpoint={import.meta.env.PUBLIC_LAMBDA_URL ?? ''}
+    class="page flex h-full flex-col bg-black!"
+  >
     <div data-ident="contact-modal-header" class="flex items-center justify-between gap-4 py-6">
       <h2 data-ident="contact-modal-title" class="font-koho text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Send a message</h2>
       <button
@@ -27,7 +31,12 @@ const fields = [
       </button>
     </div>
 
-    <form data-ident="contact-form" data-contact-form class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
+    <form
+      id="contact-form"
+      data-ident="contact-form"
+      data-contact-form
+      class="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto pb-6"
+    >
       {
         fields.map((field) => (
           <label data-ident={`contact-field-${field.name}`} for={`contact-${field.name}`} class="block">
@@ -61,18 +70,29 @@ const fields = [
           class="mt-2 w-full resize-y border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-white focus:outline-none"
         ></textarea>
       </label>
-
-      <div data-ident="contact-form-actions" class="flex flex-wrap items-center justify-end gap-4">
-        <button
-          type="submit"
-          data-ident="contact-submit"
-          class="rounded-md border border-white bg-white px-6 py-2.5 text-sm font-extrabold uppercase tracking-widest text-black transition-colors hover:bg-transparent hover:text-white"
-        >
-          Send
-        </button>
-        <p data-ident="contact-status" data-contact-status class="hidden text-xs font-semibold uppercase tracking-widest"></p>
-      </div>
     </form>
+
+    <!-- Kept outside the scrolling form so the button holds one fixed position
+         and the status line is never pushed below the fold. -->
+    <div data-ident="contact-form-actions" class="flex flex-wrap items-center justify-end gap-4 border-t border-white/15 py-4">
+      <button
+        type="submit"
+        form="contact-form"
+        data-ident="contact-submit"
+        data-contact-submit
+        class="rounded-md border border-white bg-white px-6 py-2.5 text-sm font-extrabold uppercase tracking-widest text-black transition-colors hover:bg-transparent hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Send
+      </button>
+      <p
+        data-ident="contact-status"
+        data-contact-status
+        data-state="idle"
+        role="status"
+        aria-live="polite"
+        class="text-xs font-semibold uppercase tracking-widest text-white/60"
+      ></p>
+    </div>
   </div>
 </dialog>
 
@@ -122,14 +142,75 @@ const fields = [
     }
   })
 
-  document.querySelector('[data-contact-form]')?.addEventListener('submit', (event) => {
+  const form = document.querySelector('[data-contact-form]')
+  // The action row sits outside the form so the button holds a fixed position, so
+  // these two must be looked up on the dialog, not on the form.
+  const status = dialog?.querySelector('[data-contact-status]')
+  const submitButton = dialog?.querySelector('[data-contact-submit]')
+
+  // Read from the DOM rather than import.meta.env on purpose. A build-time
+  // constant gets folded to a literal when the var is empty, which lets the
+  // minifier drop the whole fetch block and silently ship a form that cannot send.
+  // Empty until the SES/Lambda backend is deployed and PUBLIC_LAMBDA_URL is set.
+  const ENDPOINT =
+    document.querySelector('[data-contact-endpoint]')?.getAttribute('data-contact-endpoint') ?? ''
+
+  const setStatus = (state, text) => {
+    if (!(status instanceof HTMLElement)) return
+    status.dataset.state = state
+    status.textContent = text
+  }
+
+  form?.addEventListener('submit', async (event) => {
     event.preventDefault()
-    const form = event.currentTarget
-    const status = form.querySelector('[data-contact-status]')
-    if (status) {
-      status.textContent = 'Message sent.'
-      status.classList.remove('hidden')
+
+    if (!(form instanceof HTMLFormElement)) return
+
+    if (!form.checkValidity()) {
+      form.reportValidity()
+      setStatus('error', 'Fill in every field.')
+      return
     }
-    form.reset()
+
+    if (!ENDPOINT) {
+      setStatus('error', 'Sending is not configured yet.')
+      return
+    }
+
+    setStatus('pending', 'Sending...')
+    if (submitButton instanceof HTMLButtonElement) submitButton.disabled = true
+
+    try {
+      const payload = Object.fromEntries(new FormData(form).entries())
+      const response = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) throw new Error(`Server responded ${response.status}`)
+
+      setStatus('success', 'Message sent.')
+      form.reset()
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : 'Unknown error'
+      setStatus('error', `Failed to send. ${reason}`)
+    } finally {
+      if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false
+    }
   })
 </script>
+
+<style>
+  [data-contact-status][data-state='pending'] {
+    color: #fff;
+  }
+
+  [data-contact-status][data-state='success'] {
+    color: #4ade80;
+  }
+
+  [data-contact-status][data-state='error'] {
+    color: #f87171;
+  }
+</style>

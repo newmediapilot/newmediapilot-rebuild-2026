@@ -156,3 +156,45 @@ body:has(dialog[open]) [data-ident='footer-spacer'] {
   --shadow-color: #000;
   text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
 }
+
+/* Tailwind's preflight leaves links and buttons on the default arrow cursor, so
+   every control on the page needs this explicitly. The [data-open-*] and
+   [data-close-*] hooks cover the dialog triggers, which are divs in places. */
+a,
+button,
+summary,
+label[for],
+[role='button'],
+[role='link'],
+[role='tab'],
+[role='menuitem'],
+[onclick],
+[tabindex]:not([tabindex='-1']),
+[data-open-contact],
+[data-close-contact],
+[data-open-contact-card],
+[data-close-contact-card],
+[data-open-gallery],
+[data-close-gallery],
+[data-contact-submit],
+[data-chip] {
+  cursor: pointer;
+}
+
+/* Disabled controls read as unavailable rather than inviting a click. */
+button:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+/* Text entry keeps its own caret. */
+input:not([type='checkbox']):not([type='radio']),
+textarea,
+select {
+  cursor: text;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  cursor: pointer;
+}

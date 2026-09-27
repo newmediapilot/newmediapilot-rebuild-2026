@@ -1,0 +1,94 @@
+---
+const details = [
+  { label: 'Email', value: 'marcin@newmediapilot.com', href: 'mailto:marcin@newmediapilot.com' },
+  { label: 'Phone', value: '+1 416 554 6798', href: 'tel:+14165546798' },
+  { label: 'Based in', value: 'Toronto, Ontario, Canada', href: null },
+]
+
+const email = 'marcin@newmediapilot.com'
+---
+
+<!-- Mirrors ContactModal.astro exactly: same dialog chrome, panel, header and
+     close button. Only the body differs, carrying the contact card details. -->
+<dialog
+  id="contact-card"
+  data-ident="contact-card-modal"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
+>
+  <div data-ident="contact-card-modal-panel" class="page flex h-full flex-col bg-black!">
+    <div data-ident="contact-card-modal-header" class="flex items-center justify-between gap-4 py-6">
+      <h2 data-ident="contact-card-modal-title" class="font-koho text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Contact</h2>
+      <button
+        type="button"
+        data-ident="contact-card-modal-close"
+        data-close-contact-card
+        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        aria-label="Close"
+      >
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div data-ident="contact-card-modal-body" class="flex flex-1 flex-col gap-5 overflow-y-auto pb-6">
+      <div data-ident="contact-card-modal-qr" class="flex justify-center">
+        <img
+          src={`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${email}`}
+          alt={`QR code linking to ${email}`}
+          class="w-64 max-w-full opacity-90"
+        />
+      </div>
+
+      {
+        details.map((detail) => (
+          <div data-ident={`contact-card-field-${detail.label.toLowerCase()}`}>
+            <span
+              data-ident={`contact-card-label-${detail.label.toLowerCase()}`}
+              class="block text-sm font-semibold uppercase tracking-widest text-white"
+            >
+              {detail.label}
+            </span>
+            {detail.href ? (
+              <a
+                data-ident={`contact-card-value-${detail.label.toLowerCase()}`}
+                href={detail.href}
+                class="mt-2 block w-full border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white transition-colors hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                {detail.value}
+              </a>
+            ) : (
+              <p
+                data-ident={`contact-card-value-${detail.label.toLowerCase()}`}
+                class="mt-2 w-full border border-white/70 bg-transparent px-3 py-2.5 text-sm text-white"
+              >
+                {detail.value}
+              </p>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('contact-card')
+
+  const open = () => {
+    if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
+  }
+
+  const close = () => {
+    if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
+  }
+
+  document.addEventListener('click', (event) => {
+    if (event.target.closest('[data-open-contact-card]')) open()
+    if (event.target.closest('[data-close-contact-card]')) close()
+  })
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) close()
+  })
+</script>
