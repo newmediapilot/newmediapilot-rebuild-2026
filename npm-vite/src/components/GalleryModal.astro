@@ -1,0 +1,78 @@
+---
+/**
+ * Fullscreen gallery viewer.
+ *
+ * Opens when an anchor whose href starts with `#gallery-` is activated, so the
+ * card links stay real, shareable URLs while the content renders in place.
+ * The slug is the card's own slug, which keeps the two in sync automatically.
+ */
+---
+
+<dialog
+  id="gallery"
+  data-ident="gallery-modal"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
+>
+  <div data-ident="gallery-modal-panel" class="page flex h-full flex-col bg-black!">
+    <div data-ident="gallery-modal-header" class="flex items-center justify-between gap-4 py-6">
+      <h2 data-ident="gallery-modal-title" data-gallery-title class="font-koho text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Gallery</h2>
+      <button
+        type="button"
+        data-ident="gallery-modal-close"
+        data-close-gallery
+        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        aria-label="Close"
+      >
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div data-ident="gallery-modal-body" class="flex flex-1 flex-col gap-6 overflow-y-auto pb-6">
+      <p data-ident="gallery-modal-placeholder" class="text-sm text-white/60">
+        Gallery coming soon.
+      </p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('gallery')
+  const title = dialog?.querySelector('[data-gallery-title]')
+
+  const slugToTitle = (slug) =>
+    slug
+      .split('-')
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+
+  const close = () => {
+    if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
+  }
+
+  document.addEventListener('click', (event) => {
+    const closer = event.target.closest('[data-close-gallery]')
+    if (closer) {
+      close()
+      return
+    }
+
+    // Only `#gallery-` anchors are intercepted; every other hash link keeps
+    // its native behaviour.
+    const link = event.target.closest('a[href^="#gallery-"]')
+    if (!link) return
+
+    event.preventDefault()
+
+    const slug = link.getAttribute('href').slice('#gallery-'.length)
+    if (title) title.textContent = link.dataset.galleryName || slugToTitle(slug)
+
+    if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
+  })
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) close()
+  })
+</script>
