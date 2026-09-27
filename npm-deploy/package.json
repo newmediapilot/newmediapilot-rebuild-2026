@@ -1,12 +1,19 @@
-﻿{
+{
   "name": "npm-deploy",
   "version": "1.0.0",
   "description": "Deploy script: build & deploy s3, invalidate cloudfront",
   "private": true,
   "type": "module",
   "scripts": {
-    "s3": "node deploy.js s3",
-    "cloudfront": "node deploy.js cloudfront",
-    "deploy": "node deploy.js all"
+    "s3": "node deploy-s3.js",
+    "function": "node deploy-cloudfront-function.js",
+    "cloudfront": "node invalidate-cloudfront.js",
+    "deploy": "npm run s3 && npm run function && npm run cloudfront"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudfront": "^3.1141.0",
+    "@aws-sdk/client-s3": "^3.1141.0",
+    "dotenv": "^10.0.0",
+    "glob": "^13.0.6"
   }
 }

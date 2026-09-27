@@ -16,9 +16,9 @@
     "start": "npm run start --workspace=npm-vite",
     "build": "npm run build --workspace=npm-vite",
     "patch": "npm run build && npm version patch && git push --follow-tags",
-    "deploy": "npm run deploy:s3 && npm run deploy:lambda && npm run deploy:cloudfront",
+    "deploy": "npm run build && npm run deploy:s3 && npm run deploy:function && npm run deploy:cloudfront",
     "deploy:s3": "npm run s3 --workspace=npm-deploy",
-    "deploy:lambda": "npm run deploy --workspace=npm-lambda",
+    "deploy:function": "npm run function --workspace=npm-deploy",
     "deploy:cloudfront": "npm run cloudfront --workspace=npm-deploy"
   }
 }

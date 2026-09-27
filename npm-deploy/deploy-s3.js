@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectsCommand } from '@aws-sdk/client-s3'
 import fs from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -66,7 +66,14 @@ const getCacheControl = (key) => {
     return 'public, max-age=3600'
 }
 
-const files = globSync('**/*', { cwd: DIST, nodir: true })
+// glob returns native separators, which are backslashes on Windows. S3 keys must
+// always be forward-slashed or every nested object lands under a bogus key.
+const files = globSync('**/*', { cwd: DIST, nodir: true }).map((file) => file.split(/[\\/]/).join('/'))
+
+if (files.some((file) => file.includes('\\'))) {
+    console.error('Refusing to upload: unnormalised keys remain in the file list.')
+    process.exit(1)
+}
 
 let uploaded = 0
 const failures = []
@@ -90,12 +97,37 @@ const upload = async (key) => {
     }
 }
 
+/** Remove anything in the bucket that is not in the current build manifest. */
+const prune = async () => {
+    const keep = new Set(files)
+    const stale = []
+    let token
+
+    do {
+        const listed = await client.send(new ListObjectsV2Command({ Bucket: bucket, ContinuationToken: token }))
+        for (const item of listed.Contents ?? []) {
+            if (item.Key && !keep.has(item.Key)) stale.push({ Key: item.Key })
+        }
+        token = listed.IsTruncated ? listed.NextContinuationToken : undefined
+    } while (token)
+
+    if (stale.length === 0) {
+        console.log('Nothing to prune')
+        return
+    }
+
+    console.log(`Pruning ${stale.length} stale object(s)`)
+    for (let i = 0; i < stale.length; i += 1000) {
+        await client.send(new DeleteObjectsCommand({ Bucket: bucket, Delete: { Objects: stale.slice(i, i + 1000), Quiet: true } }))
+    }
+}
+
 const run = async () => {
     if (!bucket) {
         console.error('AMAZON_S3_BUCKET is not set in .env')
         process.exit(1)
     }
-    if (!fs.existsSync(new URL('index.html', DIST))) {
+    if (!fs.existsSync(join(DIST, 'index.html'))) {
         console.error('No build found at npm-vite/dist. Run `npm run build` first.')
         process.exit(1)
     }
@@ -118,6 +150,8 @@ const run = async () => {
         for (const failure of failures) console.error(`  ${failure.key}: ${failure.message}`)
         process.exit(1)
     }
+
+    await prune()
 }
 
 run().catch((err) => {
