@@ -399,7 +399,7 @@ const nav = [
 
     {
       rows.map((row) => (
-        <section id={slug(row.name)} data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group">
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group">
           <div class="card-figure flex items-start justify-center overflow-hidden rounded-xl">
             <Image src={row.image} alt={row.alt} class="card-image rounded-xl object-cover brightness-[.62] contrast-[1.15] saturate-[.6] sepia-[.8] transition-[filter] duration-500 ease-out group-hover:brightness-100 group-hover:contrast-100 group-hover:saturate-100 group-hover:sepia-0" style={`object-position: ${row.position}`} />
           </div>
@@ -407,10 +407,10 @@ const nav = [
             <h3 class="font-koho text-2xl font-bold text-white sm:text-3xl">{row.name}</h3>
             <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
             <div class="mt-3 flex flex-col items-start gap-2 text-base">
-              <button class="flex items-center gap-2 no-underline">
+              <a href={`#gallery-${slug(row.name)}`} class="flex items-center gap-2 no-underline">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 View gallery
-              </button>
+              </a>
               {row.href && row.href !== '#' && (
                 <a href={row.href} target="_blank" rel="noopener" class="flex items-center gap-2 no-underline">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
