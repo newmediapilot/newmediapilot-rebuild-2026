@@ -172,7 +172,7 @@ const skillGroups = [
   {
     ident: 'cloud',
     label: 'Cloud & infrastructure',
-    note: 'Deploys, hosts and scales applications',
+    note: 'Deployments, hosting, application scaling',
     skills: [
       'AWS',
       'Lambda',
@@ -182,6 +182,11 @@ const skillGroups = [
       'EC2',
       'Elastic Beanstalk',
       'Load balancers',
+      'Autoscaling',
+      'Edge functions',
+      'DNS',
+      'HTTPS',
+      'Certificates',
       'Lightsail',
       'Netlify',
       'Vercel',
@@ -279,6 +284,11 @@ const skillDescriptions = {
   'Lambda': 'Run code without managing servers. It scales automatically with requests. It’s cost effective for event-driven work.',
   'S3': 'Online storage for files and media. It’s durable and globally accessible. It’s used for images, backups, and assets.',
   'CloudFront': 'Fast delivery of content worldwide. It caches sites close to users. It improves speed and reliability.',
+  'Autoscaling': 'Adding or removing capacity automatically with demand. It keeps apps responsive during traffic spikes and trims cost when traffic drops. It removes manual capacity planning.',
+  'Edge functions': 'Small pieces of code that run close to the user instead of in one central region. They cut latency on routing, auth checks, and rewrites. It keeps responses fast worldwide.',
+  'DNS': 'The system that turns names into addresses. It points domains at the right servers and can route users geographically. It is the first lookup every visit depends on.',
+  'HTTPS': 'Encrypted delivery between browser and server. It protects data in transit and is expected by visitors. Browsers flag sites without it as insecure.',
+  'Certificates': 'The credentials that make HTTPS work. They prove a domain is who it claims to be. They are issued, renewed, and deployed automatically in most setups.',
   'Route 53': 'Domain name management and routing. It directs traffic to the right servers. It provides reliable DNS.',
   'EC2': 'Virtual computers in the cloud. You control the OS and software. It’s flexible compute for apps.',
   'Elastic Beanstalk': 'Easy deployment for web apps. It handles servers and scaling for you. It simplifies AWS launches.',
@@ -447,7 +457,7 @@ const skillRows = skillGroups.flatMap((group) =>
         group.ident === BRANDS_ANCHOR ? (
           <section data-ident="footer-brands" class="page rounded-panel p-3.5 shadow-[0_20px_40px_-20px_#000] sm:p-4 flex flex-col overflow-hidden footer-brands">
             <h3 class="font-koho py-1 text-lg font-bold text-white sm:text-xl shrink-0">Brands &amp; Agencies</h3>
-            <ul class="mt-2 flex flex-wrap justify-center gap-2 text-xs sm:text-sm" id="brands-list">
+            <ul class="mt-2 mb-8 flex flex-wrap justify-center gap-2 text-xs sm:text-sm" id="brands-list">
               {sortedBrands.map((b) => (
                 <li class={brandChipClass}>{b}</li>
               ))}
@@ -770,7 +780,7 @@ const skillRows = skillGroups.flatMap((group) =>
     /* Only the duration is swapped, never the animation shorthand: rewriting the
        shorthand would reset `infinite` and the loop would stop on mouse-out. */
     .professional-chip:hover .size-4 {
-      animation-duration: 0.9s;
+      animation-duration: 1.8s;
     }
     @keyframes spin-slow {
       from { transform: rotate(0deg); }
@@ -847,7 +857,74 @@ const skillRows = skillGroups.flatMap((group) =>
       .card-image { width: 100cqw; height: 100cqw; }
     }
 
-    .professional-chip { transition: border-color 0.2s ease; }
+    /* The chips are plain divs with no role or tabindex, so none of the pointer
+       selectors in global.css match them. Declared here instead of adding a role,
+       since they carry no action for a pointer to promise. */
+    /* The chip is the positioning context: the gradient lives on a ::before
+       pinned to its padding box, so it sits behind the dot and the label without
+       needing to know their sizes. Those two then lift above it with z-index. */
+    .professional-chip {
+      transition: border-color 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    /* 45deg gives the diagonal banding. The bands alternate between two tones and
+       slide sideways, which only reads as movement because background-size is
+       wider than the box -- at 100% a translated background would simply clip. */
+    .professional-chip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0;
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(191, 77, 40, 0.75) 0px,
+        rgba(191, 77, 40, 0.75) 14px,
+        rgba(122, 49, 20, 0.75) 14px,
+        rgba(122, 49, 20, 0.75) 28px
+      );
+      background-size: 300% 300%;
+      background-position: 100% 50%;
+      /* Fast out. The hover rule below overrides this with the slower duration,
+         so the easing can differ per direction without a second element. */
+      transition: opacity 120ms ease-out;
+    }
+    .professional-chip:hover::before,
+    .professional-chip:focus-visible::before {
+      opacity: 1;
+      /* Long cycle: the gradient drifts rather than visibly scrolls. */
+      animation: chip-gradient-slide 9s linear infinite;
+      transition: opacity 300ms ease-in;
+    }
+    /* Isolated on ::before so the moving gradient cannot re-trigger the reveal
+       transition on every repaint. Runs right-to-left to match the reading
+       direction of the keyframe, so the banding travels back the other way. */
+    @keyframes chip-gradient-slide {
+      from { background-position: 100% 50%; }
+      to   { background-position: 0% 50%; }
+    }
+    /* The label sits over a moving gradient, so it takes the same hard black
+       shadow the intro paragraph uses to stay readable. */
+    .professional-chip > span:not(:first-child) {
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .professional-chip > span:first-child {
+      position: relative;
+      z-index: 1;
+    }
+    /* Reduced motion: keep the reveal, drop the slide. A looping background
+       animation is exactly the kind of large-area motion this setting targets. */
+    @media (prefers-reduced-motion: reduce) {
+      .professional-chip:hover::before,
+      .professional-chip:focus-visible::before {
+        animation: none;
+      }
+    }
     .professional-chip:hover {
       border-color: rgba(255,255,255,0.6);
     }
@@ -871,7 +948,9 @@ const skillRows = skillGroups.flatMap((group) =>
     .site-header:has(nav a:nth-child(4):hover) {
       filter: hue-rotate(30deg);
     }
-    .professional-skills { pointer-events: none; }
+    /* pointer-events was disabled on the whole panel, which suppressed :hover on
+       every chip inside it -- no border flash, no fast spin, no pointer cursor,
+       since hover never reached them. Restored so the chip hovers work. */
     .is-hover-locked {
       filter: brightness(1.3) saturate(1.2);
       outline: 2px solid rgba(255,255,255,0.6);
