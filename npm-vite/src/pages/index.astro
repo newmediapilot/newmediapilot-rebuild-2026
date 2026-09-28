@@ -19,10 +19,10 @@ const intro =
 // (uploads/image-preview-<key>-<n>.png). Card names slugify to something else
 // entirely, so the key is what ties a card to its gallery.
 const projects = [
-  { key: 'wrea', name: 'World Real Estate Association Portal' },
-  { key: 'remedy', name: 'Remedy Design Portfolio' },
+  { key: 'wrea', name: 'World Real Estate Association' },
+  { key: 'remedy', name: 'Remedy Design' },
   { key: 'oakcountry', name: 'Oak & Country Samples' },
-  { key: 'novo', name: 'Novo Nordisk Sales' },
+  { key: 'novo', name: 'Novo Nordisk' },
   { key: 'mazda', name: 'Mazda SkyDrive' },
   { key: 'klodge', name: 'Killarney Lodge' },
   { key: 'homelife', name: 'HomeLife Realty' },
@@ -49,7 +49,7 @@ const websites = [
   { label: 'Killarney Lodge', href: 'https://killarneylodge.com/' },
   { label: 'HomeLife Realty', href: 'https://www.homelife.ca/' },
   { label: 'CrossFit Cambridge', href: 'https://crossfitcambridge.ca/' },
-  { label: 'World Real Estate Association Portal', href: 'https://thewrea.com/' },
+  { label: 'World Real Estate Association', href: 'https://thewrea.com/' },
 ]
 
 const recentWebsiteLabels = new Set(websites.map(w => w.label));
@@ -489,7 +489,10 @@ const skillRows = skillGroups.flatMap((group) =>
             </ul>
           </section>
         ) : (
-        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] skill-group skill-group-${group.ident}">
+        <section
+          data-ident={`skill-group-${group.ident}`}
+          class={`page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] skill-group skill-group-${group.ident}${group.ident === 'cms' ? ' stripes-blue' : ''}`}
+        >
           <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-koho text-xl font-bold text-white sm:text-2xl skill-group-heading">
             {group.label}
           </h3>
@@ -694,6 +697,19 @@ const skillRows = skillGroups.flatMap((group) =>
     .skill-group > * { position: relative; z-index: 1; }
     .skill-group,
     .site-header { background: transparent !important; }
+
+    /* The CMS panel carries the paragraph panel's stripe texture, but the blanket
+       `background: transparent !important` above would wipe it out -- same
+       specificity, and the important flag wins. Restated here with both halves of
+       the shorthand and the same !important, declared after, so it takes. */
+    .skill-group.stripes-blue {
+      background-color: var(--stripe-blue) !important;
+      background-image: var(--stripes-blue-image) !important;
+    }
+    /* Same reason: the noise ::before sits on top of the stripes and muddies them.
+       Suppressed for this panel only so the stripes read as cleanly as the
+       paragraph panel's, where there is no ::before at all. */
+    .skill-group.stripes-blue::before { content: none; }
     .site-header {
       --sz: 20px;
       --c0: #ffffff00;
