@@ -636,7 +636,7 @@ const skillRows = skillGroups.flatMap((group) =>
       ))
     }
 
-    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh]" footer-websites">
+    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] footer-websites">
       <h3 class="font-koho text-xl font-bold text-white sm:text-2xl">Recent Websites</h3>
       <ul class="mt-4 flex flex-col gap-2 text-sm">
         {websites.map((w) => (
@@ -726,6 +726,38 @@ const skillRows = skillGroups.flatMap((group) =>
       z-index: 0;
     }
     .site-header > * { position: relative; z-index: 1; }
+
+    /* Experimental pattern layer. Every card type below already spends its
+       ::before on an existing texture (noise, conic tiles), so the patterns ride
+       on ::after instead. z-index 0 matches the ::before, keeping both beneath
+       the content, and pointer-events:none stops the overlay from swallowing the
+       chip hovers -- the professional-skills panel needs those to work. */
+    .professional-skills::after,
+    .skill-group::after,
+    .footer-brands::after,
+    .recent-work::after,
+    .footer-websites::after {
+      /* One shared pattern for every gray card, the -45deg / 4px tile that reads
+         best against the dark noise underneath. Kept in the base block rather than
+         repeated per card so the cards cannot drift apart again. */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.5;
+      background-repeat: repeat;
+    }
+    .footer-websites { position: relative; overflow: hidden; }
+
+    .professional-skills::after,
+    .skill-group::after,
+    .footer-brands::after,
+    .recent-work::after,
+    .footer-websites::after {
+      background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,0.25), rgba(255,255,255,0.25) 1px, transparent 1px, transparent 6px);
+      background-size: 4px 4px;
+    }
 
     .professional-skills {
       --sz: 20px;
