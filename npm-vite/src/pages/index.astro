@@ -142,6 +142,7 @@ const skillGroups = [
       'GSAP',
       'Service workers',
       'Vite',
+      'Bespoke functionality',
     ],
   },
   {
@@ -158,6 +159,7 @@ const skillGroups = [
       'Stripe',
       'Facebook API',
       'User authentication',
+      'SSO',
       'Pipeline design',
       'Socket.IO',
       'WebSockets',
@@ -167,7 +169,20 @@ const skillGroups = [
     ident: 'databases',
     label: 'Databases',
     note: 'Stores and queries application data',
-    skills: ['SQL', 'NoSQL', 'MongoDB', 'DynamoDB', 'SQLite'],
+    skills: [
+      'SQL',
+      'NoSQL',
+      'JSON',
+      'XML',
+      'Data conversion',
+      'MongoDB',
+      'DynamoDB',
+      'SQLite',
+      'MySQL',
+      'Database design',
+      'Migrations',
+      'ORM',
+    ],
   },
   {
     ident: 'cloud',
@@ -264,6 +279,7 @@ const skillDescriptions = {
   'GSAP': 'Smooth animations for websites. It gives fine control over motion and timing. It’s used for polished, performant effects.',
   'Service workers': 'Background helpers for offline use. They cache files so sites work without internet. They also enable push notifications.',
   'Vite': 'Fast tool for building and testing sites. It starts instantly and updates in real time. It simplifies modern front-end workflows.',
+  'Bespoke functionality': 'Custom interactive features built for a specific project. It covers drag and drop, carousels, and animation work. It is where the craft shows once a design is unusual.',
   'Node.js': 'Running JavaScript on servers. It lets the same language power back-end services. It’s widely used for APIs and tools.',
   'Express': 'Simple server setup for web apps. It provides routing and middleware for Node.js. It’s a lightweight foundation for APIs.',
   'Fastify': 'Fast server framework for APIs. It focuses on speed and low overhead. It’s great for high-performance services.',
@@ -272,11 +288,20 @@ const skillDescriptions = {
   'API design': 'Planning how apps talk to each other. It defines endpoints, data shapes, and behavior. Good design makes integration reliable.',
   'Facebook API': 'Meta’s platform for social data and publishing. It covers login, sharing, and audience insights. It requires review and app setup before going live.',
   'User authentication': 'Checking who users are and keeping them logged in. It protects private areas and personal data. It’s essential for secure apps.',
+  'SSO': 'Signing in once and carrying that session across services. It uses standards like OAuth and OIDC with providers such as Okta and Entra ID. It removes separate passwords for each tool.',
   'Pipeline design': 'Automating build and release steps. It runs tests and deploys automatically. It reduces manual errors and speeds delivery.',
   'Socket.IO': 'Real-time messaging between browser and server. It enables chat and live updates. It works over WebSockets with fallbacks.',
   'WebSockets': 'Live two-way connection for updates. It keeps a persistent link between client and server. It’s ideal for real-time features.',
   'SQL': 'Standard language for relational databases. It lets you query and update structured data. It’s the workhorse for many business systems.',
   'NoSQL': 'Flexible databases for varied data. They handle unstructured and rapidly changing data well. They scale horizontally.',
+  'JSON': 'Text format for structured data. It is the default format for most APIs and config files. It is readable and easy to generate from code.',
+  'XML': 'Marked-up text format for structured data. It carries both content and meaning through its tags. It remains common in older systems and document formats.',
+  'Data conversion': 'Turning data from one format or schema into another. It moves data between legacy, partner, and internal systems. It is usually where integration bugs hide.',
+  'PostgreSQL': 'Relational database known for correctness and SQL standards support. It handles JSON, full-text search, and geospatial data. It is a common production choice.',
+  'MySQL': 'Widely deployed relational database. It is known for reliability and broad tooling support. It backs a large share of web applications.',
+  'Database design': 'Deciding tables, keys, and relationships before any code is written. Good design keeps data consistent and queries fast. It is much cheaper to fix on paper.',
+  'Migrations': 'Changing a database schema without losing existing data. They keep deployed code and stored data in step. They are the main risk in shipping schema changes.',
+  'ORM': 'A layer that maps database tables to code objects. It removes most raw SQL for routine work. It keeps queries consistent across a codebase.',
   'MongoDB': 'Database that stores data as documents. It’s flexible and developer friendly. It’s popular for modern web apps.',
   'DynamoDB': 'Managed key-value database service. It scales automatically with traffic. It’s used for low-latency applications.',
   'SQLite': 'Small file-based database for apps. It requires no server setup. It’s great for local storage and prototypes.',
@@ -633,14 +658,14 @@ const skillRows = skillGroups.flatMap((group) =>
 <ContactCardModal />
 
   <footer class="w-full text-center py-6 text-xs tracking-widest text-white/40">
-    <button
-      type="button"
+    <a
+      href="#contact-card"
       data-ident="footer-view-contact-card"
       data-open-contact-card
       class="mb-3 block w-full font-semibold uppercase tracking-widest text-white/60 transition-colors hover:text-white"
     >
       View contact card
-    </button>
+    </a>
     &copy; 2026 NEWMEDIAPILOT
   </footer>
 
@@ -973,7 +998,26 @@ const skillRows = skillGroups.flatMap((group) =>
     .footer-brands {
       height: auto !important;
       min-height: 0 !important;
+      position: relative;
+      overflow: hidden;
+      background: transparent !important;
     }
+    /* Mirrors .skill-group::before. Duplicated rather than added via the
+       `skill-group` class because that selector also matches
+       `section.page.skill-group { min-height: 360px }` above, which would
+       override the auto height this panel needs. */
+    .footer-brands::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
+      filter: contrast(170%) brightness(400%);
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+      background-blend-mode: overlay;
+      opacity: 0.4;
+      z-index: 0;
+    }
+    .footer-brands > * { position: relative; z-index: 1; }
     #cursor-ball {
       position: fixed;
       left: 0;
