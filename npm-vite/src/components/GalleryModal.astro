@@ -5,7 +5,14 @@
  * Opens when an anchor whose href starts with `#gallery-` is activated, so the
  * card links stay real, shareable URLs while the content renders in place.
  * The slug is the card's own slug, which keeps the two in sync automatically.
+ *
+ * `galleries` maps that same slug to the project's shots, so this component
+ * stays presentational and needs to know nothing about the projects themselves.
  */
+const { galleries = {} } = Astro.props;
+
+// < is escaped so a future project name can never close the script element.
+const payload = JSON.stringify(galleries).replace(/</g, '<');
 ---
 
 <dialog
@@ -13,9 +20,12 @@
   data-ident="gallery-modal"
   class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
 >
-  <div data-ident="gallery-modal-panel" class="page flex h-full flex-col bg-black!">
-    <div data-ident="gallery-modal-header" class="flex items-center justify-between gap-4 py-6">
-      <h2 data-ident="gallery-modal-title" data-gallery-title class="font-koho text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Gallery</h2>
+  {/* The panel deliberately skips the `.page` design-system class: that class
+      pins a fixed height with !important at every breakpoint, which would cap
+      the carousel at 400px on desktop instead of filling the modal. */}
+  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black! p-4 sm:p-6">
+    <div data-ident="gallery-modal-header" class="flex shrink-0 items-center justify-between gap-4 py-2 sm:py-4">
+      <h2 data-ident="gallery-modal-title" data-gallery-title class="font-koho truncate text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Gallery</h2>
       <button
         type="button"
         data-ident="gallery-modal-close"
@@ -29,17 +39,70 @@
       </button>
     </div>
 
-    <div data-ident="gallery-modal-body" class="flex flex-1 flex-col gap-6 overflow-y-auto pb-6">
-      <p data-ident="gallery-modal-placeholder" class="text-sm text-white/60">
+    <div data-ident="gallery-modal-body" class="flex min-h-0 flex-1 flex-col gap-4">
+      <p data-ident="gallery-modal-placeholder" data-gallery-placeholder class="text-sm text-white/60">
         Gallery coming soon.
       </p>
+
+      <div data-ident="gallery-modal-stage" data-gallery-stage class="hidden min-h-0 flex-1 flex-col gap-4">
+        {/* `relative` is load-bearing: the script measures each slide's offsetLeft
+            against the track to translate scroll position into an image index. */}
+        <div
+          data-ident="gallery-modal-track"
+          data-gallery-track
+          class="relative flex min-h-0 flex-1 snap-x snap-mandatory items-center gap-4 overflow-x-auto overflow-y-hidden scroll-smooth pb-1 scrollbar-none"
+          style="scrollbar-width:none"
+        >
+        </div>
+
+        <div data-ident="gallery-modal-controls" class="flex shrink-0 items-center justify-center gap-6">
+          <button
+            data-ident="gallery-modal-prev"
+            data-gallery-prev
+            type="button"
+            aria-label="Previous image"
+            class="flex size-8 items-center justify-center rounded border border-white/20 text-white/70 transition hover:text-white disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+
+          <span
+            data-ident="gallery-modal-counter"
+            data-gallery-counter
+            class="font-koho tabular-nums tracking-widest text-white/80"
+            aria-live="polite"
+          >1 / 1</span>
+
+          <button
+            data-ident="gallery-modal-next"
+            data-gallery-next
+            type="button"
+            aria-label="Next image"
+            class="flex size-8 items-center justify-center rounded border border-white/20 text-white/70 transition hover:text-white disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <script type="application/json" data-gallery-data set:html={payload}></script>
 </dialog>
 
 <script>
   const dialog = document.getElementById('gallery')
   const title = dialog?.querySelector('[data-gallery-title]')
+  const body = dialog?.querySelector('[data-gallery-modal-body]')
+  const placeholder = dialog?.querySelector('[data-gallery-placeholder]')
+  const stage = dialog?.querySelector('[data-gallery-stage]')
+  const track = dialog?.querySelector('[data-gallery-track]')
+  const counter = dialog?.querySelector('[data-gallery-counter]')
+  const prevBtn = dialog?.querySelector('[data-gallery-prev]')
+  const nextBtn = dialog?.querySelector('[data-gallery-next]')
+
+  const dataElement = document.querySelector('[data-gallery-data]')
+  const galleries = dataElement ? JSON.parse(dataElement.textContent) : {}
 
   const slugToTitle = (slug) =>
     slug
@@ -50,6 +113,106 @@
 
   const close = () => {
     if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
+  }
+
+  const slides = () => (track ? Array.from(track.children) : [])
+
+  // Slides are laid out by the browser, so their widths differ. Measuring the
+  // real offsets beats assuming a fixed slide width, which breaks the moment a
+  // viewport, a gap or a max-width changes.
+  const offsetOf = (slide) => slide.offsetLeft - (slides()[0]?.offsetLeft ?? 0)
+
+  const indexFromScroll = () => {
+    const list = slides()
+    let closest = 0
+    let closestDistance = Infinity
+    list.forEach((slide, index) => {
+      const distance = Math.abs(offsetOf(slide) - track.scrollLeft)
+      if (distance < closestDistance) {
+        closestDistance = distance
+        closest = index
+      }
+    })
+    return closest
+  }
+
+  const paint = (index) => {
+    const total = slides().length
+    if (counter) counter.textContent = `${index + 1} / ${total}`
+    if (prevBtn) prevBtn.disabled = index <= 0
+    if (nextBtn) nextBtn.disabled = index >= total - 1
+  }
+
+  const goTo = (index) => {
+    const slide = slides()[index]
+    if (!slide) return
+    track.scrollTo({ left: offsetOf(slide), behavior: 'smooth' })
+  }
+
+  // `snap-center` can only centre a slide that has slack on both sides of it, and
+  // the first and last slides have none -- the scroll container stops at the edge.
+  // That leaves image 1 pinned left while every image after it centres correctly.
+  // Half a slide of inline padding on each edge gives the first and last slides the
+  // slack they are missing, so scrollLeft 0 is now the centred position.
+  //
+  // Measured off the rendered width rather than the declared percentage because
+  // the slides are also capped at max-w-[1200px], and the two only agree on wide
+  // viewports. The existing padding is subtracted first so repeated calls are
+  // idempotent rather than compounding.
+  const syncEdgePadding = () => {
+    const first = slides()[0]
+    if (!track || !first) return
+    const styles = getComputedStyle(track)
+    const current = (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0)
+    const inset = Math.max(0, (track.clientWidth - current - first.offsetWidth) / 2)
+    track.style.paddingInline = `${inset}px`
+  }
+
+  // Paints from the scroll position in both directions, so dragging the native
+  // scrollbar keeps the slider and the counter in step with the carousel.
+  const settle = () => paint(indexFromScroll())
+
+  const render = (entry) => {
+    const images = Array.isArray(entry?.images) ? entry.images : []
+
+    if (images.length === 0) {
+      stage?.classList.add('hidden')
+      placeholder?.classList.remove('hidden')
+      if (track) {
+        track.replaceChildren()
+        track.style.paddingInline = ''
+      }
+      return
+    }
+
+    const figures = images.map((src, index) => {
+            const figure = document.createElement('figure')
+            figure.className = 'relative h-[68vh] w-[78%] max-w-[1200px] shrink-0 snap-center sm:w-[72%]'
+
+            const image = document.createElement('img')
+            image.src = src
+            image.alt = `${entry.name} image ${index + 1} of ${images.length}`
+            // The first slide is on screen the moment the modal opens, so it must not
+            // be deferred; the rest stay lazy so opening a gallery costs one request.
+            image.loading = index === 0 ? 'eager' : 'lazy'
+            image.decoding = 'async'
+            image.className = 'size-full object-contain'
+            figure.appendChild(image)
+
+      return figure
+    })
+
+    track?.replaceChildren(...figures)
+    if (track) {
+      // Padding first: slide 1 is only centred once the edge slack exists, and
+      // scrollLeft 0 is what that centred position resolves to.
+      syncEdgePadding()
+      track.scrollLeft = 0
+    }
+
+    placeholder?.classList.add('hidden')
+    stage?.classList.remove('hidden')
+    paint(0)
   }
 
   document.addEventListener('click', (event) => {
@@ -67,12 +230,54 @@
     event.preventDefault()
 
     const slug = link.getAttribute('href').slice('#gallery-'.length)
-    if (title) title.textContent = link.dataset.galleryName || slugToTitle(slug)
+    const entry = galleries[slug]
+    if (title) title.textContent = link.dataset.galleryName || entry?.name || slugToTitle(slug)
 
+    // Opened first on purpose: a closed <dialog> is display:none, so every
+    // offsetLeft would measure as 0 and the first slide could not be located.
     if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
+
+    render(entry)
   })
 
   dialog?.addEventListener('click', (event) => {
     if (event.target === dialog) close()
+  })
+
+  let frame = 0
+  track?.addEventListener(
+    'scroll',
+    () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        settle()
+      })
+    },
+    { passive: true }
+  )
+
+  const step = (delta) => {
+    const total = slides().length
+    goTo(Math.min(Math.max(indexFromScroll() + delta, 0), Math.max(total - 1, 0)))
+  }
+
+  prevBtn?.addEventListener('click', () => step(-1))
+  nextBtn?.addEventListener('click', () => step(1))
+
+  dialog?.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') step(1)
+    if (event.key === 'ArrowLeft') step(-1)
+  })
+
+  // Re-centres on the slide the resized viewport now considers closest, so the
+  // counter cannot be left describing a slide that is half off screen. The edge
+  // padding is recomputed first because the slide widths are percentages, so a
+  // resize changes how much slack each edge needs.
+  window.addEventListener('resize', () => {
+    if (dialog instanceof HTMLDialogElement && !dialog.open) return
+    const index = indexFromScroll()
+    syncEdgePadding()
+    paint(index)
   })
 </script>

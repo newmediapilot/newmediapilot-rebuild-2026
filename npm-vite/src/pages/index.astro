@@ -1,4 +1,5 @@
 ---
+import galleryShots from 'virtual:nmp-gallery-shots'
 import Base from '../layouts/Base.astro'
 import RowActions from '../components/RowActions.astro'
 import ContactModal from '../components/ContactModal.astro'
@@ -13,17 +14,36 @@ const lorem =
 const intro =
   'I have spent decades building things on the Internet, and I enjoy the work. I have worked in real estate, advertising and marketing, games and entertainment, and the public sector. I work pragmatically: the next useful step, not the most impressive one. I stay at it when something is difficult or unfinished, because good outcomes come from steady effort rather than one big moment. I keep an eye on what is changing and think\u00A0ahead.'
 
-const rows = [
-  { name: 'World Real Estate Association Portal', href: '#', image: '/uploads/preview-wrea.png', alt: 'Preview', position: 'center' },
-  { name: 'Remedy Design Portfolio', href: '#', image: '/uploads/preview-remedy.png', alt: 'Preview', position: 'center' },
-  { name: 'Oak & Country Samples', href: '#', image: '/uploads/preview-oakcountry.png', alt: 'Preview', position: 'center' },
-  { name: 'Novo Nordisk Sales', href: '#', image: '/uploads/preview-novo.png', alt: 'Preview', position: 'center' },
-  { name: 'Mazda SkyDrive', href: '#', image: '/uploads/preview-mazda.png', alt: 'Preview', position: 'center' },
-  { name: 'Killarney Lodge', href: '#', image: '/uploads/preview-klodge.png', alt: 'Preview', position: 'center' },
-  { name: 'HomeLife Realty', href: '#', image: '/uploads/preview-homelife.png', alt: 'Preview', position: 'center' },
-  { name: 'CrossFit Cambridge', href: '#', image: '/uploads/preview-ccambridge.png', alt: 'Preview', position: 'center' },
-  { name: 'Architectural Media', href: '#', image: '/uploads/preview-archmedia.png', alt: 'Preview', position: 'center' },
+// The key is the project identity shared by the card image
+// (uploads/preview-<key>.png) and its gallery shots
+// (uploads/image-preview-<key>-<n>.png). Card names slugify to something else
+// entirely, so the key is what ties a card to its gallery.
+const projects = [
+  { key: 'wrea', name: 'World Real Estate Association Portal' },
+  { key: 'remedy', name: 'Remedy Design Portfolio' },
+  { key: 'oakcountry', name: 'Oak & Country Samples' },
+  { key: 'novo', name: 'Novo Nordisk Sales' },
+  { key: 'mazda', name: 'Mazda SkyDrive' },
+  { key: 'klodge', name: 'Killarney Lodge' },
+  { key: 'homelife', name: 'HomeLife Realty' },
+  { key: 'ccambridge', name: 'CrossFit Cambridge' },
+  { key: 'archmedia', name: 'Architectural Media' },
+  { key: 'stella-mccartney', name: 'Stella McCartney' },
+  { key: 'workopolis', name: 'Workopolis' },
 ]
+
+// Card thumbnail path. Stella's thumbnail is `preview-stella.png`, not
+// `preview-stella-mccartney.png`. Work around the mismatch with a one-line alias.
+const CARD_THUMB = (key) =>
+  key === 'stella-mccartney' ? '/uploads/preview-stella.png' : `/uploads/preview-${key}.png`
+
+const rows = projects.map((project) => ({
+  ...project,
+  href: '#',
+  image: CARD_THUMB(project.key),
+  alt: 'Preview',
+  position: 'center',
+}))
 
 const websites = [
   { label: 'Killarney Lodge', href: 'https://killarneylodge.com/' },
@@ -40,6 +60,30 @@ const slug = (value) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '')
+
+// Gallery shots are discovered at build time, so dropping a new image-*.png into
+// public/uploads is enough to populate that project's gallery -- there is no list
+// to maintain here. A key with no matching project is simply never looked up.
+// The virtual module hands over bare filenames; public/ serves the bytes itself.
+const shotsByKey = {}
+for (const file of galleryShots) {
+  const match = file.match(/^image-preview-(.+)-(\d+)\.png$/)
+  if (!match) continue
+  ;(shotsByKey[match[1]] ??= []).push({ index: Number(match[2]), url: `/uploads/${file}` })
+}
+for (const shots of Object.values(shotsByKey)) {
+  shots.sort((a, b) => a.index - b.index)
+}
+
+const galleries = Object.fromEntries(
+  rows.map((row) => [
+    slug(row.name),
+    {
+      name: row.name,
+      images: (shotsByKey[row.key] ?? []).map((shot) => shot.url),
+    },
+  ])
+)
 
 const skillGroups = [
   {
@@ -218,12 +262,13 @@ const skillDescriptions = {
 
 const professional = [
   'Agency background',
-  'Coordinates stand-ups',
+  'Coordinates standups',
+  'Coordinates team efforts',
   'Ships fast under tight deadlines',
   'Natural problem solver',
-  'Clear and direct communicator',
+  'Clear & direct',
   'Performance focused',
-  'Mentors other developers',
+  'Mentors others',
   'Client-facing delivery',
 ]
 
@@ -280,14 +325,21 @@ const brands = [
 const sortedBrands = [...brands].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }))
 
 const brandChipClass =
-  'flex items-center justify-center rounded-md bg-black px-2 py-1 text-center leading-tight opacity-80'
+  'flex items-center justify-center rounded-md bg-black px-2.5 py-1.5 text-center leading-tight opacity-80'
+
+// Brands & Agencies sits inside the skills grid, immediately above Front-end.
+// A marker entry in the same list keeps the skill groups to a single pass.
+const BRANDS_ANCHOR = 'brands'
+const skillRows = skillGroups.flatMap((group) =>
+  group.ident === 'front-end' ? [{ ident: BRANDS_ANCHOR }, group] : [group]
+)
 ---
 
 <Base title="Home">
   <div id="bg-gradient" class="fixed inset-0 -z-10"></div>
 
   <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8 site-main">
-    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] h-[36vh] site-header">
+    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] site-header">
       <a
         href="/"
         data-ident="header-brand"
@@ -325,11 +377,11 @@ const brandChipClass =
       </nav>
     </section>
 
-    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] h-[36vh] intro-panel">
+    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] intro-panel">
       <p data-ident="intro-paragraph" class="text-shadow-hard font-serif text-base leading-relaxed sm:text-lg">{intro}</p>
     </section>
 
-    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] professional-skills">
+    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] professional-skills">
       <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold sm:text-3xl professional-skills-heading">Professional Skills</h2>
       <div data-ident="professional-skills-list" class="mt-6 flex flex-wrap gap-2">
         {
@@ -344,8 +396,18 @@ const brandChipClass =
     </section>
 
     {
-      skillGroups.map((group) => (
-        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] skill-group skill-group-${group.ident}">
+      skillRows.map((group) =>
+        group.ident === BRANDS_ANCHOR ? (
+          <section data-ident="footer-brands" class="page rounded-panel p-3.5 shadow-[0_20px_40px_-20px_#000] sm:p-4 flex flex-col overflow-hidden footer-brands">
+            <h3 class="font-koho py-1 text-lg font-bold text-white sm:text-xl shrink-0">Brands &amp; Agencies</h3>
+            <ul class="mt-2 flex flex-wrap justify-center gap-2 text-xs sm:text-sm" id="brands-list">
+              {sortedBrands.map((b) => (
+                <li class={brandChipClass}>{b}</li>
+              ))}
+            </ul>
+          </section>
+        ) : (
+        <section data-ident={`skill-group-${group.ident}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] skill-group skill-group-${group.ident}">
           <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-koho text-xl font-bold text-white sm:text-2xl skill-group-heading">
             {group.label}
           </h3>
@@ -456,12 +518,13 @@ const brandChipClass =
             <div data-ai-message class="mt-3 hidden text-xs text-white/70"></div>
           )}
         </section>
-      ))
+        )
+      )
     }
 
     {
       rows.map((row) => (
-        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh] grid grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group">
+        <section data-ident={`recent-work-${slug(row.name)}`} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] grid grid-cols-1 sm:grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group">
           <div class="card-figure flex items-start justify-center overflow-hidden rounded-xl">
             <Image src={row.image} alt={row.alt} class="card-image rounded-xl object-cover brightness-[.62] contrast-[1.15] saturate-[.6] sepia-[.8] transition-[filter] duration-500 ease-out group-hover:brightness-100 group-hover:contrast-100 group-hover:saturate-100 group-hover:sepia-0" style={`object-position: ${row.position}`} />
           </div>
@@ -491,7 +554,7 @@ const brandChipClass =
       ))
     }
 
-    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] h-[36vh]" footer-websites">
+    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh]" footer-websites">
       <h3 class="font-koho text-xl font-bold text-white sm:text-2xl">Recent Websites</h3>
       <ul class="mt-4 flex flex-col gap-2 text-sm">
         {websites.map((w) => (
@@ -505,22 +568,11 @@ const brandChipClass =
       </ul>
     </section>
 
-    <section data-ident="footer-brands" class="page rounded-panel p-3.5 shadow-[0_20px_40px_-20px_#000] sm:p-4 flex flex-col overflow-hidden footer-brands">
-      <h3 class="font-koho py-1 text-lg font-bold text-white sm:text-xl shrink-0">Brands &amp; Agencies</h3>
-      <div class="mt-2" id="brands-list-wrap">
-        <ul class="flex flex-wrap justify-center gap-1.5 text-xs" id="brands-list">
-          {sortedBrands.map((b) => (
-            <li class={brandChipClass} data-first={b.trim().toLowerCase().charAt(0)}>{b}</li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
   </main>
 
   <ContactModal />
 
-  <GalleryModal />
+  <GalleryModal galleries={galleries} />
 <ContactCardModal />
 
   <footer class="w-full text-center py-6 text-xs tracking-widest text-white/40">
@@ -623,8 +675,12 @@ const brandChipClass =
     @media (min-width: 769px) and (max-width: 1200px) {
       .page { height: 500px !important; min-height: 500px !important; }
     }
-    @media (max-width: 768px) {
-      .page { height: 450px !important; min-height: 450px !important; }
+    /* Below the two-column breakpoint every panel is free to size to its own
+       content, so a card with three links is not padded out to match one with a
+       single gallery link. The fixed heights above only apply once the grid is
+       actually laying cards out side by side. */
+    @media (max-width: 900px) {
+      .page { height: auto !important; min-height: 0 !important; }
     }
     @media (max-width: 640px) {
       [data-ident="header-brand"] .brand-word { display: block; line-height: 1.1; }
@@ -643,10 +699,6 @@ const brandChipClass =
     @media (max-width: 900px) {
       main.site-main { grid-template-columns: repeat(1, minmax(0,1fr)) !important; }
     }
-    .footer-brands div::-webkit-scrollbar { width: 8px; }
-    .footer-brands div::-webkit-scrollbar-track { background: transparent; }
-    .footer-brands div::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-    .footer-brands div::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.35); }
     /* Text is decorative, so selection is suppressed site-wide. Form fields opt
        back in, otherwise typing and correcting text in the contact form breaks. */
     body {
@@ -731,6 +783,14 @@ const brandChipClass =
          Reads stronger on hover, when the brightness filter lifts. */
       box-shadow: inset 6px 6px 14px rgba(0, 0, 0, 0.45);
     }
+    /* Stacked cards have no grid cell to stretch, so there is no resolved block
+       size for a `size` container to measure against. Switching to `inline-size`
+       derives the square from the column width alone, which is stable once the
+       height comes from content. */
+    @media (max-width: 900px) {
+      .card-figure { container-type: inline-size; }
+      .card-image { width: 100cqw; height: 100cqw; }
+    }
 
     .professional-chip { transition: border-color 0.2s ease; }
     .professional-chip:hover {
@@ -773,20 +833,12 @@ const brandChipClass =
     [data-ident="site-header"] {
       animation: hue-rotate-slow 5s linear infinite;
     }
-    .professional-skills {
-      /* background reverted to default */
-    }
     /* Static grid: the design-system .page forces a fixed 400/500px height, which
        would leave dead space under the list. Declared after that rule so it wins
        on equal specificity. */
     .footer-brands {
       height: auto !important;
       min-height: 0 !important;
-    }
-    #brands-list {
-      border-radius: 8px;
-      position: relative;
-      z-index: 1;
     }
     #cursor-ball {
       position: fixed;
@@ -850,19 +902,10 @@ const brandChipClass =
     });
   </script>
 
-  <script>
-    // The brands list is a static grid now, so the scroll-progress code that
-    // drove the conic scrollbar thumb is gone along with the scrollbar itself.
-  </script>
-
   <style>
     #bg-gradient {
       background: linear-gradient(135deg, #0a0a0a, #121212, #1a1a1a, #0f0f0f);
       background-size: 400% 400%;
-    }
-    #brands-alphabet button.bg-white:hover {
-      background-color: white !important;
-      color: black !important;
     }
   </style>
 
