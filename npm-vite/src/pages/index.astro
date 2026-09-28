@@ -124,7 +124,25 @@ const skillGroups = [
     ident: 'front-end',
     label: 'Front-end',
     note: 'Everything the visitor sees and interacts with in a browser',
-    skills: ['HTML', 'CSS', 'SCSS', 'Tailwind', 'JavaScript', 'TypeScript', 'GSAP', 'Service workers', 'Vite'],
+    skills: [
+      'HTML',
+      'CSS',
+      'SCSS',
+      'Responsive design',
+      'Tailwind',
+      'shadcn/ui',
+      'daisyUI',
+      'Bootstrap',
+      'Foundation',
+      'Skeleton',
+      'JavaScript',
+      'TypeScript',
+      'Canvas',
+      'Game logic',
+      'GSAP',
+      'Service workers',
+      'Vite',
+    ],
   },
   {
     ident: 'back-end',
@@ -137,6 +155,8 @@ const skillGroups = [
       'PHP',
       'ASP',
       'API design',
+      'Stripe',
+      'Facebook API',
       'User authentication',
       'Pipeline design',
       'Socket.IO',
@@ -173,7 +193,18 @@ const skillGroups = [
     ident: 'build',
     label: 'Build & development',
     note: 'Builds, packages and manages web applications',
-    skills: ['Git', 'Webpack', 'Parcel', 'Gulp'],
+    skills: [
+      'Git',
+      'Composer',
+      'npm',
+      'npm workspaces',
+      'Webpack',
+      'Parcel',
+      'Gulp',
+      'CI/CD pipelines',
+      'Continuous deployment',
+      'Artifact delivery',
+    ],
   },
   {
     ident: 'accessibility-security',
@@ -214,6 +245,15 @@ const skillDescriptions = {
   'CSS': 'Styling that makes web pages look good. It controls colors, fonts, spacing, and layout. It turns raw content into a polished design.',
   'SCSS': 'A friendlier way to write CSS with reusable styles. It lets you organize styles into modules and use variables. It makes large sites easier to maintain.',
   'Tailwind': 'A toolkit for building layouts quickly. It provides small utility classes you compose in HTML. It speeds up styling without writing custom CSS.',
+  'Responsive design': 'Layouts that adapt to any screen size. They use fluid units and breakpoints instead of fixed widths. It keeps sites usable from phones to large displays.',
+  'shadcn/ui': 'Component library that copies code into your project rather than installing a package. You own the components and can restyle them freely. It pairs well with Tailwind.',
+  'daisyUI': 'Component set built on top of Tailwind. It themes common elements like buttons and cards with CSS variables. It speeds up consistent interface work.',
+  'Bootstrap': 'Long-standing CSS framework with a large component set. It provides a grid, utilities, and ready-made widgets. It’s a common choice for fast, consistent builds.',
+  'Foundation': 'Responsive front-end framework from the Zurb team. It offers a grid, components, and JavaScript plugins. It powers sites that need a mature, flexible system.',
+  'Skeleton': 'Minimal CSS framework built for Tailwind projects. It provides base styles and simple components with minimal styling. It suits sites wanting a clean foundation.',
+  'Canvas': 'HTML element for drawing graphics with JavaScript. It renders charts, games, and animations pixel by pixel. It gives direct control over the visuals.',
+  'Game logic': 'The rules and state behind interactive play. It covers input handling, physics, and collision detection. It keeps behaviour consistent across frames.',
+  'Stripe': 'Payments platform for cards and subscriptions. It handles checkout, tokens, and webhooks. It takes the compliance work out of taking money.',
   'JavaScript': 'Code that makes websites interactive. It adds behavior like buttons, forms, and animations. It brings pages to life beyond static content.',
   'TypeScript': 'JavaScript with added type checking. It helps catch mistakes before the site runs. It makes larger codebases safer to work on.',
   'GSAP': 'Smooth animations for websites. It gives fine control over motion and timing. It’s used for polished, performant effects.',
@@ -225,6 +265,7 @@ const skillDescriptions = {
   'PHP': 'Server language for dynamic websites. It powers many content platforms and e-commerce sites. It runs on most web hosts.',
   'ASP': 'Microsoft server technology for web apps. It integrates with Windows and .NET. It’s used for enterprise internal sites.',
   'API design': 'Planning how apps talk to each other. It defines endpoints, data shapes, and behavior. Good design makes integration reliable.',
+  'Facebook API': 'Meta’s platform for social data and publishing. It covers login, sharing, and audience insights. It requires review and app setup before going live.',
   'User authentication': 'Checking who users are and keeping them logged in. It protects private areas and personal data. It’s essential for secure apps.',
   'Pipeline design': 'Automating build and release steps. It runs tests and deploys automatically. It reduces manual errors and speeds delivery.',
   'Socket.IO': 'Real-time messaging between browser and server. It enables chat and live updates. It works over WebSockets with fallbacks.',
@@ -251,6 +292,12 @@ const skillDescriptions = {
   'Webpack': 'Bundling code for the browser. It combines modules into optimized files. It’s a core build tool.',
   'Parcel': 'Zero-config bundler for quick starts. It works out of the box with modern code. It speeds up prototyping.',
   'Gulp': 'Automation for repetitive tasks. It runs scripts for build and test. It streamlines developer workflows.',
+  'Composer': 'PHP’s dependency manager. It reads a manifest and installs the right package versions. It also runs autoloading and project scripts.',
+  'npm': 'Node’s package manager and script runner. It installs dependencies and runs the scripts in a project. It’s the default toolchain for JavaScript builds.',
+  'npm workspaces': 'Monorepo support built into npm. It links local packages together and shares one lockfile. It avoids publishing internal code just to consume it.',
+  'CI/CD pipelines': 'Automated steps that build, test, and verify every change. They run on push or pull request and catch breakage early. They keep main branches deployable.',
+  'Continuous deployment': 'Shipping every merged change to production automatically. No manual release step stands between a commit and live. It makes releases small and frequent.',
+  'Artifact delivery': 'Shipping the built output rather than the source. It makes deployments smaller, faster, and identical across environments. It also keeps production decoupled from the build tool.',
   'WCAG': 'Guidelines for accessible websites. They ensure sites work for people with disabilities. They improve usability for everyone.',
   'AODA': 'Ontario rules for digital accessibility. They require inclusive public websites. Compliance is a legal obligation.',
   'OWASP': 'Common web security risks and fixes. It provides checklists for safe development. It helps prevent breaches.',
@@ -716,6 +763,14 @@ const skillRows = skillGroups.flatMap((group) =>
       border-style: dotted;
       display: inline-block;
       animation: spin-slow 90s linear infinite;
+      /* Resting spin is slow enough to read as a drift, so the jump to the fast
+         loop is a clear signal rather than a subtle change. */
+      transition: animation-duration 180ms ease;
+    }
+    /* Only the duration is swapped, never the animation shorthand: rewriting the
+       shorthand would reset `infinite` and the loop would stop on mouse-out. */
+    .professional-chip:hover .size-4 {
+      animation-duration: 0.9s;
     }
     @keyframes spin-slow {
       from { transform: rotate(0deg); }
