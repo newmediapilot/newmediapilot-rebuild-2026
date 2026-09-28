@@ -149,6 +149,23 @@ body:has(dialog[open]) [data-ident='footer-spacer'] {
   );
 }
 
+/* The paragraph panel's texture, rotated 90deg (135deg -> 45deg) and recoloured
+   blue. Both halves are exposed as variables so a rule that has to out-specify an
+   `!important` background elsewhere can reuse the values without repeating the
+   gradient, which is what the CMS panel needs. */
+.stripes-blue {
+  --stripe: 2px;
+  --stripe-blue: #2f4f7f;
+  --stripe-blue-dark: #263d63;
+  --stripes-blue-image: repeating-linear-gradient(
+    45deg,
+    var(--stripe-blue) 0 var(--stripe),
+    var(--stripe-blue-dark) var(--stripe) calc(2 * var(--stripe))
+  );
+  background-color: var(--stripe-blue);
+  background-image: var(--stripes-blue-image);
+}
+
 .text-shadow-hard {
   --shadow-x: 1px;
   --shadow-y: 1px;
