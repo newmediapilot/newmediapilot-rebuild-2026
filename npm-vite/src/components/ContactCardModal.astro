@@ -75,6 +75,8 @@ const email = 'marcin@newmediapilot.com'
 <script>
   const dialog = document.getElementById('contact-card')
 
+  const HASH = '#contact-card'
+
   const open = () => {
     if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
   }
@@ -83,12 +85,55 @@ const email = 'marcin@newmediapilot.com'
     if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
   }
 
+  // Closing rewrites the hash rather than clearing it. replaceState avoids adding a
+  // history entry, so Back after closing returns to the previous page instead of
+  // reopening the modal, and a reload of /#contact-card still opens it.
+  const clearHash = () => {
+    if (location.hash === HASH) history.replaceState(null, '', location.pathname + location.search)
+  }
+
+  const openFromHash = () => {
+    if (location.hash !== HASH) return
+    // Deferred one frame: on a cold load the dialog is still display:none, so
+    // showModal would run before layout and any first-paint measurement would
+    // measure a hidden element.
+    requestAnimationFrame(open)
+  }
+
   document.addEventListener('click', (event) => {
-    if (event.target.closest('[data-open-contact-card]')) open()
-    if (event.target.closest('[data-close-contact-card]')) close()
+    if (event.target.closest('[data-open-contact-card]')) {
+      // Set the hash first so a reload of the resulting URL reopens the modal.
+      // The default is prevented because the browser would otherwise jump the
+      // scroll position to a matching id, and the target must stay a real link.
+      event.preventDefault()
+      if (location.hash !== HASH) history.pushState(null, '', HASH)
+      open()
+      return
+    }
+
+    if (event.target.closest('[data-close-contact-card]')) {
+      event.preventDefault()
+      close()
+      clearHash()
+    }
   })
 
   dialog?.addEventListener('click', (event) => {
-    if (event.target === dialog) close()
+    if (event.target === dialog) {
+      close()
+      clearHash()
+    }
   })
+
+  // Covers Back/Forward landing on the hash. popstate fires before the location
+  // has settled in some browsers, so the check is deferred to the next tick.
+  window.addEventListener('popstate', () => {
+    setTimeout(() => {
+      if (location.hash === HASH) open()
+      else close()
+    }, 0)
+  })
+
+  window.addEventListener('hashchange', openFromHash)
+  openFromHash()
 </script>
