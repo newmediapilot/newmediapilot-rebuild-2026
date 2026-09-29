@@ -465,32 +465,40 @@ const brandChipClass =
 // travels with the card it belongs to rather than with a source position that a
 // reorder would break. `to top` puts the first colour at the top of the card; the
 // portfolio cards use staggered diagonals so neighbours do not read as a pair.
+// [angle, top, mid, bottom] -- three stops, so every card has a colour at each end
+// and a hue shift through the middle. The pairs are complementary rather than
+// tonal: Professional Skills already runs orange into purple, and the same
+// warm-cool opposition is now scattered across the skill groups and portfolio
+// cards so it reads as a system instead of a one-off. `warm` is the low-hue end
+// (rust, amber, teal leaning warm), `cool` the high-hue end (violet, indigo,
+// blue), with the mid stop sitting between them so the transition is a real
+// gradient rather than a hard two-tone split.
 const cardColors = {
   // Static cards.
-  'site-header': ['to top', '#33190d', '#160a05'],
-  'professional-skills': ['to top', '#241640', '#6b2a12'],
-  'footer-brands': ['to top', '#54240f', '#301309'],
-  'footer-websites': ['to top', '#161620', '#0c0c14'],
+  'site-header': ['to top', '#4a1f0a', '#33190d', '#160a05'],
+  'professional-skills': ['to top', '#241640', '#6b2a12', '#3a1608'],
+  'footer-brands': ['to top', '#54240f', '#301309', '#1a0a05'],
+  'footer-websites': ['to top', '#241640', '#161620', '#0c0c14'],
   // Skill groups. CMS and Web Frameworks are pattern-coloured instead, see below.
-  ai: ['to top', '#0d3540', '#07212a'],
-  'front-end': ['to top', '#2a1c56', '#180f33'],
-  'back-end': ['to top', '#4a2418', '#2a120b'],
-  databases: ['to top', '#4a3410', '#2a1d08'],
-  cloud: ['to top', '#1d2b3c', '#101823'],
-  build: ['to top', '#33400f', '#1c2408'],
-  'accessibility-security': ['to top', '#4c1a28', '#2b0d15'],
+  ai: ['to top', '#0d3540', '#123a2a', '#071a1f'],
+  'front-end': ['to top', '#2a1c56', '#1c2a3a', '#180f33'],
+  'back-end': ['to top', '#4a2418', '#3a1c2a', '#2a120b'],
+  databases: ['to top', '#4a3410', '#2a3418', '#2a1d08'],
+  cloud: ['to top', '#1d2b3c', '#16283a', '#101823'],
+  build: ['to top', '#33400f', '#2a2a1a', '#1c2408'],
+  'accessibility-security': ['to top', '#4c1a28', '#2a1a3a', '#2b0d15'],
   // Portfolio cards.
-  wrea: ['145deg', '#1b3a4b', '#0b1a24'],
-  remedy: ['115deg', '#3d1636', '#1a0b1c'],
-  oakcountry: ['160deg', '#43301a', '#1d1409'],
-  novo: ['125deg', '#123a34', '#07191a'],
-  mazda: ['100deg', '#3a1420', '#180810'],
-  klodge: ['150deg', '#16303f', '#091820'],
-  homelife: ['135deg', '#1c3320', '#0a1710'],
-  ccambridge: ['95deg', '#3b2a10', '#1a1206'],
-  archmedia: ['170deg', '#231a44', '#0f0b20'],
-  'stella-mccartney': ['120deg', '#3b2450', '#1b0f26'],
-  workopolis: ['140deg', '#1a2440', '#0a0f1d'],
+  wrea: ['145deg', '#1b3a4b', '#16404a', '#0b1a24'],
+  remedy: ['115deg', '#3d1636', '#2a1a3a', '#1a0b1c'],
+  oakcountry: ['160deg', '#43301a', '#2a331a', '#1d1409'],
+  novo: ['125deg', '#123a34', '#123a20', '#07191a'],
+  mazda: ['100deg', '#3a1420', '#2a1a2a', '#180810'],
+  klodge: ['150deg', '#16303f', '#1a3020', '#091820'],
+  homelife: ['135deg', '#1c3320', '#1c2a3a', '#0a1710'],
+  ccambridge: ['95deg', '#3b2a10', '#332a1a', '#1a1206'],
+  archmedia: ['170deg', '#231a44', '#1a2a3a', '#0f0b20'],
+  'stella-mccartney': ['120deg', '#3b2450', '#3a2020', '#1b0f26'],
+  workopolis: ['140deg', '#1a2440', '#1a2a3a', '#0a0f1d'],
 }
 
 // Cards whose colour comes from a texture class rather than a gradient, so they
@@ -515,9 +523,20 @@ if (uncolored.length > 0) {
   throw new Error(`cardColors is missing an entry for: ${[...new Set(uncolored)].join(', ')}`)
 }
 
+// Build-time guard: every entry must carry a mid stop. A two-stop row would still
+// build and still render, just without the complementary blend, which is the
+// failure that is easiest to reintroduce by accident when adding a card.
+const noMid = Object.entries(cardColors)
+  .filter(([, entry]) => entry.length < 4)
+  .map(([ident]) => ident)
+
+if (noMid.length > 0) {
+  throw new Error(`cardColors needs a mid stop (3 colours) for: ${noMid.join(', ')}`)
+}
+
 const gradStyle = (ident) => {
-  const [angle, top, bottom] = cardColors[ident]
-  return `--grad-angle:${angle};--grad-top:${top};--grad-bottom:${bottom}`
+  const [angle, top, mid, bottom] = cardColors[ident]
+  return `--grad-angle:${angle};--grad-top:${top};--grad-mid:${mid};--grad-bottom:${bottom}`
 }
 
 // Brands & Agencies sits inside the skills grid, immediately above Front-end.
@@ -568,6 +587,12 @@ const skillRows = skillGroups.flatMap((group) =>
           )
         }
       </nav>
+
+      {/* Bottom-right slogan. Absolutely positioned rather than pushed down with
+          margin-top:auto, because the card's height is forced by the design-system
+          .page rules and the nav is short -- there is no spare flow height to push
+          against. Pinned, it stays in the corner at every breakpoint. */}
+      <p data-ident="header-slogan" class="header-slogan">I want you to win.</p>
     </section>
 
     <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] intro-panel">
@@ -798,23 +823,14 @@ const skillRows = skillGroups.flatMap((group) =>
     .skill-note { margin-bottom: 0.75rem !important; min-height: 2.75rem; }    .skill-group { position: relative; overflow: hidden; }
     .professional-chip span:first-child { transition: transform 300ms ease; display: inline-block; }
     .professional-chip:hover span:first-child { transform: rotate(180deg); }
-    .skill-group::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
-      filter: contrast(170%) brightness(400%);
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
-      background-blend-mode: overlay;
-      opacity: 0.4;
-      z-index: 0;
-    }
     .skill-group > * { position: relative; z-index: 1; }
-    .skill-group,
-    .site-header { background: transparent !important; }
+    /* No blanket `background: transparent !important` here any more. It was a
+       shorthand, so on .site-header and .skill-group it reset background-image and
+       silently discarded the shared gradient below -- which is why those panels kept
+       rendering flat grey no matter what colours were set on them. */
 
     /* Shared card gradient. Only the fill changes: the white line pattern in ::after
-       and the noise in ::before are separate layers, so the texture composites on top
+       is a separate layer, so the texture composites on top of the gradient
        unchanged -- no masking involved. Every stop stays dark because the pattern is
        white at 25% alpha and would vanish against anything lighter.
        `to top` puts the first colour at the top of the card; cards that want a
@@ -822,6 +838,7 @@ const skillRows = skillGroups.flatMap((group) =>
        own stops from losing its fill entirely.
        Deliberately one class of specificity: .skill-group.stripes-panel below is two,
        so CMS and Web Frameworks keep their stripes regardless of source order. */
+    .site-header,
     .professional-skills,
     .skill-group,
     .footer-brands,
@@ -830,22 +847,33 @@ const skillRows = skillGroups.flatMap((group) =>
       background-image: linear-gradient(
         var(--grad-angle, to top),
         var(--grad-bottom, #1a1a24),
+        var(--grad-mid, var(--grad-top, #1a1a24)),
         var(--grad-top, #1a1a24)
       ) !important;
     }
+    /* The intro panel is deliberately absent from that list. It takes its colour
+       from `.stripes-rust` in global.css, and a `background-image` here would
+       replace the stripes rather than sit under them -- the same trap
+       .skill-group.stripes-panel below is written to avoid. Its rust stripes are
+       already its colour, so it needs no gradient. */
 
     /* One hue per card, deep and desaturated. Professional Skills keeps the
-       orange-to-purple it already had. */
-    .professional-skills { --grad-top: #241640; --grad-bottom: #6b2a12; }
-    .skill-group-ai { --grad-top: #0d3540; --grad-bottom: #07212a; }
-    .skill-group-front-end { --grad-top: #2a1c56; --grad-bottom: #180f33; }
-    .skill-group-back-end { --grad-top: #4a2418; --grad-bottom: #2a120b; }
-    .skill-group-databases { --grad-top: #4a3410; --grad-bottom: #2a1d08; }
-    .skill-group-cloud { --grad-top: #1d2b3c; --grad-bottom: #101823; }
-    .skill-group-build { --grad-top: #33400f; --grad-bottom: #1c2408; }
-    .skill-group-accessibility-security { --grad-top: #4c1a28; --grad-bottom: #2b0d15; }
-    .footer-brands { --grad-top: #54240f; --grad-bottom: #301309; }
-    .footer-websites { --grad-top: #161620; --grad-bottom: #0c0c14; }
+       orange-to-purple it already had. The site header gets a warm brown so it is
+       no longer plain black behind its band pattern. */
+    /* Mid stops mirror the table above, so these two sources cannot drift: a card
+       coloured in the frontmatter and the same card coloured here get the same
+       three-stop gradient. */
+    .site-header { --grad-top: #4a1f0a; --grad-mid: #33190d; --grad-bottom: #160a05; }
+    .professional-skills { --grad-top: #241640; --grad-mid: #6b2a12; --grad-bottom: #3a1608; }
+    .skill-group-ai { --grad-top: #0d3540; --grad-mid: #123a2a; --grad-bottom: #071a1f; }
+    .skill-group-front-end { --grad-top: #2a1c56; --grad-mid: #1c2a3a; --grad-bottom: #180f33; }
+    .skill-group-back-end { --grad-top: #4a2418; --grad-mid: #3a1c2a; --grad-bottom: #2a120b; }
+    .skill-group-databases { --grad-top: #4a3410; --grad-mid: #2a3418; --grad-bottom: #2a1d08; }
+    .skill-group-cloud { --grad-top: #1d2b3c; --grad-mid: #16283a; --grad-bottom: #101823; }
+    .skill-group-build { --grad-top: #33400f; --grad-mid: #2a2a1a; --grad-bottom: #1c2408; }
+    .skill-group-accessibility-security { --grad-top: #4c1a28; --grad-mid: #2a1a3a; --grad-bottom: #2b0d15; }
+    .footer-brands { --grad-top: #54240f; --grad-mid: #301309; --grad-bottom: #1a0a05; }
+    .footer-websites { --grad-top: #241640; --grad-mid: #161620; --grad-bottom: #0c0c14; }
 
     /* These panels carry the paragraph panel's stripe texture, but the blanket
        `background: transparent !important` above would wipe it out -- same
@@ -855,10 +883,8 @@ const skillRows = skillGroups.flatMap((group) =>
       background-color: var(--stripe-a) !important;
       background-image: var(--stripes-image) !important;
     }
-    /* Same reason: the noise ::before sits on top of the stripes and muddies them.
-       Suppressed for these panels only so the stripes read as cleanly as the
-       paragraph panel's, where there is no ::before at all. */
-    .skill-group.stripes-panel::before { content: none; }
+    /* CMS and Web Frameworks keep only their stripes plus the shared ::after
+       hatch, which is what the paragraph panel already does. */
     .site-header {
       --sz: 20px;
       --c0: #ffffff00;
@@ -892,37 +918,90 @@ const skillRows = skillGroups.flatMap((group) =>
     }
     .site-header > * { position: relative; z-index: 1; }
 
-    /* Experimental pattern layer. Every card type below already spends its
-       ::before on an existing texture (noise, conic tiles), so the patterns ride
-       on ::after instead. z-index 0 matches the ::before, keeping both beneath
-       the content, and pointer-events:none stops the overlay from swallowing the
-       chip hovers -- the professional-skills panel needs those to work. */
+    /* Two-class selector on purpose: `.site-header > *` above is the same
+       specificity as a bare `.header-slogan` and would win on source order,
+       resetting this back to `position: relative` and dropping the slogan into
+       the flow under the nav. */
+    .site-header .header-slogan {
+      position: absolute;
+      /* Matches the card's p-8 / sm:p-12, so the slogan sits on the card's own
+         margin instead of hard against the edge. */
+      right: 2rem;
+      bottom: 2rem;
+      margin: 0;
+      max-width: 55%;
+      text-align: right;
+      color: #fff;
+      /* Arial Black is a system face, not one of the two Google fonts this site
+         loads (KoHo, Playfair Display), so it cannot be requested by name the way
+         KoHo is. The stack degrades to Arial Bold and then Arial; on a platform
+         with neither it lands on the generic sans-serif and loses the heavy
+         weight. Say so if you would rather I load Anton or Archivo Black from
+         Google Fonts to guarantee it everywhere. */
+      font-family: 'Arial Black', 'Arial Bold', Arial, Helvetica, sans-serif;
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.1;
+      opacity: 0.8;
+      /* The card scrolls horizontally on touch; a pointer-events:none slogan would
+         otherwise become a scroll trap mid-gesture. */
+      pointer-events: none;
+      z-index: 2;
+    }
+    @media (min-width: 640px) {
+      .site-header .header-slogan {
+        right: 3rem;
+        bottom: 3rem;
+      }
+    }
+
+    /* The little grid, now on every card so none reads as an empty gradient.
+       --grid-alpha is the single dial: 0.25 everywhere by default, dropped to 0.15
+       on the skill-group and Professional Skills panels below, which are smaller and
+       sit on lighter tones where 0.25 was strong enough to read as static. The
+       already-coloured cards keep 0.25 untouched.
+       --grid-opacity is separate from the alpha so the layer can be faded without
+       editing the gradient stops. pointer-events:none keeps the overlay from
+       swallowing the chip hovers on the professional-skills panel. */
+    .site-header::after,
+    .intro-panel::after,
     .professional-skills::after,
     .skill-group::after,
     .footer-brands::after,
     .recent-work::after,
     .footer-websites::after {
-      /* One shared pattern for every gray card, the -45deg / 4px tile that reads
-         best against the dark noise underneath. Kept in the base block rather than
-         repeated per card so the cards cannot drift apart again. */
+      /* One shared pattern for every card, the -45deg / 4px tile. Kept in the base
+         block rather than repeated per card so the cards cannot drift apart again. */
       content: "";
       position: absolute;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: var(--grid-opacity, 0.5);
       background-repeat: repeat;
     }
-    .footer-websites { position: relative; overflow: hidden; }
-
+    .site-header::after,
+    .intro-panel::after,
     .professional-skills::after,
     .skill-group::after,
     .footer-brands::after,
     .recent-work::after,
     .footer-websites::after {
-      background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,0.25), rgba(255,255,255,0.25) 1px, transparent 1px, transparent 6px);
+      background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,var(--grid-alpha, 0.25)), rgba(255,255,255,var(--grid-alpha, 0.25)) 1px, transparent 1px, transparent 6px);
       background-size: 4px 4px;
     }
+    .professional-skills,
+    .skill-group { --grid-alpha: 0.15; }
+
+    /* Positioning for the grid layer. `inset: 0` on an absolutely positioned ::after
+       resolves against the nearest positioned ancestor, so every card that carries a
+       ::after has to be one itself or the grid lands on the wrong box. .skill-group
+       and .site-header already declared position:relative for their own overlays;
+       .intro-panel and .footer-websites are declared here. The `> *` rules lift the
+       content above the grid, which sits at z-index 0. */
+    .intro-panel { position: relative; }
+    .footer-websites { position: relative; overflow: hidden; }
+    .intro-panel > * { position: relative; z-index: 1; }
 
     .professional-skills {
       --sz: 20px;
@@ -933,17 +1012,6 @@ const skillRows = skillGroups.flatMap((group) =>
       --ts: 50%/ calc(var(--sz) * 13.25) calc(var(--sz) * 11.7);
       position: relative;
       overflow: hidden;
-    }
-        .professional-skills::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
-      filter: contrast(170%) brightness(400%);
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
-      background-blend-mode: overlay;
-      opacity: 0.4;
-      z-index: 0;
     }
     .professional-skills > * { position: relative; z-index: 1; }
     .page { min-height: 335px; }
@@ -1012,18 +1080,11 @@ const skillRows = skillGroups.flatMap((group) =>
     .recent-work {
       position: relative;
       overflow: hidden;
-      background: transparent !important;
-    }
-    .recent-work::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
-      filter: contrast(170%) brightness(400%);
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
-      background-blend-mode: overlay;
-      opacity: 0.4;
-      z-index: 0;
+      /* Was `background: transparent !important`, a shorthand that also reset
+         background-image and so wiped the portfolio gradients. Declared as a
+         longhand so the shared gradient rule survives, and left without !important
+         because [data-ident] on this selector already outranks the gradient rule's
+         single class -- an !important shorthand here would beat it outright. */
     }
     .recent-work > * {
       position: relative;
@@ -1197,22 +1258,8 @@ const skillRows = skillGroups.flatMap((group) =>
       min-height: 0 !important;
       position: relative;
       overflow: hidden;
-      background: transparent !important;
-    }
-    /* Mirrors .skill-group::before. Duplicated rather than added via the
-       `skill-group` class because that selector also matches
-       `section.page.skill-group { min-height: 360px }` above, which would
-       override the auto height this panel needs. */
-    .footer-brands::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #000508 0%, #000b18 100%);
-      filter: contrast(170%) brightness(400%);
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
-      background-blend-mode: overlay;
-      opacity: 0.4;
-      z-index: 0;
+      /* Longhand for the same reason as .recent-work: the shorthand was resetting
+         background-image and clearing this card's gradient too. */
     }
     .footer-brands > * { position: relative; z-index: 1; }
     #cursor-ball {
