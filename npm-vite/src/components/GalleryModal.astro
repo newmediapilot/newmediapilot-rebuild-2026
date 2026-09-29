@@ -18,14 +18,27 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
 <dialog
   id="gallery"
   data-ident="gallery-modal"
+  aria-label="Image gallery"
   class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
 >
   {/* The panel deliberately skips the `.page` design-system class: that class
       pins a fixed height with !important at every breakpoint, which would cap
       the carousel at 400px on desktop instead of filling the modal. */}
-  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black! py-4 sm:py-6">
-    <div data-ident="gallery-modal-header" class="flex shrink-0 items-center justify-between gap-4 py-2 sm:py-4">
-      <h2 data-ident="gallery-modal-title" data-gallery-title class="font-koho truncate text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Gallery</h2>
+  {/* Translucent so the page behind the dialog shows through, with a blur to
+      match. The backdrop already supplies `bg-black/70 backdrop:blur-3xl` for the
+      area outside the panel; this carries the same treatment to the panel itself.
+      Both are declared with the same `!important`-free Tailwind bang prefixes as
+      the contact modals, which already sit over a blurred backdrop. */}
+  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black/70! backdrop-blur-3xl py-4 sm:py-6">
+    {/* The title heading is gone, so the header holds only the close button and
+        justifies it to the end. The dialog carries `aria-label` instead -- the h2
+        was its accessible name, and dropping it without one would leave the dialog
+        unnamed. */}
+    {/* pr-4/sm:pr-6 matches the panel's py-4/sm:py-6, so the close button sits the
+        same distance from the right edge as the header does from the top. The panel
+        is `w-full`, so the padding goes here rather than on the panel itself, which
+        would otherwise narrow the track and stop slides filling a screen. */}
+    <div data-ident="gallery-modal-header" class="flex shrink-0 items-center justify-end gap-4 py-2 pr-4 sm:py-4 sm:pr-6">
       <button
         type="button"
         data-ident="gallery-modal-close"
@@ -44,18 +57,45 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
         Gallery coming soon.
       </p>
 
-      <div data-ident="gallery-modal-stage" data-gallery-stage class="hidden min-h-0 flex-1 flex-col gap-4">
+      {/* pr-4/sm:pr-6 on the track matches the panel's py-4/sm:py-6, so the last
+          slide's right edge sits the same distance from the panel edge as the header
+          does from the top. It has to live on the track rather than the panel: the
+          panel is `w-full`, so padding on it would narrow the track and undo the
+          full-width slide sizing that makes one image fill a screen. */}
+      {/* The stage is a column of two rows: the carousel (shrink-0, so it keeps its
+          h-[68vh] and sits at the top) and the controls (flex-1, so they take every
+          remaining pixel and centre within it).
+
+          `justify-center` is deliberately NOT on the stage. With it, the pair was
+          centred as a group, and that put the controls' midpoint at the same offset
+          the flex-1 version did -- the two computed to the same pixels, so adding
+          flex-1 moved nothing visible. The image has to sit at the top of the stage
+          for the controls' area to become a distinct, lower region to centre in.
+          `items-center` is cross-axis in a column and is kept, so the track stays
+          centred horizontally. */}
+      {/* `flex` is required and was missing: `flex-col` only sets flex-direction and
+          does not set display, so once the script removes `hidden` this element
+          became a plain block. That silently disabled flex-1, flex-col and gap-4
+          together, and the controls collapsed to sitting flush against the track's
+          bottom edge regardless of their classes. Everything else here assumes a
+          flex column parent. */}
+      <div data-ident="gallery-modal-stage" data-gallery-stage class="hidden min-h-0 flex-1 flex flex-col items-center gap-4">
         {/* `relative` is load-bearing: the script measures each slide's offsetLeft
             against the track to translate scroll position into an image index. */}
         <div
           data-ident="gallery-modal-track"
           data-gallery-track
-          class="relative flex min-h-0 flex-1 snap-x snap-mandatory items-center overflow-x-auto overflow-y-hidden scroll-smooth pb-1 scrollbar-none"
+          class="relative flex min-h-0 w-full shrink-0 snap-x snap-mandatory items-center overflow-x-auto overflow-y-hidden scroll-smooth pb-1 pr-4 scrollbar-none sm:pr-6"
           style="scrollbar-width:none"
         >
         </div>
 
-        <div data-ident="gallery-modal-controls" class="flex shrink-0 items-center justify-center gap-6">
+        {/* flex-1, not shrink-0: the controls take all the space left below the
+            carousel and centre themselves in it, so they sit at the vertical
+            midpoint of the leftover height instead of hugging the image's bottom
+            edge. The track stays shrink-0 above, which is what leaves that space
+            for the controls to occupy. */}
+        <div data-ident="gallery-modal-controls" class="flex min-h-0 w-full flex-1 items-center justify-center gap-6">
           <button
             data-ident="gallery-modal-prev"
             data-gallery-prev
@@ -92,7 +132,6 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
 
 <script>
   const dialog = document.getElementById('gallery')
-  const title = dialog?.querySelector('[data-gallery-title]')
   const body = dialog?.querySelector('[data-gallery-modal-body]')
   const placeholder = dialog?.querySelector('[data-gallery-placeholder]')
   const stage = dialog?.querySelector('[data-gallery-stage]')
@@ -103,13 +142,6 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
 
   const dataElement = document.querySelector('[data-gallery-data]')
   const galleries = dataElement ? JSON.parse(dataElement.textContent) : {}
-
-  const slugToTitle = (slug) =>
-    slug
-      .split('-')
-      .filter(Boolean)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
 
   const close = () => {
     if (dialog instanceof HTMLDialogElement && dialog.open) dialog.close()
@@ -149,6 +181,24 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
     track.scrollTo({ left: offsetOf(slide), behavior: 'smooth' })
   }
 
+  // Jumps to the first slide with no animation.
+  //
+  // The track carries `scroll-smooth`, and CSS `scroll-behavior: smooth` governs
+  // direct `scrollLeft` assignments too, not just `scrollTo`. So assigning
+  // scrollLeft = 0 while the dialog is already open (switching from one gallery
+  // to another) animates the carousel backwards to the start, which reads as a
+  // glitch on open. `behavior: 'instant'` is the declarative fix, but the
+  // class toggle is kept as the belt-and-braces path: removing the class, forcing
+  // a reflow to flush the style change, then restoring it guarantees the jump
+  // lands synchronously before the first slide paints.
+  const jumpToStart = () => {
+    if (!track) return
+    track.classList.remove('scroll-smooth')
+    track.scrollLeft = 0
+    void track.offsetWidth
+    track.classList.add('scroll-smooth')
+  }
+
   // Each slide is exactly as wide as the track, so `snap-center` has nothing to
   // centre and the slides need no inline padding at all -- an earlier version
   // halved the shortfall to centre narrower slides, which is now guaranteed to
@@ -182,6 +232,9 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
             // the track and leave the last one unable to scroll fully into view.
             // Combined with the track's snap-mandatory, slides traverse one screen
             // at a time with no partial rest positions.
+            // h-[68vh], not h-full: the track is content-sized, so a percentage
+            // height here has no definite parent to resolve against and collapses
+            // to the image's intrinsic pixel size.
             figure.className = 'relative h-[68vh] w-full shrink-0 snap-center'
 
             const image = document.createElement('img')
@@ -202,7 +255,7 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
       // Padding first: slide 1 is only centred once the edge slack exists, and
       // scrollLeft 0 is what that centred position resolves to.
       syncEdgePadding()
-      track.scrollLeft = 0
+      jumpToStart()
     }
 
     placeholder?.classList.add('hidden')
@@ -226,7 +279,6 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
 
     const slug = link.getAttribute('href').slice('#gallery-'.length)
     const entry = galleries[slug]
-    if (title) title.textContent = link.dataset.galleryName || entry?.name || slugToTitle(slug)
 
     // Opened first on purpose: a closed <dialog> is display:none, so every
     // offsetLeft would measure as 0 and the first slide could not be located.
