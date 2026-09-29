@@ -34,6 +34,12 @@ const galleryShots = {
 
 export default defineConfig({
   output: 'static',
+  devToolbar: {
+    // Dev-only overlay (inspector, audit warnings, logger). It is injected into
+    // the page and rendered by the browser, so it has no place in a production
+    // build, and it can obscure the layout while working on the page itself.
+    enabled: false,
+  },
   build: {
     format: 'file',
   },

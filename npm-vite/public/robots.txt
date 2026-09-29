@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# CMS admin is not useful to crawlers and is password protected.
+Disallow: /admin
+
+Sitemap: https://newmediapilot.com/sitemap.xml

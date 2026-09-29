@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static sitemap. The site is a single page, so there is exactly one indexable
+  URL. Gallery and contact routes are hash fragments (#gallery-<slug>,
+  #contact, #contact-card) and fragments are never sent to a server, so they
+  cannot appear here and are not separately discoverable.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://newmediapilot.com/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

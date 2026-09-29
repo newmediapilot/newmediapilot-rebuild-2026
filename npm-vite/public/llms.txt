@@ -1,0 +1,101 @@
+# Marcin Zajkowski — newmediapilot
+
+> Full-stack, front-end focused developer based in Toronto, Ontario, Canada.
+> Decades of experience in the marketing sector as an implementor, animator,
+> consultant and developer. Enjoys bringing people's vision to reality, is a
+> strong translator of technical terms, and understands how to navigate the
+> creative process as it relates to software development.
+
+Personal site and portfolio for Marcin Zajkowski, trading as NewMediaPilot.
+Single-page site: a skills inventory and a gallery of client project work.
+
+## Contact
+
+- Email: marcin@newmediapilot.com
+- Phone: +1 416 554 6798
+- Based in: Toronto, Ontario, Canada
+- LinkedIn: https://www.linkedin.com/in/newmediapilot/
+- GitHub: https://github.com/newmediapilot
+- CV (PDF): /uploads/Marcin%20Zajkowski%202026%20-%20Full-stack%20Front-end%20Dev.pdf
+
+Contact details are also available on the site itself at `/#contact-card`,
+which opens a contact card modal including a scannable QR code.
+
+## Professional skills
+
+Agency background. Coordinates standups. Coordinates team efforts. Ships fast
+under tight deadlines. Natural problem solver. Clear and direct. Performance
+focused. Mentors others. Client-facing delivery.
+
+## Skills
+
+### Web frameworks
+Builds websites and web applications.
+React, Angular, Vue, Astro, Symfony, Redux
+
+### AI and automation
+Builds AI assistants and automates repetitive work.
+AI agents, agentic coding, automation, OpenCode, LM Studio, Google ADK, OpenAI
+API, Hugging Face, local models, GPT OSS, DeepSeek, Nemotron, GLM, Gemma,
+prompt engineering
+
+### Content management systems
+Enables teams to publish and manage their own content.
+Contentful, Decap CMS, WordPress, TeamSite, AEM
+
+### Front-end
+Everything the visitor sees and interacts with in a browser.
+HTML, CSS, SCSS, responsive design, Tailwind, shadcn/ui, daisyUI, Bootstrap,
+Foundation, Skeleton, JavaScript, TypeScript, Canvas, game logic, GSAP, service
+workers, Vite, bespoke functionality
+
+### Back-end
+Servers, APIs, authentication and application logic.
+Node.js, Express, Fastify, PHP, ASP, API design, Stripe, Facebook API, user
+authentication, SSO, pipeline design, Socket.IO, WebSockets
+
+### Databases
+Stores and queries application data.
+SQL, NoSQL, JSON, XML, data conversion, MongoDB, DynamoDB, SQLite, MySQL,
+database design, migrations, ORM
+
+### Cloud and infrastructure
+Deployments, hosting, application scaling.
+AWS, Lambda, S3, CloudFront, Route 53, EC2, Elastic Beanstalk, load balancers,
+autoscaling, edge functions, DNS, HTTPS, certificates, Lightsail, Netlify,
+Vercel, Unix, Linux
+
+### Build and development
+Builds, packages and manages web applications.
+Git, Composer, npm, npm workspaces, Webpack, Parcel, Gulp, CI/CD pipelines,
+continuous deployment, artifact delivery
+
+### Accessibility, security and compliance
+Builds accessible, secure and privacy-conscious applications.
+WCAG, AODA, OWASP, web application security, GDPR, web privacy, i18n
+
+## Recent work
+
+Ongoing client work with focus on performance and content systems. Each entry
+opens a gallery of screenshots at `/#gallery-<slug>`.
+
+- World Real Estate Association — https://thewrea.com/
+- Remedy Design
+- Oak & Country Samples
+- Novo Nordisk
+- Mazda SkyDrive
+- Killarney Lodge — https://killarneylodge.com/
+- HomeLife Realty — https://www.homelife.ca/
+- CrossFit Cambridge — https://crossfitcambridge.ca/
+- Architectural Media
+- Stella McCartney
+- Workopolis
+
+## Brands and agencies
+
+Clients and partners worked with, listed on the site as brand chips.
+
+## Optional
+
+- [Contact form](/#contact) — sends a message through an AWS Lambda endpoint.
+- [Sitemap](/sitemap.xml)

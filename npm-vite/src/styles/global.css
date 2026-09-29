@@ -149,21 +149,35 @@ body:has(dialog[open]) [data-ident='footer-spacer'] {
   );
 }
 
-/* The paragraph panel's texture, rotated 90deg (135deg -> 45deg) and recoloured
-   blue. Both halves are exposed as variables so a rule that has to out-specify an
-   `!important` background elsewhere can reuse the values without repeating the
-   gradient, which is what the CMS panel needs. */
-.stripes-blue {
+/* The paragraph panel's texture, rotated 90deg (135deg -> 45deg) and recoloured.
+   The two tones live in the shared --stripe-a / --stripe-b contract and the
+   assembled gradient in --stripes-image, so a rule that has to out-specify an
+   `!important` background elsewhere (the skill-group panels) can reuse the values
+   without repeating the gradient. To add a colour: set --stripe-a/--stripe-b and
+   include `.stripes-panel` in the skill-group override in index.astro. */
+.stripes-panel {
   --stripe: 2px;
-  --stripe-blue: #2f4f7f;
-  --stripe-blue-dark: #263d63;
-  --stripes-blue-image: repeating-linear-gradient(
-    45deg,
-    var(--stripe-blue) 0 var(--stripe),
-    var(--stripe-blue-dark) var(--stripe) calc(2 * var(--stripe))
+  --stripe-angle: 45deg;
+  --stripes-image: repeating-linear-gradient(
+    var(--stripe-angle),
+    var(--stripe-a) 0 var(--stripe),
+    var(--stripe-b) var(--stripe) calc(2 * var(--stripe))
   );
-  background-color: var(--stripe-blue);
-  background-image: var(--stripes-blue-image);
+  background-color: var(--stripe-a);
+  background-image: var(--stripes-image);
+}
+
+.stripes-blue {
+  --stripe-a: #1c2c47;
+  --stripe-b: #19263c;
+}
+
+/* Angle flipped 90deg off the shared 45deg (45 -> 135). Modulo 180 that is the
+   same line set as -45deg, since a linear gradient's direction repeats every 180. */
+.stripes-green {
+  --stripe-a: #122a1e;
+  --stripe-b: #0e2017;
+  --stripe-angle: 135deg;
 }
 
 .text-shadow-hard {

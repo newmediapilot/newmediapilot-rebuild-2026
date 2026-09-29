@@ -23,7 +23,7 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
   {/* The panel deliberately skips the `.page` design-system class: that class
       pins a fixed height with !important at every breakpoint, which would cap
       the carousel at 400px on desktop instead of filling the modal. */}
-  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black! p-4 sm:p-6">
+  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black! py-4 sm:py-6">
     <div data-ident="gallery-modal-header" class="flex shrink-0 items-center justify-between gap-4 py-2 sm:py-4">
       <h2 data-ident="gallery-modal-title" data-gallery-title class="font-koho truncate text-xl font-extrabold uppercase tracking-widest sm:text-2xl">Gallery</h2>
       <button
@@ -50,7 +50,7 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
         <div
           data-ident="gallery-modal-track"
           data-gallery-track
-          class="relative flex min-h-0 flex-1 snap-x snap-mandatory items-center gap-4 overflow-x-auto overflow-y-hidden scroll-smooth pb-1 scrollbar-none"
+          class="relative flex min-h-0 flex-1 snap-x snap-mandatory items-center overflow-x-auto overflow-y-hidden scroll-smooth pb-1 scrollbar-none"
           style="scrollbar-width:none"
         >
         </div>
@@ -149,23 +149,12 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
     track.scrollTo({ left: offsetOf(slide), behavior: 'smooth' })
   }
 
-  // `snap-center` can only centre a slide that has slack on both sides of it, and
-  // the first and last slides have none -- the scroll container stops at the edge.
-  // That leaves image 1 pinned left while every image after it centres correctly.
-  // Half a slide of inline padding on each edge gives the first and last slides the
-  // slack they are missing, so scrollLeft 0 is now the centred position.
-  //
-  // Measured off the rendered width rather than the declared percentage because
-  // the slides are also capped at max-w-[1200px], and the two only agree on wide
-  // viewports. The existing padding is subtracted first so repeated calls are
-  // idempotent rather than compounding.
+  // Each slide is exactly as wide as the track, so `snap-center` has nothing to
+  // centre and the slides need no inline padding at all -- an earlier version
+  // halved the shortfall to centre narrower slides, which is now guaranteed to
+  // compute 0 and would only add a phantom pixel of scroll range at the edges.
   const syncEdgePadding = () => {
-    const first = slides()[0]
-    if (!track || !first) return
-    const styles = getComputedStyle(track)
-    const current = (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0)
-    const inset = Math.max(0, (track.clientWidth - current - first.offsetWidth) / 2)
-    track.style.paddingInline = `${inset}px`
+    if (track) track.style.paddingInline = ''
   }
 
   // Paints from the scroll position in both directions, so dragging the native
@@ -187,7 +176,13 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
 
     const figures = images.map((src, index) => {
             const figure = document.createElement('figure')
-            figure.className = 'relative h-[68vh] w-[78%] max-w-[1200px] shrink-0 snap-center sm:w-[72%]'
+            // One slide per screen: w-full (not w-[100vw]) so the slide resolves
+            // to the track's own content width. 100vw includes the vertical
+            // scrollbar gutter, which would make every slide a few px wider than
+            // the track and leave the last one unable to scroll fully into view.
+            // Combined with the track's snap-mandatory, slides traverse one screen
+            // at a time with no partial rest positions.
+            figure.className = 'relative h-[68vh] w-full shrink-0 snap-center'
 
             const image = document.createElement('img')
             image.src = src
