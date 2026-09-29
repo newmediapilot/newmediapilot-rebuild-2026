@@ -43,8 +43,12 @@ html {
   user-select: none;
 }
 
+/* The entrance tween on the Web Frameworks card already fades the whole card in,
+   and it targets opacity and filter. This rule used to animate opacity as well, on
+   its own 1s clock with `both` fill, so the tile images inside were fading twice at
+   once and landing out of step with the card around them. The transition is kept for
+   the hover dim below; the entrance animation is not. */
 .tile-bg {
-  animation: tile-fade-in 1s ease-out both;
   transition: opacity 0.3s ease-out, filter 0.3s ease-out;
 }
 
