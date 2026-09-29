@@ -192,6 +192,21 @@ body:has(dialog[open]) [data-ident='footer-spacer'] {
   text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
 }
 
+/* The intro paragraph reads against a rust stripe texture, and the card headings
+   read against three-stop gradients plus the diagonal hatch, so they all need the
+   same hard offset shadow to stay legible. The custom properties are restated
+   rather than the shorthand reused, because a heading at 2rem/3rem needs a wider
+   offset than body copy at 1rem to read as a shadow rather than a smudge.
+   `.professional-skills` is excluded on purpose: its heading already has its own
+   treatment and the user asked for that card to be left alone. */
+.text-shadow-hard-lg {
+  --shadow-x: 2px;
+  --shadow-y: 2px;
+  --shadow-blur: 0;
+  --shadow-color: #000;
+  text-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur) var(--shadow-color);
+}
+
 /* Tailwind's preflight leaves links and buttons on the default arrow cursor, so
    every control on the page needs this explicitly. The [data-open-*] and
    [data-close-*] hooks cover the dialog triggers, which are divs in places. */
