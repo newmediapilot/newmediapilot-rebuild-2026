@@ -428,15 +428,30 @@ const shuffledBrands = (() => {
 const brandChipClass =
   'flex items-center justify-center rounded-md bg-black px-2.5 py-1.5 text-center leading-tight opacity-80'
 
-// Diagonal gradient treatment per portfolio card: [angle, top, bottom]. Keyed by
-// the same project `key`, so the colour travels with the card it belongs to rather
-// than with a position that a reorder would break. The shared `.recent-work` rule
-// in the style block reads these as --grad-angle/--grad-top/--grad-bottom.
+// One row per card: [angle, top, bottom]. Read by the shared gradient rule in the
+// style block as --grad-angle/--grad-top/--grad-bottom, and applied inline to each
+// section. Living here rather than as per-card CSS rules means every card in the
+// page is visible in one place and the guard below can check all of them.
 //
-// Every project needs an entry. Missing keys fall back to the shared default, which
-// would leave that card on the plain gray fill, so `rows` asserts coverage below
-// rather than letting a new project silently ship uncoloured.
-const cardGradients = {
+// Keyed by the card's own ident (project `key` or skill-group `ident`), so a colour
+// travels with the card it belongs to rather than with a source position that a
+// reorder would break. `to top` puts the first colour at the top of the card; the
+// portfolio cards use staggered diagonals so neighbours do not read as a pair.
+const cardColors = {
+  // Static cards.
+  'site-header': ['to top', '#33190d', '#160a05'],
+  'professional-skills': ['to top', '#241640', '#6b2a12'],
+  'footer-brands': ['to top', '#54240f', '#301309'],
+  'footer-websites': ['to top', '#161620', '#0c0c14'],
+  // Skill groups. CMS and Web Frameworks are pattern-coloured instead, see below.
+  ai: ['to top', '#0d3540', '#07212a'],
+  'front-end': ['to top', '#2a1c56', '#180f33'],
+  'back-end': ['to top', '#4a2418', '#2a120b'],
+  databases: ['to top', '#4a3410', '#2a1d08'],
+  cloud: ['to top', '#1d2b3c', '#101823'],
+  build: ['to top', '#33400f', '#1c2408'],
+  'accessibility-security': ['to top', '#4c1a28', '#2b0d15'],
+  // Portfolio cards.
   wrea: ['145deg', '#1b3a4b', '#0b1a24'],
   remedy: ['115deg', '#3d1636', '#1a0b1c'],
   oakcountry: ['160deg', '#43301a', '#1d1409'],
@@ -450,16 +465,30 @@ const cardGradients = {
   workopolis: ['140deg', '#1a2440', '#0a0f1d'],
 }
 
-// Build-time guard: a project with no gradient would fall through to the shared
-// gray default and read as a bug against its neighbours. Failing the build is
-// louder and cheaper than noticing it in the browser.
-const missingGradients = projects.filter((project) => !cardGradients[project.key]).map((project) => project.key)
-if (missingGradients.length > 0) {
-  throw new Error(`cardGradients is missing an entry for: ${missingGradients.join(', ')}`)
+// Cards whose colour comes from a texture class rather than a gradient, so they
+// are deliberately absent from `cardColors`: the intro panel takes `.stripes-rust`,
+// and CMS and Web Frameworks take `.stripes-panel` with their own two tones.
+const PATTERN_CARD_IDENTS = new Set(['intro-panel', 'cms', 'frameworks'])
+
+// Static cards in the page that are not part of the projects or skill groups.
+const STATIC_CARD_IDENTS = ['site-header', 'professional-skills', 'footer-brands', 'footer-websites']
+
+// Build-time guard. A card with no colour would fall through to the shared gray
+// default and read as a bug against its neighbours, so the build fails and names
+// the offenders instead. Covers all three sources of cards, not just the projects:
+// a new skill group or a renamed ident is caught the same way.
+const uncolored = [
+  ...STATIC_CARD_IDENTS,
+  ...skillGroups.map((group) => group.ident),
+  ...projects.map((project) => project.key),
+].filter((ident) => !PATTERN_CARD_IDENTS.has(ident) && !cardColors[ident])
+
+if (uncolored.length > 0) {
+  throw new Error(`cardColors is missing an entry for: ${[...new Set(uncolored)].join(', ')}`)
 }
 
-const gradStyle = (key) => {
-  const [angle, top, bottom] = cardGradients[key]
+const gradStyle = (ident) => {
+  const [angle, top, bottom] = cardColors[ident]
   return `--grad-angle:${angle};--grad-top:${top};--grad-bottom:${bottom}`
 }
 
