@@ -1490,7 +1490,7 @@ const skillRows = skillGroups.flatMap((group) =>
 
         const contentNodes = cards.map((card) => Array.from(card.children));
 
-        const tl = gsap.timeline({ delay: 1 });
+        const tl = gsap.timeline({ delay: 0.3 });
 
         cards.forEach((card, i) => {
           tl.fromTo(card,
