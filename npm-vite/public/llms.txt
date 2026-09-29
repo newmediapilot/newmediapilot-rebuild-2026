@@ -4,7 +4,7 @@
 > Decades of experience in the marketing sector as an implementor, animator,
 > consultant and developer. Enjoys bringing people's vision to reality, is a
 > strong translator of technical terms, and understands how to navigate the
-> creative process as it relates to software development.
+> creative process as it relates to tech.
 
 Personal site and portfolio for Marcin Zajkowski, trading as NewMediaPilot.
 Single-page site: a skills inventory and a gallery of client project work.
