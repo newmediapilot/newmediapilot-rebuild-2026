@@ -929,7 +929,9 @@ const skillRows = skillGroups.flatMap((group) =>
       right: 2rem;
       bottom: 2rem;
       margin: 0;
-      max-width: 55%;
+      /* Wider on phones so the shorter type still fits on fewer lines, rather than
+         wrapping to a tall block against the stacked nav. */
+      max-width: 70%;
       text-align: right;
       color: #fff;
       /* Arial Black is a system face, not one of the two Google fonts this site
@@ -940,7 +942,10 @@ const skillRows = skillGroups.flatMap((group) =>
          Google Fonts to guarantee it everywhere. */
       font-family: 'Arial Black', 'Arial Bold', Arial, Helvetica, sans-serif;
       font-weight: 900;
-      font-size: 14px;
+      /* Smaller on phones. The header card is a fixed 36vh and the nav stacks into
+         a column below 640px, so a 14px slogan wrapped against a 55% max-width was
+         eating three or four lines of that column and crowding the CV link. */
+      font-size: 11px;
       line-height: 1.1;
       opacity: 0.8;
       /* The card scrolls horizontally on touch; a pointer-events:none slogan would
@@ -952,6 +957,8 @@ const skillRows = skillGroups.flatMap((group) =>
       .site-header .header-slogan {
         right: 3rem;
         bottom: 3rem;
+        font-size: 14px;
+        max-width: 55%;
       }
     }
 
@@ -1215,11 +1222,19 @@ const skillRows = skillGroups.flatMap((group) =>
     .skill-chip:hover {
       border-color: rgba(255,255,255,0.6);
     }
+    /* Duplicated selector merged. The filter transition is what makes the nav
+       hue-shift on hover feel smooth, but it also applies to the entrance tween's
+       filter writes, so the script suppresses it for the length of the animation
+       (see `.cards-entering` below) and restores it afterwards. */
     .site-header {
       transition: filter 0.3s ease;
     }
-    .site-header {
-      transition: filter 0.3s ease;
+    /* Set by the entrance script while the cards are tweening. Kills the filter
+       transition so GSAP owns the property outright; without it the 0.3s ease
+       overrides the 3s tween and the card jumps to its final value. */
+    .cards-entering,
+    .cards-entering * {
+      transition: none !important;
     }
     /* Nav children: 1 = button, 2 = LinkedIn, 3 = GitHub, 4 = Download CV */
     .site-header:has(nav a:nth-child(2):hover) {
@@ -1247,9 +1262,12 @@ const skillRows = skillGroups.flatMap((group) =>
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    [data-ident="site-header"] {
-      animation: hue-rotate-slow 5s linear infinite;
-    }
+    /* The header carries a slow infinite hue-rotate, and it animates `filter` --
+       the same property the GSAP entrance tween writes on this card. Both running at
+       once means each frame is a fight over one value, which read as the header
+       snapping between hue-cycled and fully desaturated while it faded in. The
+       entrance script pauses this animation for the length of the tween instead of
+       moving the cycle to another layer, so the finished look is unchanged. */
     /* Static grid: the design-system .page forces a fixed 400/500px height, which
        would leave dead space under the list. Declared after that rule so it wins
        on equal specificity. */
@@ -1339,18 +1357,84 @@ const skillRows = skillGroups.flatMap((group) =>
       const st = document.createElement('script');
       st.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
       st.onload = () => {
+        const { gsap, ScrollTrigger } = window;
+        if (!gsap || !ScrollTrigger) return;
+        gsap.registerPlugin(ScrollTrigger);
+
         const bg = document.getElementById('bg-gradient');
-        if (!bg || !window.gsap || !window.ScrollTrigger) return;
-        window.gsap.registerPlugin(window.ScrollTrigger);
-        window.gsap.to(bg, {
-          backgroundPosition: '100% 100%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: 'main',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-          }
+        if (bg) {
+          gsap.to(bg, {
+            backgroundPosition: '100% 100%',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: 'main',
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: true,
+            }
+          });
+        }
+
+        // Scatter the cards in left to right on load. Deliberately NOT
+        // ScrollTrigger.batch: batching ties the tween to a scroll position, so any
+        // card already past its start when ScrollTrigger first measured would either
+        // fire instantly or, if the batch never resolved, sit at the `from` state
+        // (invisible) until scrolled to and then snap. That is exactly what happened
+        // -- only the first card animated properly. A load-in sequence has no scroll
+        // dependency, so it is a single timeline instead.
+        //
+        // The grid is row-major in the DOM, so a plain index stagger already walks
+        // each row left to right and then drops to the next one.
+        //
+        // Opacity, brightness and saturation all rise together, no translate: a y
+        // offset during the fade shifts the card's own drop shadow out of alignment
+        // with the grid, which is visible on a layout this regular. Filtering the
+        // whole card also has to live on the card rather than its children, because
+        // a filter on a parent creates a containing block for any fixed-position
+        // descendant -- the chip hovers and the gallery both depend on that.
+        const cards = gsap.utils.toArray('main.site-main > *');
+        if (cards.length === 0) return;
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        // No willChange here. Promoting all 25 cards to their own composited layer
+        // made the browser skip the paint-level interpolation, so opacity jumped
+        // straight to its final value on every card except the first and only the
+        // filter read as animating. The tween is short and the cards are simple
+        // enough that the layer promotion costs more than it saves.
+        //
+        // Suppress every filter transition on the cards for the length of the
+        // entrance. The site header carries `transition: filter 0.3s ease` for its
+        // nav hue-shift, and that ease also applies to the tween's own filter
+        // writes -- so a 0.3s transition was overriding the 0.5s tween and snapping
+        // cards to their final value. Class-based rather than per-element so the
+        // browser matches it once instead of recalculating transitions on 25 nodes.
+        document.documentElement.classList.add('cards-entering');
+
+        // The site header has an infinite hue-rotate animation that also writes
+        // `filter`. Two things animating one property on one element resolve to
+        // whichever ran last, so the header flickered between hue-cycled and
+        // desaturated through the entrance. Pausing it for the tween keeps the
+        // finished look identical.
+        const header = document.querySelector('[data-ident="site-header"]');
+        if (header) gsap.set(header, { animationPlayState: 'paused' });
+
+        gsap.from(cards, {
+          opacity: 0,
+          // Filtered to nothing and back, so the card arrives fully lit rather than
+          // fading in grey. Tweened to exactly 1 -- not 'none' -- because a discrete
+          // jump to none at the end would pop the last frame.
+          filter: 'brightness(0) saturate(0)',
+          duration: 0.5,
+          ease: 'power1.out',
+          // 1s hold before the first card starts, then the per-card offset.
+          delay: 1,
+          stagger: { amount: 2.4 },
+          onComplete: () => {
+            gsap.set(cards, { clearProps: 'filter' });
+            if (header) gsap.set(header, { animationPlayState: 'running' });
+            document.documentElement.classList.remove('cards-entering');
+          },
         });
       };
       document.head.appendChild(st);
