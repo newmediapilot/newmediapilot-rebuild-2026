@@ -32,6 +32,23 @@ const projects = [
   { key: 'workopolis', name: 'Workopolis' },
 ]
 
+// Per-project card blurbs, keyed by the same project key. Sparse on purpose:
+// any project without an entry keeps the shared fallback line below, so the
+// ten cards you have not written copy for yet are unchanged.
+const projectDescriptions = {
+  wrea: 'Real estate portal for associate members with payment system and identity integration',
+  remedy: 'A dynamically animated website with portfolio samples and client roster',
+  oakcountry: 'An AI generated concept for an imaginary golf course',
+  novo: 'A sales module for field presentations pertaining to insulin delivery',
+  mazda: 'Interactive screen presentation outlining a brand new engine',
+  klodge: 'Immersive marketing site clearly defining this all inclusive premium resort',
+  homelife: 'Marketing website with offering, contact information and a searchable roster',
+  ccambridge: 'Fitness site with pricing, booking, galleries and mission statement',
+  archmedia: 'A multipage dynamic animated site with offering of services',
+  workopolis: 'Preliminaro module samples for a potential product',
+  'stella-mccartney': 'Initial design tests on a potential product',
+}
+
 // Card thumbnail path. Stella's thumbnail is `preview-stella.png`, not
 // `preview-stella-mccartney.png`. Work around the mismatch with a one-line alias.
 const CARD_THUMB = (key) =>
@@ -60,6 +77,17 @@ const slug = (value) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '')
+
+// Every project now has its own blurb, so a missing one is a gap in the copy rather
+// than an intentional omission. Same reasoning as the `cardColors` guard below: fail
+// the build and name the project, instead of silently shipping the shared fallback
+// line on one card among eleven bespoke ones.
+const undescribed = projects.filter((project) => !projectDescriptions[project.key])
+if (undescribed.length > 0) {
+  throw new Error(
+    `projectDescriptions is missing an entry for: ${undescribed.map((project) => `${project.key} (${project.name})`).join(', ')}`
+  )
+}
 
 // Gallery shots are discovered at build time, so dropping a new image-*.png into
 // public/uploads is enough to populate that project's gallery -- there is no list
@@ -700,7 +728,9 @@ const skillRows = skillGroups.flatMap((group) =>
           </div>
           <div class="flex flex-col justify-start">
             <h3 class="font-koho text-2xl font-bold text-white sm:text-3xl">{row.name}</h3>
-            <p class="mt-2 text-sm text-white/70 sm:text-base">Ongoing client work with focus on performance and content systems.</p>
+            <p class="mt-2 text-sm text-white/70 sm:text-base">
+              {projectDescriptions[row.key] ?? 'Ongoing client work with focus on performance and content systems.'}
+            </p>
             <div class="mt-3 flex flex-col items-start gap-2 text-base">
               <a href={`#gallery-${slug(row.name)}`} data-gallery-name={row.name} class="flex items-center gap-2 no-underline">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
