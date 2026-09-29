@@ -25,11 +25,12 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
       pins a fixed height with !important at every breakpoint, which would cap
       the carousel at 400px on desktop instead of filling the modal. */}
   {/* Translucent so the page behind the dialog shows through, with a blur to
-      match. The backdrop already supplies `bg-black/70 backdrop:blur-3xl` for the
-      area outside the panel; this carries the same treatment to the panel itself.
-      Both are declared with the same `!important`-free Tailwind bang prefixes as
-      the contact modals, which already sit over a blurred backdrop. */}
-  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black/70! backdrop-blur-3xl py-4 sm:py-6">
+      match. The backdrop supplies `backdrop:blur-3xl` for the area outside the
+      panel, though the panel is full-bleed and covers it, so the panel's own
+      `bg-black/50` is what actually shows. Both are declared with the same
+      `!important`-free Tailwind bang prefixes as the contact modals, which already
+      sit over a blurred backdrop. */}
+  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black/50! backdrop-blur-3xl py-4 sm:py-6">
     {/* The title heading is gone, so the header holds only the close button and
         justifies it to the end. The dialog carries `aria-label` instead -- the h2
         was its accessible name, and dropping it without one would leave the dialog
