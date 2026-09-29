@@ -967,6 +967,12 @@ const skillRows = skillGroups.flatMap((group) =>
         linear-gradient(90deg, var(--c0) 0 50%, var(--c2) 0 75%, var(--c0) 0 100%) var(--ts),
         repeating-linear-gradient(90deg, var(--c1) 0 24.33%, var(--c3) 0 25%) var(--ts);
       z-index: 0;
+      animation: header-pattern-drift 120s linear infinite;
+    }
+
+    @keyframes header-pattern-drift {
+      from { background-position: 0 0; }
+      to { background-position: 0 264px; }
     }
     .site-header > * { position: relative; z-index: 1; }
 
@@ -1482,25 +1488,30 @@ const skillRows = skillGroups.flatMap((group) =>
         // browser matches it once instead of recalculating transitions on 25 nodes.
         document.documentElement.classList.add('cards-entering');
 
-        gsap.from(cards, {
-          opacity: 0,
-          // Filtered to nothing and back, so the card arrives fully lit rather than
-          // fading in grey. Tweened to exactly 1 -- not 'none' -- because a discrete
-          // jump to none at the end would pop the last frame.
-          filter: 'brightness(0) saturate(0)',
-          duration: 0.5,
-          ease: 'power1.out',
-          // 1s hold before the first card starts, then the per-card offset.
-          delay: 1,
-          stagger: { amount: 2.4 },
-          onComplete: () => {
-            // Hands `filter` back to the stylesheet, which is what re-enables the
-            // hover saturation bump -- an inline value left behind would out-specify
-            // every :hover rule and the cards would stay stuck at their tweened
-            // filter forever.
-            gsap.set(cards, { clearProps: 'filter' });
-            document.documentElement.classList.remove('cards-entering');
-          },
+        const contentNodes = cards.map((card) => Array.from(card.children));
+
+        const tl = gsap.timeline({ delay: 1 });
+
+        cards.forEach((card, i) => {
+          tl.fromTo(card,
+            { opacity: 0, filter: 'brightness(0) saturate(0)' },
+            { opacity: 1, filter: 'brightness(1) saturate(1)', duration: 1.2, ease: 'power1.out' },
+            i * 0.3
+          );
+
+          const content = contentNodes[i];
+          if (content.length > 0) {
+            tl.fromTo(content,
+              { opacity: 0 },
+              { opacity: 1, duration: 0.8, ease: 'power1.out' },
+              2 + i * 0.3
+            );
+          }
+        });
+
+        tl.eventCallback('onComplete', () => {
+          gsap.set(cards, { clearProps: 'filter' });
+          document.documentElement.classList.remove('cards-entering');
         });
       };
       document.head.appendChild(st);
