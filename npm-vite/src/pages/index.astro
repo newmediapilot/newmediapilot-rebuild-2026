@@ -69,6 +69,19 @@ const websites = [
   { label: 'World Real Estate Association', href: 'https://thewrea.com/' },
 ]
 
+// Tools used day to day, shown as a plain list -- these are the applications behind
+// the work, not client projects, so they carry no outbound links.
+const software = [
+  'Adobe Creative Cloud',
+  'Figma',
+  'Sketch',
+  'Microsoft Office Suite',
+  'Keynote',
+  'IntelliJ',
+  'VS Code',
+  'GitHub Desktop',
+]
+
 const recentWebsiteLabels = new Set(websites.map(w => w.label));
 const websiteUrlMap = Object.fromEntries(websites.map(w => [w.label, w.href]));
 
@@ -479,6 +492,9 @@ const cardColors = {
   'professional-skills': ['to top', '#241640', '#6b2a12', '#3a1608'],
   'footer-brands': ['to top', '#54240f', '#301309', '#1a0a05'],
   'footer-websites': ['to top', '#241640', '#161620', '#0c0c14'],
+  // Diagonal rather than `to top`, so the tools card reads as a distinct block
+  // next to Recent Websites instead of two flat panels stacked.
+  'software-card': ['125deg', '#0f3040', '#1a2a48', '#08131f'],
   // Skill groups. CMS and Web Frameworks are pattern-coloured instead, see below.
   ai: ['to top', '#0d3540', '#123a2a', '#071a1f'],
   'front-end': ['to top', '#2a1c56', '#1c2a3a', '#180f33'],
@@ -829,27 +845,57 @@ const skillRows = skillGroups.flatMap((group) =>
        silently discarded the shared gradient below -- which is why those panels kept
        rendering flat grey no matter what colours were set on them. */
 
-    /* Shared card gradient. Only the fill changes: the white line pattern in ::after
-       is a separate layer, so the texture composites on top of the gradient
-       unchanged -- no masking involved. Every stop stays dark because the pattern is
-       white at 25% alpha and would vanish against anything lighter.
-       `to top` puts the first colour at the top of the card; cards that want a
-       diagonal set --grad-angle instead. Fallbacks keep a card that never sets its
-       own stops from losing its fill entirely.
-       Deliberately one class of specificity: .skill-group.stripes-panel below is two,
-       so CMS and Web Frameworks keep their stripes regardless of source order. */
+    /* Shared card gradient. Two things stacked:
+         1. Two off-centre radial blobs in the card's own --grad-top and --grad-mid,
+            each fading to transparent. These are what stop every card reading as a
+            flat vertical or horizontal ramp -- a linear gradient alone can only ever
+            be a straight line through the box, no matter the angle, so organic
+            shapes have to come from radials.
+         2. The three-stop linear underneath, which supplies the base wash and keeps
+            the corners from going flat where the blobs do not reach.
+       Blob centres come from --blob-a / --blob-b so each card can place them
+       differently; they are emitted per card by gradStyle, and the fallbacks here
+       keep an unconfigured card from losing its fill. The white grid in ::after is
+       still a separate layer and composites on top unchanged.
+       Every stop stays dark because that pattern is white at 25% alpha and would
+       vanish against anything lighter.
+       Deliberately one class of specificity: .skill-group.stripes-panel below is
+       two, so CMS and Web Frameworks keep their stripes regardless of source order. */
     .site-header,
     .professional-skills,
     .skill-group,
     .footer-brands,
     .recent-work,
     .footer-websites {
-      background-image: linear-gradient(
-        var(--grad-angle, to top),
-        var(--grad-bottom, #1a1a24),
-        var(--grad-mid, var(--grad-top, #1a1a24)),
-        var(--grad-top, #1a1a24)
-      ) !important;
+      background-image:
+        radial-gradient(
+          58% 66% at var(--blob-a, 18% 22%),
+          var(--grad-top, #1a1a24),
+          transparent 72%
+        ),
+        radial-gradient(
+          48% 58% at var(--blob-b, 82% 30%),
+          var(--grad-mid, #1a1a24),
+          transparent 68%
+        ),
+        radial-gradient(74% 82% at 76% 88%, var(--grad-bottom, #1a1a24), transparent 74%),
+        linear-gradient(
+          var(--grad-angle, to top),
+          var(--grad-bottom, #1a1a24),
+          var(--grad-mid, var(--grad-top, #1a1a24)),
+          var(--grad-top, #1a1a24)
+        ) !important;
+    }
+    /* The skill groups are all one class, so nothing distinguishes them without this.
+       Alternating the blob centres on sibling parity keeps the panels from sharing
+       an identical shape while staying a single rule rather than nine declarations. */
+    .skill-group:nth-of-type(even) {
+      --blob-a: 78% 26%;
+      --blob-b: 20% 34%;
+    }
+    .skill-group:nth-of-type(odd) {
+      --blob-a: 24% 18%;
+      --blob-b: 74% 38%;
     }
     /* The intro panel is deliberately absent from that list. It takes its colour
        from `.stripes-rust` in global.css, and a `background-image` here would
@@ -1222,29 +1268,58 @@ const skillRows = skillGroups.flatMap((group) =>
     .skill-chip:hover {
       border-color: rgba(255,255,255,0.6);
     }
-    /* Duplicated selector merged. The filter transition is what makes the nav
-       hue-shift on hover feel smooth, but it also applies to the entrance tween's
-       filter writes, so the script suppresses it for the length of the animation
-       (see `.cards-entering` below) and restores it afterwards. */
-    .site-header {
-      transition: filter 0.3s ease;
-    }
+    /* The filter transition the cards need for the hover saturation bump, and the
+       one the header needs for its nav hue-shift, are the same declaration and now
+       live in the shared card rule above rather than twice. */
     /* Set by the entrance script while the cards are tweening. Kills the filter
        transition so GSAP owns the property outright; without it the 0.3s ease
-       overrides the 3s tween and the card jumps to its final value. */
+       overrides the tween and the card jumps to its final value. */
     .cards-entering,
     .cards-entering * {
       transition: none !important;
     }
-    /* Nav children: 1 = button, 2 = LinkedIn, 3 = GitHub, 4 = Download CV */
+    /* Hover saturates the whole card by 10%. Filter rather than a colour change on
+       the gradient stops, because the stops are custom properties shared by every
+       card that reuses the ident -- animating them would have to be done per card
+       and would fight the `!important` background-image above.
+       Transition is what makes it smooth; `.cards-entering` kills it for the length
+       of the entrance so the two do not fight over `filter`.
+       Safe on the containing-block front: filter establishes one, so anything
+       position:fixed inside a card would be pinned to it while hovered. The gallery,
+       contact and contact-card dialogs are all siblings of <main> rather than card
+       descendants, and the only fixed element on the page (#cursor-ball) is a
+       sibling of main too, so nothing is affected. */
+    .site-header,
+    .intro-panel,
+    .professional-skills,
+    .skill-group,
+    .footer-brands,
+    .recent-work,
+    .footer-websites {
+      transition: filter 0.3s ease;
+    }
+    .site-header:hover,
+    .intro-panel:hover,
+    .professional-skills:hover,
+    .skill-group:hover,
+    .footer-brands:hover,
+    .recent-work:hover,
+    .footer-websites:hover {
+      filter: saturate(1.1);
+    }
+    /* Nav children: 1 = button, 2 = LinkedIn, 3 = GitHub, 4 = Download CV.
+       saturate() is repeated in each because filter is a single value, not additive:
+       a more specific :hover rule replaces the earlier one outright rather than
+       combining with it, so the header's own saturation bump would be dropped the
+       moment a nav link was hovered. */
     .site-header:has(nav a:nth-child(2):hover) {
-      filter: hue-rotate(10deg);
+      filter: hue-rotate(10deg) saturate(1.1);
     }
     .site-header:has(nav a:nth-child(3):hover) {
-      filter: hue-rotate(20deg);
+      filter: hue-rotate(20deg) saturate(1.1);
     }
     .site-header:has(nav a:nth-child(4):hover) {
-      filter: hue-rotate(30deg);
+      filter: hue-rotate(30deg) saturate(1.1);
     }
     /* pointer-events was disabled on the whole panel, which suppressed :hover on
        every chip inside it -- no border flash, no fast spin, no pointer cursor,
@@ -1254,20 +1329,10 @@ const skillRows = skillGroups.flatMap((group) =>
       outline: 2px solid rgba(255,255,255,0.6);
       outline-offset: 2px;
     }
-    @keyframes hue-rotate-slow {
-      from { filter: hue-rotate(0deg); }
-      to { filter: hue-rotate(360deg); }
-    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    /* The header carries a slow infinite hue-rotate, and it animates `filter` --
-       the same property the GSAP entrance tween writes on this card. Both running at
-       once means each frame is a fight over one value, which read as the header
-       snapping between hue-cycled and fully desaturated while it faded in. The
-       entrance script pauses this animation for the length of the tween instead of
-       moving the cycle to another layer, so the finished look is unchanged. */
     /* Static grid: the design-system .page forces a fixed 400/500px height, which
        would leave dead space under the list. Declared after that rule so it wins
        on equal specificity. */
@@ -1411,14 +1476,6 @@ const skillRows = skillGroups.flatMap((group) =>
         // browser matches it once instead of recalculating transitions on 25 nodes.
         document.documentElement.classList.add('cards-entering');
 
-        // The site header has an infinite hue-rotate animation that also writes
-        // `filter`. Two things animating one property on one element resolve to
-        // whichever ran last, so the header flickered between hue-cycled and
-        // desaturated through the entrance. Pausing it for the tween keeps the
-        // finished look identical.
-        const header = document.querySelector('[data-ident="site-header"]');
-        if (header) gsap.set(header, { animationPlayState: 'paused' });
-
         gsap.from(cards, {
           opacity: 0,
           // Filtered to nothing and back, so the card arrives fully lit rather than
@@ -1431,8 +1488,11 @@ const skillRows = skillGroups.flatMap((group) =>
           delay: 1,
           stagger: { amount: 2.4 },
           onComplete: () => {
+            // Hands `filter` back to the stylesheet, which is what re-enables the
+            // hover saturation bump -- an inline value left behind would out-specify
+            // every :hover rule and the cards would stay stuck at their tweened
+            // filter forever.
             gsap.set(cards, { clearProps: 'filter' });
-            if (header) gsap.set(header, { animationPlayState: 'running' });
             document.documentElement.classList.remove('cards-entering');
           },
         });
