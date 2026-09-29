@@ -19,18 +19,18 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
   id="gallery"
   data-ident="gallery-modal"
   aria-label="Image gallery"
-  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/70 backdrop:blur-3xl"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-transparent p-0 backdrop:bg-black/30 backdrop:blur-sm"
 >
   {/* The panel deliberately skips the `.page` design-system class: that class
       pins a fixed height with !important at every breakpoint, which would cap
       the carousel at 400px on desktop instead of filling the modal. */}
-  {/* Translucent so the page behind the dialog shows through, with a blur to
-      match. The backdrop supplies `backdrop:blur-3xl` for the area outside the
-      panel, though the panel is full-bleed and covers it, so the panel's own
-      `bg-black/50` is what actually shows. Both are declared with the same
-      `!important`-free Tailwind bang prefixes as the contact modals, which already
-      sit over a blurred backdrop. */}
-  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black/50! backdrop-blur-3xl py-4 sm:py-6">
+  {/* Both the panel tint and the blur were pulled well back from the contact
+      modals' heavier treatment: bg-black/50 + blur-3xl was close to opaque, so the
+      page behind was barely visible and the images had nothing to sit against.
+      The panel is full-bleed and covers the backdrop entirely, so these two values
+      are what actually render; the dialog's own backdrop classes only matter for
+      the sliver outside the panel. */}
+  <div data-ident="gallery-modal-panel" class="flex h-full flex-col bg-black/30! backdrop-blur-sm py-4 sm:py-6">
     {/* The title heading is gone, so the header holds only the close button and
         justifies it to the end. The dialog carries `aria-label` instead -- the h2
         was its accessible name, and dropping it without one would leave the dialog
@@ -44,10 +44,10 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
         type="button"
         data-ident="gallery-modal-close"
         data-close-gallery
-        class="flex size-10 shrink-0 items-center justify-center rounded-md border border-white/70 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        class="flex size-11 shrink-0 items-center justify-center rounded-md border-2 border-white text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         aria-label="Close"
       >
-        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18"></path>
         </svg>
       </button>
@@ -102,9 +102,9 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
             data-gallery-prev
             type="button"
             aria-label="Previous image"
-            class="flex size-8 items-center justify-center rounded border border-white/20 text-white/70 transition hover:text-white disabled:opacity-40 disabled:pointer-events-none"
+            class="flex size-11 items-center justify-center rounded border-2 border-white text-white transition hover:bg-white hover:text-black disabled:opacity-40 disabled:pointer-events-none"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="size-6"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
 
           <span
@@ -119,9 +119,9 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
             data-gallery-next
             type="button"
             aria-label="Next image"
-            class="flex size-8 items-center justify-center rounded border border-white/20 text-white/70 transition hover:text-white disabled:opacity-40 disabled:pointer-events-none"
+            class="flex size-11 items-center justify-center rounded border-2 border-white text-white transition hover:bg-white hover:text-black disabled:opacity-40 disabled:pointer-events-none"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="size-6"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
       </div>
@@ -236,7 +236,15 @@ const payload = JSON.stringify(galleries).replace(/</g, '<');
             // h-[68vh], not h-full: the track is content-sized, so a percentage
             // height here has no definite parent to resolve against and collapses
             // to the image's intrinsic pixel size.
-            figure.className = 'relative h-[68vh] w-full shrink-0 snap-center'
+            //
+            // max-sm:scale-95 pulls the slide in on phones only, so the neighbouring
+            // slide is visible at the edge and the carousel reads as separate images
+            // rather than one bleeding into the next. A transform is used rather than
+            // a width or padding change on purpose: scaling leaves the layout box at
+            // full track width, so offsetLeft -- which the arrow buttons and the
+            // counter measure against to find the current slide -- is unaffected.
+            figure.className =
+              'relative h-[68vh] w-full shrink-0 snap-center max-sm:scale-95'
 
             const image = document.createElement('img')
             image.src = src
