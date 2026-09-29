@@ -567,7 +567,7 @@ const skillRows = skillGroups.flatMap((group) =>
   <div id="bg-gradient" class="fixed inset-0 -z-10"></div>
 
   <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8 site-main">
-    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] site-header">
+    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] min-h-[60vh] sm:min-h-[36vh] [@media(max-height:360px)_and_(orientation:landscape)]:min-h-[90vh]! site-header">
       <a
         href="/"
         data-ident="header-brand"
@@ -920,6 +920,12 @@ const skillRows = skillGroups.flatMap((group) =>
     .skill-group-accessibility-security { --grad-top: #4c1a28; --grad-mid: #2a1a3a; --grad-bottom: #2b0d15; }
     .footer-brands { --grad-top: #54240f; --grad-mid: #301309; --grad-bottom: #1a0a05; }
     .footer-websites { --grad-top: #241640; --grad-mid: #161620; --grad-bottom: #0c0c14; }
+
+    @media (max-height: 360px) and (orientation: landscape) {
+      .site-header {
+        min-height: 90vh !important;
+      }
+    }
 
     /* These panels carry the paragraph panel's stripe texture, but the blanket
        `background: transparent !important` above would wipe it out -- same
