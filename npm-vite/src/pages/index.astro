@@ -862,7 +862,6 @@ const skillRows = skillGroups.flatMap((group) =>
        Deliberately one class of specificity: .skill-group.stripes-panel below is
        two, so CMS and Web Frameworks keep their stripes regardless of source order. */
     .site-header,
-    .intro-panel,
     .professional-skills,
     .skill-group,
     .footer-brands,
@@ -930,11 +929,13 @@ const skillRows = skillGroups.flatMap((group) =>
       --blob-a: 24% 18%;
       --blob-b: 74% 38%;
     }
-    /* The intro panel is deliberately absent from that list. It takes its colour
-       from `.stripes-rust` in global.css, and a `background-image` here would
-       replace the stripes rather than sit under them -- the same trap
-       .skill-group.stripes-panel below is written to avoid. Its rust stripes are
-       already its colour, so it needs no gradient. */
+    /* The intro panel is deliberately absent from the shared gradient rule above and
+       from the blob-centre list here. It takes its colour from `.stripes-rust` in
+       global.css, and a `background-image` there would replace the stripes rather
+       than sit under them -- the same trap .skill-group.stripes-panel below is
+       written to avoid. Its rust stripes are already its colour, so it needs no
+       gradient. It is still in the ::after rules, because the white grid overlays
+       the stripes rather than competing with them. */
 
     /* One hue per card, deep and desaturated. Professional Skills keeps the
        orange-to-purple it already had. The site header gets a warm brown so it is
