@@ -13,29 +13,12 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   background-color: #000;
-  background-image: linear-gradient(
-    135deg,
-    #000 0%,
-    #121212 16%,
-    #050505 32%,
-    #181818 48%,
-    #080808 64%,
-    #141414 80%,
-    #000 100%
-  );
-  background-size: 200% 200%;
+  background-image:
+    radial-gradient(ellipse 80% 40% at 20% 15%, rgba(15, 60, 100, 0.9) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 10%, rgba(10, 40, 80, 0.7) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 50% 60%, rgba(5, 25, 50, 0.6) 0%, transparent 60%),
+    linear-gradient(to bottom, #001428 0%, #00223a 18%, #001a2e 34%, #001022 52%, #00070f 72%, #000000 100%);
   background-attachment: fixed;
-  animation: gradient-drift 40s ease-in-out infinite;
-}
-
-@keyframes gradient-drift {
-  0%,
-  100% {
-    background-position: 50% 50%;
-  }
-  50% {
-    background-position: 30% 70%;
-  }
 }
 
 .tile {
