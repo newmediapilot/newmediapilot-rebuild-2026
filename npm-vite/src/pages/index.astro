@@ -12,7 +12,7 @@ const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 
 const intro =
-  'My name is Marcin Zajkowski, I am a seasoned full-stack front-end focused developer living in Toronto. I have decades of experience in the marketing sector as an implementor, animator, consultant and developer. I love my work, I enjoy bringing people’s vision to reality, I’m a great translator of technical terms, and I understand how to navigate the creative process as it relates to tech. Thanks for reading.'
+  'My name is Marcin Zajkowski, I am a seasoned full-stack front-end focused developer living in Toronto. I have decades of experience in the marketing sector as an implementor, animator, consultant and developer. I love my work, I enjoy bringing people’s vision to reality, I’m a great translator of technical terms, and I understand how to navigate the creative process as it relates to tech. Thanks for stopping by.'
 
 // The key is the project identity shared by the card image
 // (uploads/preview-<key>.png) and its gallery shots
@@ -1133,6 +1133,14 @@ const skillRows = skillGroups.flatMap((group) =>
       [data-ident="header-nav"] { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       [data-ident="header-nav-download-cv"] { margin-top: 1rem; }
     }
+    /* iPad portrait (768-1024px wide) lands in the max-width:900px rule above,
+       which zeroes every panel's min-height, so the header card collapses to the
+       height of its nav alone. Restored to a floor here, declared after that rule
+       so the !important on both sides is settled by source order. Kept to the
+       header: the other panels size to their own content on tablets by design. */
+    @media (orientation: portrait) and (min-width: 768px) and (max-width: 1024px) {
+      .site-header { height: auto !important; min-height: 300px !important; }
+    }
     .skill-chip {
       background: transparent !important;
       backdrop-filter: blur(8px);
@@ -1144,6 +1152,25 @@ const skillRows = skillGroups.flatMap((group) =>
     }
     @media (max-width: 900px) {
       main.site-main { grid-template-columns: repeat(1, minmax(0,1fr)) !important; }
+    }
+    /* Scroll snap onto the cards. The snap container has to be the document, but
+       <html> lives in Base.astro and so never carries this component's scope
+       attribute -- :global() is the only way to reach it from here. `proximity`
+       rather than `mandatory`: the cards are 400-500px against a taller viewport,
+       so mandatory would park every row with dead space under it and trap anyone
+       trying to scroll past. Every direct child of main snaps, so the three-column
+       rows land as rows rather than three cards fighting each other.
+       scroll-margin gives back main's own padding, which the snap would otherwise
+       eat by pulling the card flush to the top of the viewport. */
+    :global(html) { scroll-snap-type: y proximity; }
+    main > section { scroll-snap-align: start; scroll-margin-top: 1rem; }
+    @media (min-width: 640px) {
+      main > section { scroll-margin-top: 2rem; }
+    }
+    /* Snapping is motion the visitor did not ask for, and this file already gates
+       the other animations on the same query. */
+    @media (prefers-reduced-motion: reduce) {
+      :global(html) { scroll-snap-type: none; }
     }
     /* Text is decorative, so selection is suppressed site-wide. Form fields opt
        back in, otherwise typing and correcting text in the contact form breaks. */
