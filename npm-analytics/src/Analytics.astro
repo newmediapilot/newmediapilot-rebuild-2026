@@ -1,0 +1,23 @@
+---
+// Set PUBLIC_GA_ID in the repo-root .env. Left unset by default so a clone with
+// no analytics property renders no tag at all rather than a broken one.
+const measurementId = import.meta.env.PUBLIC_GA_ID
+---
+
+{
+  measurementId && (
+    <script>
+      import { onConsentChange } from './consent.js'
+      import { loadGtag } from './gtag.js'
+
+      // Read through import.meta.env rather than a define:vars prop: define:vars
+      // implies is:inline, which leaves the imports above unbundled and throws a
+      // SyntaxError. PUBLIC_* is inlined at build time either way.
+      const measurementId = import.meta.env.PUBLIC_GA_ID
+
+      onConsentChange((decision) => {
+        if (decision === 'granted') loadGtag(measurementId)
+      })
+    </script>
+  )
+}
