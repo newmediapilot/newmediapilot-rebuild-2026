@@ -8,6 +8,7 @@
     "npm-lambda",
     "npm-cloudfront",
     "npm-deploy",
+    "npm-analytics",
     "npm-work",
     "npm-flash"
   ],
