@@ -862,12 +862,15 @@ const skillRows = skillGroups.flatMap((group) =>
        Deliberately one class of specificity: .skill-group.stripes-panel below is
        two, so CMS and Web Frameworks keep their stripes regardless of source order. */
     .site-header,
+    .intro-panel,
     .professional-skills,
     .skill-group,
     .footer-brands,
     .recent-work,
     .footer-websites {
       --bg-scale: 3;
+      position: relative;
+      isolation: isolate;
       background-image:
         radial-gradient(
           58% 66% at var(--blob-a, 18% 22%),
@@ -888,6 +891,33 @@ const skillRows = skillGroups.flatMap((group) =>
         ) !important;
       background-size: calc(var(--bg-scale) * 100%) calc(var(--bg-scale) * 100%);
       background-position: center;
+    }
+
+    .site-header::after,
+    .intro-panel::after,
+    .professional-skills::after,
+    .skill-group::after,
+    .footer-brands::after,
+    .recent-work::after,
+    .footer-websites::after {
+      content: '';
+      /* after left as-is, border lives on its own DOM element */
+    }
+
+    :global(.card-border) {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      mix-blend-mode: normal;
+      border-radius: inherit;
+      border: 5px solid transparent;
+      border-color:
+        rgba(255,255,255,0.15)  /* top */
+        rgba(255,255,255,0.03)  /* right */
+        rgba(255,255,255,0.06)  /* bottom */
+        rgba(255,255,255,0.10); /* left */
+      filter: blur(1px);
     }
     /* The skill groups are all one class, so nothing distinguishes them without this.
        Alternating the blob centres on sibling parity keeps the panels from sharing
@@ -1589,6 +1619,19 @@ const skillRows = skillGroups.flatMap((group) =>
         lockedEl.classList.remove('is-hover-locked');
         lockedEl = null;
       }
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cardSelector = 'main.site-main > section.site-header, main.site-main > section.intro-panel, main.site-main > section.professional-skills, main.site-main > section.skill-group, main.site-main > section.footer-brands, main.site-main > section.recent-work, main.site-main > section.footer-websites';
+      const cards = document.querySelectorAll(cardSelector);
+      cards.forEach(card => {
+        if (card.querySelector('.card-border')) return;
+        const border = document.createElement('div');
+        border.className = 'card-border';
+        card.appendChild(border);
+      });
     });
   </script>
 </Base>
