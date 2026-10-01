@@ -867,6 +867,7 @@ const skillRows = skillGroups.flatMap((group) =>
     .footer-brands,
     .recent-work,
     .footer-websites {
+      --bg-scale: 3;
       background-image:
         radial-gradient(
           58% 66% at var(--blob-a, 18% 22%),
@@ -885,6 +886,8 @@ const skillRows = skillGroups.flatMap((group) =>
           var(--grad-mid, var(--grad-top, #1a1a24)),
           var(--grad-top, #1a1a24)
         ) !important;
+      background-size: calc(var(--bg-scale) * 100%) calc(var(--bg-scale) * 100%);
+      background-position: center;
     }
     /* The skill groups are all one class, so nothing distinguishes them without this.
        Alternating the blob centres on sibling parity keeps the panels from sharing
@@ -1532,10 +1535,16 @@ const skillRows = skillGroups.flatMap((group) =>
               2 + i * 0.3
             );
           }
+
+          tl.fromTo(card,
+            { '--bg-scale': 3 },
+            { '--bg-scale': 1, duration: 7, ease: 'power1.out' },
+            2 + i * 0.3
+          );
         });
 
         tl.eventCallback('onComplete', () => {
-          gsap.set(cards, { clearProps: 'filter' });
+          gsap.set(cards, { filter: 'none' });
           document.documentElement.classList.remove('cards-entering');
         });
       };
