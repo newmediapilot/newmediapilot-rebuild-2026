@@ -1370,6 +1370,24 @@ const skillRows = skillGroups.flatMap((group) =>
       transform: translate(-50%, -50%);
       z-index: 9999;
     }
+
+    /* Zero-frame FOUC protection for the grid */
+    main.site-main { visibility: hidden; }
+    main.site-main > * {
+      opacity: 0;
+      filter: brightness(0) saturate(0);
+    }
+    main.site-main > * > * {
+      opacity: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      main.site-main { visibility: visible !important; }
+      main.site-main > *,
+      main.site-main > * > * {
+        opacity: 1 !important;
+        filter: none !important;
+      }
+    }
 </style>
 
   <script>
@@ -1472,7 +1490,14 @@ const skillRows = skillGroups.flatMap((group) =>
         const cards = gsap.utils.toArray('main.site-main > *');
         if (cards.length === 0) return;
 
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        // Reveal grid immediately to avoid a blank page; CSS hides it before first paint
+        gsap.set('main.site-main', { visibility: 'visible' });
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          // Skip animation but keep grid visible
+          gsap.set(cards, { opacity: 1, filter: 'brightness(1) saturate(1)', clearProps: 'filter' });
+          return;
+        }
 
         // No willChange here. Promoting all 25 cards to their own composited layer
         // made the browser skip the paint-level interpolation, so opacity jumped
