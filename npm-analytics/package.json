@@ -1,0 +1,16 @@
+{
+  "name": "npm-analytics",
+  "version": "1.0.0",
+  "description": "Google Analytics 4 components for newmediapilot.com. Consent-gated: gtag.js is not requested until the visitor accepts.",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./Analytics.astro": "./src/Analytics.astro",
+    "./ConsentBanner.astro": "./src/ConsentBanner.astro"
+  },
+  "files": [
+    "src"
+  ]
+}
