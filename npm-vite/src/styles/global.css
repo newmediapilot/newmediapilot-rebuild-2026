@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* The analytics components live in the npm-analytics workspace, outside this
+   package, so Tailwind's automatic source detection never reaches them and the
+   banner would build with none of its classes. Pointed at explicitly rather than
+   left to the base directory. */
+@source "../../../npm-analytics/src/*.{astro,js}";
+
 @theme {
   --font-serif: 'Playfair Display', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, 'Times New Roman', serif;
   --color-rust: #bf4d28;
