@@ -32,6 +32,10 @@ const fields = [
       </button>
     </div>
 
+    <div data-ident="contact-modal-big-title" class="px-1 pb-2">
+      <h1 class="font-koho text-4xl font-black uppercase tracking-widest sm:text-5xl md:text-6xl">CONTACT</h1>
+    </div>
+
     <form
       id="contact-form"
       data-ident="contact-form"
@@ -108,7 +112,13 @@ const fields = [
   const dialog = document.getElementById('contact')
 
   const open = () => {
-    if (dialog instanceof HTMLDialogElement && !dialog.open) dialog.showModal()
+    if (dialog instanceof HTMLDialogElement && !dialog.open) {
+      dialog.showModal()
+      requestAnimationFrame(() => {
+        const nameInput = document.querySelector('[data-ident="contact-input-name"]')
+        nameInput?.focus()
+      })
+    }
   }
 
   const close = () => {
