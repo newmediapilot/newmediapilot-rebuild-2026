@@ -1,5 +1,5 @@
 ---
-import galleryShots from 'virtual:nmp-gallery-shots'
+import { getCollection } from 'astro:content'
 import Base from '../layouts/Base.astro'
 import RowActions from '../components/RowActions.astro'
 import ContactModal from '../components/ContactModal.astro'
@@ -7,6 +7,7 @@ import ContactCardModal from '../components/ContactCardModal.astro'
 import GalleryModal from '../components/GalleryModal.astro'
 import Footer from '../components/Footer.astro'
 import Image from '../components/Image.astro'
+import { getSurface, surfaceAttrs, surfaceClass } from '../data/surfaces'
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -14,53 +15,66 @@ const lorem =
 const intro =
   'My name is Marcin Zajkowski, I am a seasoned full-stack front-end focused developer living in Toronto. I have decades of experience in the marketing sector as an implementor, animator, consultant and developer. I love my work, I enjoy bringing people’s vision to reality, I’m a great translator of technical terms, and I understand how to navigate the creative process as it relates to tech. Thanks for stopping by.'
 
-// The key is the project identity shared by the card image
-// (uploads/preview-<key>.png) and its gallery shots
-// (uploads/image-preview-<key>-<n>.png). Card names slugify to something else
-// entirely, so the key is what ties a card to its gallery.
-const projects = [
-  { key: 'wrea', name: 'World Real Estate Association' },
-  { key: 'remedy', name: 'Remedy Design' },
-  { key: 'oakcountry', name: 'Oak & Country Samples' },
-  { key: 'novo', name: 'Novo Nordisk' },
-  { key: 'mazda', name: 'Mazda SkyDrive' },
-  { key: 'klodge', name: 'Killarney Lodge' },
-  { key: 'homelife', name: 'HomeLife Realty' },
-  { key: 'ccambridge', name: 'CrossFit Cambridge' },
-  { key: 'archmedia', name: 'Architectural Media' },
-  { key: 'stella-mccartney', name: 'Stella McCartney' },
-  { key: 'workopolis', name: 'Workopolis' },
-]
+const slug = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
 
-// Per-project card blurbs, keyed by the same project key. Sparse on purpose:
-// any project without an entry keeps the shared fallback line below, so the
-// ten cards you have not written copy for yet are unchanged.
-const projectDescriptions = {
-  wrea: 'Real estate portal for associate members with payment system and identity integration',
-  remedy: 'A dynamically animated website with portfolio samples and client roster',
-  oakcountry: 'An AI generated concept for an imaginary golf course',
-  novo: 'A sales module for field presentations pertaining to insulin delivery',
-  mazda: 'Interactive screen presentation outlining a brand new engine',
-  klodge: 'Immersive marketing site clearly defining this all inclusive premium resort',
-  homelife: 'Marketing website with offering, contact information and a searchable roster',
-  ccambridge: 'Fitness site with pricing, booking, galleries and mission statement',
-  archmedia: 'A multipage dynamic animated site with offering of services',
-  workopolis: 'Preliminary module samples for a potential product',
-  'stella-mccartney': 'Initial design tests on a potential product',
-}
+// The Recent Work panels live in src/content/cards, one markdown file each, and are
+// edited through Decap. `order` is the only thing that decides position, so moving a
+// card is editing one integer rather than moving code around. The filename is the
+// stable id -- renaming the title does not change it, so gallery anchors and
+// data-ident values survive a rename.
+const cardEntries = (await getCollection('cards')).sort(
+  (a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title)
+)
 
-// Card thumbnail path. Stella's thumbnail is `preview-stella.png`, not
-// `preview-stella-mccartney.png`. Work around the mismatch with a one-line alias.
-const CARD_THUMB = (key) =>
-  key === 'stella-mccartney' ? '/uploads/preview-stella.png' : `/uploads/preview-${key}.png`
-
-const rows = projects.map((project) => ({
-  ...project,
-  href: '#',
-  image: CARD_THUMB(project.key),
-  alt: 'Preview',
-  position: 'center',
+const cards = cardEntries.map((entry) => ({
+  id: entry.id,
+  name: entry.data.title,
+  blurb: entry.data.blurb,
+  surface: entry.data.surface,
+  image: entry.data.image,
+  gallery: entry.data.gallery,
+  website: entry.data.website,
+  href: '#gallery-' + slug(entry.id),
 }))
+
+// Pixabay requires a per-video attribution, so each clip keeps its own author link
+// and its own content id on the Pixabay link. Adding a clip is one entry here.
+const videoCredits = [
+  {
+    author: 'Ruben Hiebert',
+    authorHref:
+      'https://pixabay.com/users/ditscha-2766401/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=112957',
+    contentId: 112957,
+  },
+  {
+    author: 'Ac Guevara',
+    authorHref:
+      'https://pixabay.com/users/acguevara-1744109/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=8603',
+    contentId: 8603,
+  },
+  {
+    author: 'Benedikt Geyer',
+    authorHref:
+      'https://pixabay.com/users/benediktgeyer-1771636/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=50831',
+    contentId: 50831,
+  },
+  {
+    author: 'Nico West',
+    authorHref:
+      'https://pixabay.com/users/westnl-12115786/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=47905',
+    contentId: 47905,
+  },
+  {
+    author: 'Stefanie Jockschat',
+    authorHref:
+      'https://pixabay.com/users/stefaniejockschat-20675156/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=136194',
+    contentId: 136194,
+  },
+]
 
 const websites = [
   { label: 'Killarney Lodge', href: 'https://killarneylodge.com/' },
@@ -82,46 +96,14 @@ const software = [
   'GitHub Desktop',
 ]
 
-const recentWebsiteLabels = new Set(websites.map(w => w.label));
-const websiteUrlMap = Object.fromEntries(websites.map(w => [w.label, w.href]));
-
-const slug = (value) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
-
-// Every project now has its own blurb, so a missing one is a gap in the copy rather
-// than an intentional omission. Same reasoning as the `cardColors` guard below: fail
-// the build and name the project, instead of silently shipping the shared fallback
-// line on one card among eleven bespoke ones.
-const undescribed = projects.filter((project) => !projectDescriptions[project.key])
-if (undescribed.length > 0) {
-  throw new Error(
-    `projectDescriptions is missing an entry for: ${undescribed.map((project) => `${project.key} (${project.name})`).join(', ')}`
-  )
-}
-
-// Gallery shots are discovered at build time, so dropping a new image-*.png into
-// public/uploads is enough to populate that project's gallery -- there is no list
-// to maintain here. A key with no matching project is simply never looked up.
-// The virtual module hands over bare filenames; public/ serves the bytes itself.
-const shotsByKey = {}
-for (const file of galleryShots) {
-  const match = file.match(/^image-preview-(.+)-(\d+)\.png$/)
-  if (!match) continue
-  ;(shotsByKey[match[1]] ??= []).push({ index: Number(match[2]), url: `/uploads/${file}` })
-}
-for (const shots of Object.values(shotsByKey)) {
-  shots.sort((a, b) => a.index - b.index)
-}
-
+// The gallery modal is keyed by card id rather than title, so renaming a card
+// cannot break its anchor.
 const galleries = Object.fromEntries(
-  rows.map((row) => [
-    slug(row.name),
+  cards.map((card) => [
+    slug(card.id),
     {
-      name: row.name,
-      images: (shotsByKey[row.key] ?? []).map((shot) => shot.url),
+      name: card.name,
+      images: card.gallery,
     },
   ])
 )
@@ -469,91 +451,70 @@ const shuffledBrands = (() => {
 const brandChipClass =
   'flex items-center justify-center rounded-md bg-black px-2.5 py-1.5 text-center leading-tight opacity-80'
 
-// One row per card: [angle, top, bottom]. Read by the shared gradient rule in the
-// style block as --grad-angle/--grad-top/--grad-bottom, and applied inline to each
-// section. Living here rather than as per-card CSS rules means every card in the
-// page is visible in one place and the guard below can check all of them.
-//
-// Keyed by the card's own ident (project `key` or skill-group `ident`), so a colour
-// travels with the card it belongs to rather than with a source position that a
-// reorder would break. `to top` puts the first colour at the top of the card; the
-// portfolio cards use staggered diagonals so neighbours do not read as a pair.
-// [angle, top, mid, bottom] -- three stops, so every card has a colour at each end
-// and a hue shift through the middle. The pairs are complementary rather than
-// tonal: Professional Skills already runs orange into purple, and the same
-// warm-cool opposition is now scattered across the skill groups and portfolio
-// cards so it reads as a system instead of a one-off. `warm` is the low-hue end
-// (rust, amber, teal leaning warm), `cool` the high-hue end (violet, indigo,
-// blue), with the mid stop sitting between them so the transition is a real
-// gradient rather than a hard two-tone split.
-const cardColors = {
-  // Static cards.
-  'site-header': ['to top', '#4a1f0a', '#33190d', '#160a05'],
-  'professional-skills': ['to top', '#241640', '#6b2a12', '#3a1608'],
-  'footer-brands': ['to top', '#54240f', '#301309', '#1a0a05'],
-  'footer-websites': ['to top', '#241640', '#161620', '#0c0c14'],
-  // Diagonal rather than `to top`, so the tools card reads as a distinct block
-  // next to Recent Websites instead of two flat panels stacked.
-  'software-card': ['125deg', '#0f3040', '#1a2a48', '#08131f'],
-  // Skill groups. CMS and Web Frameworks are pattern-coloured instead, see below.
-  ai: ['to top', '#0d3540', '#123a2a', '#071a1f'],
-  'front-end': ['to top', '#2a1c56', '#1c2a3a', '#180f33'],
-  'back-end': ['to top', '#4a2418', '#3a1c2a', '#2a120b'],
-  databases: ['to top', '#4a3410', '#2a3418', '#2a1d08'],
-  cloud: ['to top', '#1d2b3c', '#16283a', '#101823'],
-  build: ['to top', '#33400f', '#2a2a1a', '#1c2408'],
-  'accessibility-security': ['to top', '#4c1a28', '#2a1a3a', '#2b0d15'],
-  // Portfolio cards.
-  wrea: ['145deg', '#1b3a4b', '#16404a', '#0b1a24'],
-  remedy: ['115deg', '#3d1636', '#2a1a3a', '#1a0b1c'],
-  oakcountry: ['160deg', '#43301a', '#2a331a', '#1d1409'],
-  novo: ['125deg', '#123a34', '#123a20', '#07191a'],
-  mazda: ['100deg', '#3a1420', '#2a1a2a', '#180810'],
-  klodge: ['150deg', '#16303f', '#1a3020', '#091820'],
-  homelife: ['135deg', '#1c3320', '#1c2a3a', '#0a1710'],
-  ccambridge: ['95deg', '#3b2a10', '#332a1a', '#1a1206'],
-  archmedia: ['170deg', '#231a44', '#1a2a3a', '#0f0b20'],
-  'stella-mccartney': ['120deg', '#3b2450', '#3a2020', '#1b0f26'],
-  workopolis: ['140deg', '#1a2440', '#1a2a3a', '#0a0f1d'],
+/**
+ * Which surface each card in this file uses.
+ *
+ * The values themselves live in src/data/surfaces.ts, shared with the CMS picker
+ * and the content schema, so a card's surface is a name that both the editor and
+ * the build agree on. This map only says which name each hardcoded section uses;
+ * the portfolio cards carry their own `surface` in frontmatter instead.
+ *
+ * Gradients and textures are picked from the same place. That is the whole point:
+ * textures used to live in a hardcoded exception list which had to be kept in sync
+ * with the gradient table by hand.
+ */
+const STATIC_CARD_SURFACES = {
+  'site-header': 'header-warm',
+  'intro-panel': 'rust-stripes',
+  'professional-skills': 'skills-orchid',
+  'footer-brands': 'brands-rust',
+  'footer-websites': 'aubergine',
+  'footer-credits': 'credits-warm',
 }
 
-// Cards whose colour comes from a texture class rather than a gradient, so they
-// are deliberately absent from `cardColors`: the intro panel takes `.stripes-rust`,
-// and CMS and Web Frameworks take `.stripes-panel` with their own two tones.
-const PATTERN_CARD_IDENTS = new Set(['intro-panel', 'cms', 'frameworks'])
-
-// Static cards in the page that are not part of the projects or skill groups.
-const STATIC_CARD_IDENTS = ['site-header', 'professional-skills', 'footer-brands', 'footer-websites']
-
-// Build-time guard. A card with no colour would fall through to the shared gray
-// default and read as a bug against its neighbours, so the build fails and names
-// the offenders instead. Covers all three sources of cards, not just the projects:
-// a new skill group or a renamed ident is caught the same way.
-const uncolored = [
-  ...STATIC_CARD_IDENTS,
-  ...skillGroups.map((group) => group.ident),
-  ...projects.map((project) => project.key),
-].filter((ident) => !PATTERN_CARD_IDENTS.has(ident) && !cardColors[ident])
-
-if (uncolored.length > 0) {
-  throw new Error(`cardColors is missing an entry for: ${[...new Set(uncolored)].join(', ')}`)
+/**
+ * Skill-group ident to surface. Mirrors the `ident` on each group below.
+ *
+ * CMS and Web Frameworks are textures, and they are listed here like every other
+ * group rather than being special-cased in the markup -- picking a gradient or a
+ * stripe is the same choice for all of them, which is what the surface table is for.
+ */
+const SKILL_GROUP_SURFACES = {
+  frameworks: 'green-stripes',
+  ai: 'ai-teal',
+  cms: 'blue-stripes',
+  'front-end': 'front-end',
+  'back-end': 'back-end',
+  databases: 'databases',
+  cloud: 'cloud',
+  build: 'build',
+  'accessibility-security': 'accessibility',
 }
 
-// Build-time guard: every entry must carry a mid stop. A two-stop row would still
-// build and still render, just without the complementary blend, which is the
-// failure that is easiest to reintroduce by accident when adding a card.
-const noMid = Object.entries(cardColors)
-  .filter(([, entry]) => entry.length < 4)
-  .map(([ident]) => ident)
+/**
+ * Build-time guard: every card resolves to a real surface.
+ *
+ * A typo would otherwise reach the page and leave the card on the shared gray
+ * fallback, which is easy to miss against its neighbours. `getSurface` throws on
+ * an unknown name, so this runs every surface through it.
+ */
+const unresolved = [
+  ...Object.entries(STATIC_CARD_SURFACES).map(([ident, name]) => `${ident} -> ${name}`),
+  ...Object.entries(SKILL_GROUP_SURFACES).map(([ident, name]) => `${ident} -> ${name}`),
+  ...skillGroups.map((group) => `${group.ident} -> ${SKILL_GROUP_SURFACES[group.ident] ?? 'MISSING'}`),
+  ...cards.map((card) => `${card.id} -> ${card.surface}`),
+]
 
-if (noMid.length > 0) {
-  throw new Error(`cardColors needs a mid stop (3 colours) for: ${noMid.join(', ')}`)
+for (const entry of unresolved) {
+  const [, name] = entry.split(' -> ')
+  if (name === 'MISSING') {
+    throw new Error(`SKILL_GROUP_SURFACES is missing an entry for: ${entry}`)
+  }
+  getSurface(name)
 }
 
-const gradStyle = (ident) => {
-  const [angle, top, mid, bottom] = cardColors[ident]
-  return `--grad-angle:${angle};--grad-top:${top};--grad-mid:${mid};--grad-bottom:${bottom}`
-}
+/** Surface for a skill group, falling back loudly rather than to gray. */
+const skillSurface = (ident) => SKILL_GROUP_SURFACES[ident]
 
 // Brands & Agencies sits inside the skills grid, immediately above Front-end.
 // A marker entry in the same list keeps the skill groups to a single pass.
@@ -567,7 +528,11 @@ const skillRows = skillGroups.flatMap((group) =>
   <div id="bg-gradient" class="fixed inset-0 -z-10"></div>
 
   <main data-ident="site-main" class="grid grid-cols-1 gap-6 p-4 sm:gap-8 sm:p-8 site-main">
-    <section data-ident="site-header" class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] min-h-[60vh] sm:min-h-[36vh] [@media(max-height:360px)_and_(orientation:landscape)]:min-h-[90vh]! site-header">
+    <section
+      data-ident="site-header"
+      {...surfaceAttrs(STATIC_CARD_SURFACES['site-header'])}
+      class="page rounded-panel p-8 sm:p-12 shadow-[0_20px_40px_-20px_#000] min-h-[60vh] sm:min-h-[36vh] [@media(max-height:360px)_and_(orientation:landscape)]:min-h-[90vh]! site-header"
+    >
       <a
         href="/"
         data-ident="header-brand"
@@ -611,11 +576,20 @@ const skillRows = skillGroups.flatMap((group) =>
       <p data-ident="header-slogan" class="header-slogan">I want you to win.</p>
     </section>
 
-    <section data-ident="intro-panel" class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] intro-panel">
+    <section
+      data-ident="intro-panel"
+      data-surface="rust-stripes"
+      data-surface-kind="texture"
+      class="page rounded-panel p-8 sm:p-12 bg-transparent stripes-rust shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] intro-panel"
+    >
       <p data-ident="intro-paragraph" class="text-shadow-hard font-serif text-base leading-relaxed sm:text-lg">{intro}</p>
     </section>
 
-    <section data-ident="professional-skills" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] professional-skills">
+    <section
+      data-ident="professional-skills"
+      {...surfaceAttrs(STATIC_CARD_SURFACES['professional-skills'])}
+      class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] professional-skills"
+    >
       <h2 data-ident="professional-skills-heading" class="text-2xl font-extrabold sm:text-3xl professional-skills-heading">Professional Skills</h2>
       <div data-ident="professional-skills-list" class="mt-6 flex flex-wrap gap-2">
         {
@@ -632,7 +606,11 @@ const skillRows = skillGroups.flatMap((group) =>
     {
       skillRows.map((group) =>
         group.ident === BRANDS_ANCHOR ? (
-          <section data-ident="footer-brands" class="page rounded-panel p-3.5 shadow-[0_20px_40px_-20px_#000] sm:p-4 flex flex-col overflow-hidden footer-brands">
+          <section
+            data-ident="footer-brands"
+            {...surfaceAttrs(STATIC_CARD_SURFACES['footer-brands'])}
+            class="page rounded-panel p-3.5 shadow-[0_20px_40px_-20px_#000] sm:p-4 flex flex-col overflow-hidden footer-brands"
+          >
             <h3 class="font-koho py-1 text-lg font-bold text-white sm:text-xl shrink-0">Brands &amp; Agencies</h3>
             <ul class="mt-2 mb-8 flex flex-wrap justify-center gap-2 text-xs sm:text-sm" id="brands-list">
               {shuffledBrands.map((b) => (
@@ -643,9 +621,8 @@ const skillRows = skillGroups.flatMap((group) =>
         ) : (
         <section
           data-ident={`skill-group-${group.ident}`}
-          class={`page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] skill-group skill-group-${group.ident}${
-            group.ident === 'cms' ? ' stripes-panel stripes-blue' : group.ident === 'frameworks' ? ' stripes-panel stripes-green' : ''
-          }`}
+          {...surfaceAttrs(skillSurface(group.ident))}
+          class={`page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] skill-group skill-group-${group.ident} ${surfaceClass(skillSurface(group.ident))}`}
         >
           <h3 data-ident={`skill-group-${group.ident}-heading`} class="font-koho text-xl font-bold text-white sm:text-2xl skill-group-heading">
             {group.label}
@@ -762,29 +739,27 @@ const skillRows = skillGroups.flatMap((group) =>
     }
 
     {
-      rows.map((row) => (
-        <section data-ident={`recent-work-${slug(row.name)}`} style={gradStyle(row.key)} class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] grid grid-cols-1 sm:grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group">
+      cards.map((card) => (
+        <section
+          data-ident={`recent-work-${slug(card.id)}`}
+          {...surfaceAttrs(card.surface)}
+          class={`page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] grid grid-cols-1 sm:grid-cols-[1fr_1fr] gap-4 items-stretch overflow-hidden recent-work group ${surfaceClass(card.surface)}`}
+        >
           <div class="card-figure flex items-start justify-center overflow-hidden rounded-xl">
-            <Image src={row.image} alt={row.alt} class="card-image rounded-xl object-cover brightness-[.62] contrast-[1.15] saturate-[.6] sepia-[.8] transition-[filter] duration-500 ease-out group-hover:brightness-100 group-hover:contrast-100 group-hover:saturate-100 group-hover:sepia-0" style={`object-position: ${row.position}`} />
+            <Image src={card.image} alt={card.name} class="card-image rounded-xl object-cover brightness-[.62] contrast-[1.15] saturate-[.6] sepia-[.8] transition-[filter] duration-500 ease-out group-hover:brightness-100 group-hover:contrast-100 group-hover:saturate-100 group-hover:sepia-0" style="object-position: center" />
           </div>
           <div class="flex flex-col justify-start">
-            <h3 class="font-koho text-2xl font-bold text-white sm:text-3xl">{row.name}</h3>
+            <h3 class="font-koho text-2xl font-bold text-white sm:text-3xl">{card.name}</h3>
             <p class="mt-2 text-sm text-white/70 sm:text-base">
-              {projectDescriptions[row.key] ?? 'Ongoing client work with focus on performance and content systems.'}
+              {card.blurb}
             </p>
             <div class="mt-3 flex flex-col items-start gap-2 text-base">
-              <a href={`#gallery-${slug(row.name)}`} data-gallery-name={row.name} class="flex items-center gap-2 no-underline">
+              <a href={card.href} data-gallery-name={card.name} class="flex items-center gap-2 no-underline">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                 View gallery
               </a>
-              {row.href && row.href !== '#' && (
-                <a href={row.href} target="_blank" rel="noopener" class="flex items-center gap-2 no-underline">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Launch website
-                </a>
-              )}
-              {recentWebsiteLabels.has(row.name) && (
-                <a href={websiteUrlMap[row.name] || '#'} target="_blank" rel="noopener" class="flex items-center gap-2 no-underline">
+              {card.website && (
+                <a href={card.website} target="_blank" rel="noopener" class="flex items-center gap-2 no-underline">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   Visit website
                 </a>
@@ -795,7 +770,11 @@ const skillRows = skillGroups.flatMap((group) =>
       ))
     }
 
-    <section data-ident="footer-websites" class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] footer-websites">
+    <section
+      data-ident="footer-websites"
+      {...surfaceAttrs(STATIC_CARD_SURFACES['footer-websites'])}
+      class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] footer-websites"
+    >
       <h3 class="font-koho text-xl font-bold text-white sm:text-2xl">Recent Websites</h3>
       <ul class="mt-4 flex flex-col gap-2 text-sm">
         {websites.map((w) => (
@@ -804,6 +783,32 @@ const skillRows = skillGroups.flatMap((group) =>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               {w.label}
             </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section
+      data-ident="footer-credits"
+      {...surfaceAttrs(STATIC_CARD_SURFACES['footer-credits'])}
+      class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] footer-credits"
+    >
+      <h3 class="font-koho text-xl font-bold text-white sm:text-2xl">Credits</h3>
+      <ul class="mt-4 flex flex-col gap-2 text-sm text-white/70">
+        {videoCredits.map((credit) => (
+          <li>
+            Video by{' '}
+            <a
+              href={credit.authorHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:underline">{credit.author}</a>
+            {' '}from{' '}
+            <a
+              href={`https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=${credit.contentId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:underline">Pixabay</a>
           </li>
         ))}
       </ul>
@@ -854,19 +859,20 @@ const skillRows = skillGroups.flatMap((group) =>
          2. The three-stop linear underneath, which supplies the base wash and keeps
             the corners from going flat where the blobs do not reach.
        Blob centres come from --blob-a / --blob-b so each card can place them
-       differently; they are emitted per card by gradStyle, and the fallbacks here
-       keep an unconfigured card from losing its fill. The white grid in ::after is
-       still a separate layer and composites on top unchanged.
+       differently; the fallbacks here keep an unconfigured card from losing its
+       fill. The white grid in ::after is still a separate layer and composites on
+       top unchanged.
        Every stop stays dark because that pattern is white at 25% alpha and would
        vanish against anything lighter.
-       Deliberately one class of specificity: .skill-group.stripes-panel below is
-       two, so CMS and Web Frameworks keep their stripes regardless of source order. */
-    .site-header,
-    .professional-skills,
-    .skill-group,
-    .footer-brands,
-    .recent-work,
-    .footer-websites {
+
+       Scoped by data-surface-kind rather than by a hand-maintained class list.
+       A card opts into this layer by declaring itself a gradient, and a texture
+       card is excluded simply by not matching -- which is what let the
+       `.skill-group.stripes-panel` override below (two classes, `!important`,
+       existing only to out-specify this rule) and the intro panel's omission
+       from the list both be deleted. One attribute now decides, so forgetting to
+       update a list is no longer a way to paint stripes over a gradient. */
+    .page[data-surface-kind='gradient'] {
       --bg-scale: 3;
       position: relative;
       isolation: isolate;
@@ -892,17 +898,6 @@ const skillRows = skillGroups.flatMap((group) =>
       background-position: center;
     }
 
-    .site-header::after,
-    .intro-panel::after,
-    .professional-skills::after,
-    .skill-group::after,
-    .footer-brands::after,
-    .recent-work::after,
-    .footer-websites::after {
-      content: '';
-      /* after left as-is, border lives on its own DOM element */
-    }
-
     :global(.card-border) {
       position: absolute;
       inset: 0;
@@ -920,40 +915,24 @@ const skillRows = skillGroups.flatMap((group) =>
     }
     /* The skill groups are all one class, so nothing distinguishes them without this.
        Alternating the blob centres on sibling parity keeps the panels from sharing
-       an identical shape while staying a single rule rather than nine declarations. */
-    .skill-group:nth-of-type(even) {
+       an identical shape while staying a single rule rather than nine declarations.
+       Only gradient panels are affected, because the texture panels are not matched
+       by the shared gradient rule at all -- a `background-image` on them would
+       replace their stripes rather than sit under them. They still get the ::after
+       grid, because that overlays the stripes instead of competing with them. */
+    .skill-group[data-surface-kind='gradient']:nth-of-type(even) {
       --blob-a: 78% 26%;
       --blob-b: 20% 34%;
     }
-    .skill-group:nth-of-type(odd) {
+    .skill-group[data-surface-kind='gradient']:nth-of-type(odd) {
       --blob-a: 24% 18%;
       --blob-b: 74% 38%;
     }
-    /* The intro panel is deliberately absent from the shared gradient rule above and
-       from the blob-centre list here. It takes its colour from `.stripes-rust` in
-       global.css, and a `background-image` there would replace the stripes rather
-       than sit under them -- the same trap .skill-group.stripes-panel below is
-       written to avoid. Its rust stripes are already its colour, so it needs no
-       gradient. It is still in the ::after rules, because the white grid overlays
-       the stripes rather than competing with them. */
 
-    /* One hue per card, deep and desaturated. Professional Skills keeps the
-       orange-to-purple it already had. The site header gets a warm brown so it is
-       no longer plain black behind its band pattern. */
-    /* Mid stops mirror the table above, so these two sources cannot drift: a card
-       coloured in the frontmatter and the same card coloured here get the same
-       three-stop gradient. */
-    .site-header { --grad-top: #4a1f0a; --grad-mid: #33190d; --grad-bottom: #160a05; }
-    .professional-skills { --grad-top: #241640; --grad-mid: #6b2a12; --grad-bottom: #3a1608; }
-    .skill-group-ai { --grad-top: #0d3540; --grad-mid: #123a2a; --grad-bottom: #071a1f; }
-    .skill-group-front-end { --grad-top: #2a1c56; --grad-mid: #1c2a3a; --grad-bottom: #180f33; }
-    .skill-group-back-end { --grad-top: #4a2418; --grad-mid: #3a1c2a; --grad-bottom: #2a120b; }
-    .skill-group-databases { --grad-top: #4a3410; --grad-mid: #2a3418; --grad-bottom: #2a1d08; }
-    .skill-group-cloud { --grad-top: #1d2b3c; --grad-mid: #16283a; --grad-bottom: #101823; }
-    .skill-group-build { --grad-top: #33400f; --grad-mid: #2a2a1a; --grad-bottom: #1c2408; }
-    .skill-group-accessibility-security { --grad-top: #4c1a28; --grad-mid: #2a1a3a; --grad-bottom: #2b0d15; }
-    .footer-brands { --grad-top: #54240f; --grad-mid: #301309; --grad-bottom: #1a0a05; }
-    .footer-websites { --grad-top: #241640; --grad-mid: #161620; --grad-bottom: #0c0c14; }
+    /* Per-card gradient stops used to be duplicated here as well as in the table, with
+       a comment claiming the two "cannot drift". They could, and nothing checked.
+       Each section now emits its own --grad-* inline from src/data/surfaces.ts, which
+       is the single source, so there is nothing left to keep in sync. */
 
     @media (max-height: 360px) and (orientation: landscape) {
       .site-header {
@@ -961,16 +940,14 @@ const skillRows = skillGroups.flatMap((group) =>
       }
     }
 
-    /* These panels carry the paragraph panel's stripe texture, but the blanket
-       `background: transparent !important` above would wipe it out -- same
-       specificity, and the important flag wins. Restated here with both halves of
-       the shorthand and the same !important, declared after, so it takes. */
-    .skill-group.stripes-panel {
-      background-color: var(--stripe-a) !important;
-      background-image: var(--stripes-image) !important;
-    }
     /* CMS and Web Frameworks keep only their stripes plus the shared ::after
-       hatch, which is what the paragraph panel already does. */
+       hatch, which is what the paragraph panel already does. The stripes survive
+       without an override here: the shared gradient rule is scoped to
+       `[data-surface-kind='gradient']`, and these panels are textures, so it never
+       applies to them in the first place. That rule (two classes plus `!important`,
+       restating both halves of the `background` shorthand) used to exist solely to
+       out-specify it, and would have wiped the stripes out again the moment any
+       blanket `background: transparent !important` came back. */
     .site-header {
       --sz: 20px;
       --c0: #ffffff00;
@@ -1062,15 +1039,12 @@ const skillRows = skillGroups.flatMap((group) =>
        --grid-opacity is separate from the alpha so the layer can be faded without
        editing the gradient stops. pointer-events:none keeps the overlay from
        swallowing the chip hovers on the professional-skills panel. */
-    .site-header::after,
-    .intro-panel::after,
-    .professional-skills::after,
-    .skill-group::after,
-    .footer-brands::after,
-    .recent-work::after,
-    .footer-websites::after {
-      /* One shared pattern for every card, the -45deg / 4px tile. Kept in the base
-         block rather than repeated per card so the cards cannot drift apart again. */
+    /* Every card carries this grid, so none reads as an empty gradient. It was a
+       seven-class selector list repeated twice, which meant a new card had to be
+       added in two places or silently lost its grid -- the Credits card did.
+       `.page` is on every panel, so it cannot be forgotten. */
+    .page::after {
+      /* One shared pattern, the -45deg / 4px tile. */
       content: "";
       position: absolute;
       inset: 0;
@@ -1078,14 +1052,6 @@ const skillRows = skillGroups.flatMap((group) =>
       pointer-events: none;
       opacity: var(--grid-opacity, 0.5);
       background-repeat: repeat;
-    }
-    .site-header::after,
-    .intro-panel::after,
-    .professional-skills::after,
-    .skill-group::after,
-    .footer-brands::after,
-    .recent-work::after,
-    .footer-websites::after {
       background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,var(--grid-alpha, 0.25)), rgba(255,255,255,var(--grid-alpha, 0.25)) 1px, transparent 1px, transparent 6px);
       background-size: 4px 4px;
     }

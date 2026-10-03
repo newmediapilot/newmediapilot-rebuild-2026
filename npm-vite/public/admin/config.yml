@@ -5,13 +5,116 @@ backend:
 local_backend: true
 local_backend_url: http://localhost:8081/api/v1
 
-media_folder: public/uploads
+# Paths are relative to the repository root, not to npm-vite/. decap-server is
+# started with GIT_REPO_DIRECTORY pointing at the root (see scripts/dev.mjs), so a
+# path written as `src/content/cards` would resolve to <root>/src/content/cards,
+# which does not exist -- the CMS would open fine and silently show an empty
+# collection. These are the real locations.
+media_folder: npm-vite/public/uploads
 public_folder: /uploads
 
 collections:
+  - name: cards
+    label: Portfolio Cards
+    label_singular: Card
+    description: >-
+      The Recent Work panels. Reorder with Order (lowest renders first). Surface
+      picks a gradient or a stripe texture -- both live in the same list.
+    folder: npm-vite/src/content/cards
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    slug: '{{slug}}'
+    summary: '{{order}} · {{title}} · {{surface}}'
+    sortable_fields: [order, title]
+    view_filters:
+      - label: All
+        field: order
+        pattern: ''
+      - label: Missing website link
+        field: website
+        pattern: ''
+    view_groups:
+      - label: Surface
+        field: surface
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: The heading on the card. Renaming it does not change the card's id or its gallery.
+      - label: Order
+        name: order
+        widget: number
+        value_type: int
+        min: 0
+        hint: Lower renders earlier. Use 10, 20, 30 to leave gaps for inserting later.
+      - label: Surface
+        name: surface
+        widget: select
+        default: harbor
+        options:
+          - { label: '— Gradients —', value: '' }
+          - { label: Amethyst, value: amethyst }
+          - { label: Auburn, value: aubergine }
+          - { label: Bronze, value: bronze }
+          - { label: Clay, value: clay }
+          - { label: Crimson, value: crimson }
+          - { label: Fern, value: fern }
+          - { label: Harbour, value: harbor }
+          - { label: Indigo, value: indigo }
+          - { label: Jade, value: jade }
+          - { label: Lagoon, value: lagoon }
+          - { label: Plum, value: plum }
+          - { label: Slate, value: slate }
+          - { label: AI teal, value: ai-teal }
+          - { label: Accessibility, value: accessibility }
+          - { label: Back-end, value: back-end }
+          - { label: Build, value: build }
+          - { label: Cloud, value: cloud }
+          - { label: Databases, value: databases }
+          - { label: Front-end, value: front-end }
+          - { label: 'Section: header', value: header-warm }
+          - { label: 'Section: skills panel', value: skills-orchid }
+          - { label: 'Section: brands', value: brands-rust }
+          - { label: 'Section: credits', value: credits-warm }
+          - { label: '— Textures —', value: none }
+          - { label: Rust stripes, value: rust-stripes }
+          - { label: Blue stripes, value: blue-stripes }
+          - { label: Green stripes, value: green-stripes }
+        hint: >-
+          The card background. Gradients and textures are one list, so any card can
+          take either. Adding an option here needs a matching entry in
+          npm-vite/src/data/surfaces.ts, which is what actually paints it.
+      - label: Blurb
+        name: blurb
+        widget: text
+        hint: The short line under the title.
+      - label: Thumbnail
+        name: image
+        widget: image
+        required: false
+        hint: The large image on the left. Falls back to a plain frame if unset.
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        hint: >-
+          Images shown in the fullscreen viewer, in this order. Drag to reorder.
+          Removing an entry here only removes it from the gallery; the file itself
+          stays in uploads.
+        fields:
+          - { label: Image, name: image, widget: image }
+      - label: Website
+        name: website
+        widget: string
+        required: false
+        hint: Full URL including https://. Leave blank to hide the Visit website link.
+
   - name: tiles
     label: Tiles
-    folder: src/content/tiles
+    folder: npm-vite/src/content/tiles
     create: true
     fields:
       - { label: Title, name: title, widget: string }
