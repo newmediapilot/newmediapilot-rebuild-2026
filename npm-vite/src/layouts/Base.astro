@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import Analytics from 'npm-analytics/Analytics.astro'
+import AnalyticsEvents from 'npm-analytics/AnalyticsEvents.astro'
 import ConsentBanner from 'npm-analytics/ConsentBanner.astro'
 
 const { title = 'Default' } = Astro.props
@@ -23,5 +24,6 @@ const { title = 'Default' } = Astro.props
     <slot />
     <ConsentBanner />
     <Analytics />
+    <AnalyticsEvents />
   </body>
 </html>

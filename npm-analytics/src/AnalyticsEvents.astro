@@ -1,0 +1,20 @@
+---
+// Same guard as Analytics.astro: with no PUBLIC_GA_ID there is no tag to send
+// to, so the listener bundle is not rendered at all.
+const measurementId = import.meta.env.PUBLIC_GA_ID
+---
+
+{
+  measurementId && (
+    <script>
+      import { onConsentChange } from './consent.js'
+      import { initAutoTracking } from './track.js'
+
+      // Attached only once consent is granted, so a declined visit attaches no
+      // listeners rather than attaching them and discarding every event.
+      onConsentChange((decision) => {
+        if (decision === 'granted') initAutoTracking()
+      })
+    </script>
+  )
+}

@@ -8,7 +8,9 @@
   "exports": {
     ".": "./src/index.js",
     "./Analytics.astro": "./src/Analytics.astro",
-    "./ConsentBanner.astro": "./src/ConsentBanner.astro"
+    "./AnalyticsEvents.astro": "./src/AnalyticsEvents.astro",
+    "./ConsentBanner.astro": "./src/ConsentBanner.astro",
+    "./track.js": "./src/track.js"
   },
   "files": [
     "src"

@@ -41,41 +41,6 @@ const cards = cardEntries.map((entry) => ({
   href: '#gallery-' + slug(entry.id),
 }))
 
-// Pixabay requires a per-video attribution, so each clip keeps its own author link
-// and its own content id on the Pixabay link. Adding a clip is one entry here.
-const videoCredits = [
-  {
-    author: 'Ruben Hiebert',
-    authorHref:
-      'https://pixabay.com/users/ditscha-2766401/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=112957',
-    contentId: 112957,
-  },
-  {
-    author: 'Ac Guevara',
-    authorHref:
-      'https://pixabay.com/users/acguevara-1744109/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=8603',
-    contentId: 8603,
-  },
-  {
-    author: 'Benedikt Geyer',
-    authorHref:
-      'https://pixabay.com/users/benediktgeyer-1771636/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=50831',
-    contentId: 50831,
-  },
-  {
-    author: 'Nico West',
-    authorHref:
-      'https://pixabay.com/users/westnl-12115786/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=47905',
-    contentId: 47905,
-  },
-  {
-    author: 'Stefanie Jockschat',
-    authorHref:
-      'https://pixabay.com/users/stefaniejockschat-20675156/?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=136194',
-    contentId: 136194,
-  },
-]
-
 const websites = [
   { label: 'Killarney Lodge', href: 'https://killarneylodge.com/' },
   { label: 'HomeLife Realty', href: 'https://www.homelife.ca/' },
@@ -469,7 +434,6 @@ const STATIC_CARD_SURFACES = {
   'professional-skills': 'skills-orchid',
   'footer-brands': 'brands-rust',
   'footer-websites': 'aubergine',
-  'footer-credits': 'credits-warm',
 }
 
 /**
@@ -783,32 +747,6 @@ const skillRows = skillGroups.flatMap((group) =>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               {w.label}
             </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <section
-      data-ident="footer-credits"
-      {...surfaceAttrs(STATIC_CARD_SURFACES['footer-credits'])}
-      class="page rounded-panel p-4 sm:p-6 shadow-[0_20px_40px_-20px_#000] sm:h-[36vh] footer-credits"
-    >
-      <h3 class="font-koho text-xl font-bold text-white sm:text-2xl">Credits</h3>
-      <ul class="mt-4 flex flex-col gap-2 text-sm text-white/70">
-        {videoCredits.map((credit) => (
-          <li>
-            Video by{' '}
-            <a
-              href={credit.authorHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:underline">{credit.author}</a>
-            {' '}from{' '}
-            <a
-              href={`https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=video&utm_content=${credit.contentId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="hover:underline">Pixabay</a>
           </li>
         ))}
       </ul>

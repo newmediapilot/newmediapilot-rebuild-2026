@@ -109,6 +109,8 @@ const fields = [
 </dialog>
 
 <script>
+  import { track } from 'npm-analytics/track.js'
+
   const dialog = document.getElementById('contact')
 
   const open = () => {
@@ -213,10 +215,12 @@ const fields = [
 
       if (!response.ok) throw new Error(`Server responded ${response.status}`)
 
+      track('form_success', { form: 'contact' })
       setStatus('success', 'Message sent.')
       form.reset()
     } catch (error) {
       const reason = error instanceof Error ? error.message : 'Unknown error'
+      track('form_error', { form: 'contact', reason })
       setStatus('error', `Failed to send. ${reason}`)
     } finally {
       if (submitButton instanceof HTMLButtonElement) submitButton.disabled = false
